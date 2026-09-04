@@ -1476,6 +1476,7 @@ function routeLogic() {
     }
     if (path === '/notifications') return renderNotifications();
     if (path === '/review') return renderReview();
+    if (path === '/leaderboard') return renderLeaderboard();
     if (path.match(/^\/u\/(.+)/)) return renderProfile(decodeURIComponent(path.match(/^\/u\/(.+)/)[1]));
     if (path === '/settings') {
       renderSettings();
@@ -5513,6 +5514,33 @@ function showPushSettings() {
   }).catch(function (e) {
     showAlert('Could not load notification settings');
   });
+}
+function renderLeaderboard() {
+  var LB_ID = (window.DUMBCOURSE_SETTINGS && DUMBCOURSE_SETTINGS.leaderboardId) || 6;
+  setTitle('Leaderboard');
+  showBack(false);
+  $app.innerHTML = '<div class="empty">Loading\u2026</div>';
+  return api('/leaderboard/' + LB_ID + '.json').then(function (d) {
+    var users = (d && d.users) || [];
+    var meta = (d && d.leaderboard) || {};
+    var personal = d && d.personal;
+    if (!users.length) { $app.innerHTML = '<div class="empty">No leaderboard data</div>'; return; }
+    var html = '<div class="lb-header">' + IC.star + '<span>' + esc(meta.name || 'Leaderboard') + '</span></div>';
+    if (personal && personal.user && personal.user.position) {
+      var pu = personal.user;
+      html += '<div class="lb-you">Your rank: #' + esc(String(pu.position)) + ' \u00b7 ' + esc(String(pu.total_score)) + ' pts</div>';
+    }
+    html += '<div class="lb-list">' + users.map(function (u) {
+      var topCls = u.position <= 3 ? ' lb-rank--top' : '';
+      return '<a class="lb-item" href="' + makeUrl(userPath(u.username)) + '" tabindex="0">'
+        + '<span class="lb-rank' + topCls + '">' + esc(String(u.position)) + '</span>'
+        + '<img class="lb-avatar" src="' + avatarUrl(u.avatar_template, 40) + '" alt="" loading="lazy">'
+        + '<span class="lb-name">' + esc(u.username) + '</span>'
+        + '<span class="lb-score">' + esc(String(u.total_score)) + '</span>'
+        + '</a>';
+    }).join('') + '</div>';
+    $app.innerHTML = html;
+  }, function (err) { $app.innerHTML = '<div class="error">' + esc(formatErrorMessage(err)) + '</div>'; });
 }
 function renderNotifications() {
   return _renderNotifications.apply(this, arguments);
