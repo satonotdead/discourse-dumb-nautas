@@ -4,7 +4,7 @@
 # about: Jtech Tools — the JTech Forums all-in-one plugin. Reaction controls, alternate SMTP relay, mini-mod and moderator tooling, the Dumbcourse app, translator tweaks, smart search, desktop pop-ups, username-based default avatars, and the Telegram chat bridge.
 # version: 0.4.0
 # authors: TripleU, Shalom_Karr, Ars18
-# url: https://github.com/JTech-Forums/JtechTools
+# url: https://github.com/satonotdead/discourse-dumb-nautas
 # required_version: 3.0.0
 
 # Smart-search synonym backend — rwordnet ships the WordNet lexical DB

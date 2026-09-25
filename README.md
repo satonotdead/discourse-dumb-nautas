@@ -1,5 +1,7 @@
 # Jtech Tools
 
+Maintained edition by Criptonautas, based on [JTech-Forums/JtechTools](https://github.com/JTech-Forums/JtechTools) with our own fixes and additions. The plugin keeps the internal name `jtech-tools`, so clone it into that folder.
+
 One Discourse plugin with everything JTech Forums runs on top of core. Ten features, each with its own on/off switch in **Admin → Settings → Jtech**.
 
 ## Supported versions
@@ -11,7 +13,7 @@ Requires Discourse 3.0+. Cores older than 2026.8 get a pinned commit via `.disco
 ```bash
 cd /var/discourse
 # add to containers/app.yml under hooks → after_code → cmd:
-#   - git clone https://github.com/JTech-Forums/JtechTools.git jtech-tools
+#   - git clone https://github.com/satonotdead/discourse-dumb-nautas.git jtech-tools
 ./launcher rebuild app
 ```
 
