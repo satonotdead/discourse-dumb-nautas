@@ -4,7 +4,6 @@ module DiscourseDumbcourse
   class PushController < ::ApplicationController
     requires_plugin "jtech-tools"
     requires_login except: [:server_info]
-    skip_before_action :verify_authenticity_token
     before_action :ensure_dumbcourse_enabled, except: [:server_info]
 
     # GET /<base>/push/info

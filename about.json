@@ -1,7 +1,7 @@
 {
   "name": "jtech-tools",
-  "about": "Jtech — combined Discourse plugin (dislike, another-smtp, mini-mod, mod-categories, dumbcourse, translator-tweaks, smart-search)",
-  "version": "0.1.2",
+  "about": "Jtech Tools — the JTech Forums all-in-one plugin. Reaction controls, alternate SMTP relay, mini-mod and moderator tooling, the Dumbcourse app, translator tweaks, smart search, desktop pop-ups, username-based default avatars, and the Telegram chat bridge.",
+  "version": "0.4.0",
   "authors": "Jtech Forums",
   "url": "https://github.com/JTech-Forums/JtechTools"
 }

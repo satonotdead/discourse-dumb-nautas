@@ -8,7 +8,6 @@ module DiscourseDumbcourse
   class LanguagetoolController < ::ApplicationController
     requires_plugin "jtech-tools"
     requires_login
-    skip_before_action :verify_authenticity_token
 
     def check
       raise Discourse::NotFound unless SiteSetting.dumbcourse_languagetool_enabled

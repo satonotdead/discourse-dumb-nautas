@@ -696,6 +696,14 @@ jtech_dumbcourse:
     depends_on:
       - "dumbcourse_enabled"
 
+  # Leaderboard (discourse-gamification). 0 hides the menu entry.
+  dumbcourse_leaderboard_id:
+    default: 0
+    min: 0
+    client: false
+    depends_on:
+      - "dumbcourse_enabled"
+
   # Forum sidebar link (configures the MAIN forum's sidebar, not the SPA).
   dumbcourse_sidebar_link_enabled:
     default: true

@@ -524,6 +524,9 @@ en:
     dumbcourse_online_glow_enabled: Draw a glow ring around the avatars of
       users who are currently online.
 
+    dumbcourse_leaderboard_id: ID of the discourse-gamification leaderboard
+      shown under Leaderboard in the app menu. 0 hides the entry.
+
     dumbcourse_sidebar_link_enabled: Add a Dumbcourse link to the sidebar of
       the main Discourse forum, pointing at the base path above. This does
       not affect the app itself.

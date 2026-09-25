@@ -2,6 +2,10 @@
 
 One Discourse plugin with everything JTech Forums runs on top of core. Ten features, each with its own on/off switch in **Admin → Settings → Jtech**.
 
+## Supported versions
+
+Requires Discourse 3.0+. Cores older than 2026.8 get a pinned commit via `.discourse-compatibility`; 2026.8 and newer track `main`.
+
 ## Install
 
 ```bash
@@ -52,7 +56,9 @@ When a search finds too little, it quietly retries with synonyms (English dictio
 A small card in the top-right corner when you get a notification, with the person's avatar, the topic title and a preview. Click it to jump there. Desktop only, each user turns it on in their account settings.
 
 ### Dumbcourse
-A simplified web app version of the forum at `/dumb` for basic devices: reading, replying, reactions, push notifications, spell check. Uses the forum's own reactions and custom emoji.
+A simplified web app version of the forum at `/dumb` for basic devices: reading, replying, reactions, push notifications, spell check, and a leaderboard (set `dumbcourse_leaderboard_id` to a discourse-gamification leaderboard; 0 hides it). Uses the forum's own reactions and custom emoji.
+
+Spell check ("Refine") sends the draft text to the LanguageTool server configured in `dumbcourse_languagetool_url` / `dumbcourse_languagetool_api_url`. It's off by default; only turn it on for a server you trust with users' drafts.
 
 ### Another SMTP
 Send forum email through a different mail server than the one in `app.yml` — host, port, TLS, login, and optional "from" address rewriting, all from admin settings.
@@ -72,6 +78,19 @@ Default (non-uploaded) avatars are derived from a user's **username** instead of
 5. Send a message from each side to check.
 
 Known limits (Telegram's rules, not ours): the bot can't delete messages older than 48 hours, can't see when Telegram users are typing, can only show one reaction per message, and if your group is converted to a supergroup the chat ID changes — bind it again. The Reports topic needs **Topics** enabled in the group and the bot's *Manage Topics* right.
+
+## Upgrading, rolling back, removing
+
+- **Upgrade:** pull and `./launcher rebuild app`; migrations run automatically. The upgrade to 0.4.0 turns `mod_categories_enabled` back on if it was stored off (its sub-toggles keep whatever you set).
+- **Roll back:** check out the previous commit and rebuild. Migrations aren't reverted; the added tables and columns are harmless to older code.
+- **Remove / disable:** turn off `jtech_enabled` (or a single feature's switch) to stop it without losing data. Deleting the plugin from `app.yml` and rebuilding leaves its tables in place.
+
+## Security model
+
+- Staff/mod endpoints go through Discourse's guardian and `AdminConstraint`; Disteleplus is limited to `disteleplus_allowed_groups`, and the Telegram webhook requires its secret.
+- Dumbcourse is a separate SPA with a strict CSP (own origin + hCaptcha), no cross-origin framing, and CSRF-checked writes. It only serves files from its own `public/` folder.
+- Secrets (bot token, SMTP password, LanguageTool keys) are secret site settings and aren't logged.
+- Report vulnerabilities as described in `SECURITY.md`.
 
 ## Notes
 

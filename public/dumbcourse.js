@@ -54,6 +54,7 @@ var SITE_SETTINGS = {
 var HCAPTCHA_ENABLED = false;
 var HCAPTCHA_SITE_KEY = '';
 var LT_ENABLED = window.DUMBCOURSE_SETTINGS && window.DUMBCOURSE_SETTINGS.languagetoolEnabled;
+var LEADERBOARD_ID = (window.DUMBCOURSE_SETTINGS && window.DUMBCOURSE_SETTINGS.leaderboardId) || 0;
 var HCAPTCHA_WIDGET_ID = null;
 var HCAPTCHA_LOAD_PROMISE = null;
 var API_INFLIGHT = {};
@@ -5516,11 +5517,11 @@ function showPushSettings() {
   });
 }
 function renderLeaderboard() {
-  var LB_ID = (window.DUMBCOURSE_SETTINGS && DUMBCOURSE_SETTINGS.leaderboardId) || 6;
   setTitle('Leaderboard');
   showBack(false);
+  if (!LEADERBOARD_ID) { $app.innerHTML = '<div class="empty">No leaderboard configured</div>'; return; }
   $app.innerHTML = '<div class="empty">Loading\u2026</div>';
-  return api('/leaderboard/' + LB_ID + '.json').then(function (d) {
+  return api('/leaderboard/' + LEADERBOARD_ID + '.json').then(function (d) {
     var users = (d && d.users) || [];
     var meta = (d && d.leaderboard) || {};
     var personal = d && d.personal;
@@ -5993,6 +5994,7 @@ function updateMenuItems() {
     } else {
       el.style.display = isAuth ? (logged ? '' : 'none') : '';
     }
+    if (el.id === 'menuLeaderboard' && !LEADERBOARD_ID) el.style.display = 'none';
   });
   // Show/hide mod items (only for mods in topic)
   $menu.querySelectorAll('[data-mod]').forEach(function (el) {

@@ -8,7 +8,7 @@ module DiscourseDumbcourse
     include ::CurrentUser
 
     layout false
-    skip_before_action :verify_authenticity_token
+    protect_from_forgery with: :exception
     before_action :ensure_enabled
     before_action :relax_security_headers
     before_action :redirect_anonymous_to_login
@@ -23,27 +23,22 @@ module DiscourseDumbcourse
         request_path = "#{request_path}.#{format}"
       end
 
-      if request_path != ""
-        safe_path = Pathname.new(request_path).cleanpath.to_s
-        safe_path = safe_path.sub(%r{\A\.+/}, "")
-        file_path = public_root.join(safe_path)
-
-        if file_path.file?
-          ext = file_path.extname.downcase
-          mime =
-            case ext
-            when ".css"
-              "text/css; charset=utf-8"
-            when ".js"
-              "text/javascript; charset=utf-8"
-            when ".json"
-              "application/json; charset=utf-8"
-            else
-              Rack::Mime.mime_type(file_path.to_s, "application/octet-stream")
-            end
-          response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
-          return send_data(File.binread(file_path), disposition: "inline", type: mime)
-        end
+      file_path = self.class.static_file(public_root, request_path)
+      if file_path
+        ext = file_path.extname.downcase
+        mime =
+          case ext
+          when ".css"
+            "text/css; charset=utf-8"
+          when ".js"
+            "text/javascript; charset=utf-8"
+          when ".json"
+            "application/json; charset=utf-8"
+          else
+            Rack::Mime.mime_type(file_path.to_s, "application/octet-stream")
+          end
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        return send_data(File.binread(file_path), disposition: "inline", type: mime)
       end
 
       index_path = public_root.join("index.html")
@@ -127,10 +122,12 @@ module DiscourseDumbcourse
         topicPostersVisibility: SiteSetting.dumbcourse_topic_posters_visibility,
         onlineGlowEnabled: SiteSetting.dumbcourse_online_glow_enabled,
         languagetoolEnabled: SiteSetting.dumbcourse_languagetool_enabled,
+        leaderboardId: SiteSetting.dumbcourse_leaderboard_id,
         customEmojis: custom_reaction_emojis,
         enabledReactions: enabled_reactions,
       }
-      settings_script = "<script>window.DUMBCOURSE_SETTINGS=#{settings.to_json};</script>"
+      settings_script =
+        "<script nonce=\"#{csp_nonce}\">window.DUMBCOURSE_SETTINGS=#{settings.to_json};</script>"
       if html.include?("</head>")
         html = html.sub("</head>", "#{settings_script}</head>")
       else
@@ -166,7 +163,24 @@ module DiscourseDumbcourse
       render json: { success: "OK" }
     end
 
+    # Resolves a request path to a regular file strictly inside public_root, or
+    # nil. realpath follows symlinks and `..`, so anything escaping the root is
+    # rejected no matter how it was spelled.
+    def self.static_file(public_root, request_path)
+      return nil if request_path.blank? || request_path.include?("\0")
+      root = public_root.realpath.to_s
+      candidate = File.realpath(File.join(root, request_path))
+      return nil unless candidate.start_with?("#{root}/") && File.file?(candidate)
+      Pathname.new(candidate)
+    rescue SystemCallError
+      nil
+    end
+
     private
+
+    def csp_nonce
+      @csp_nonce ||= SecureRandom.base64(16)
+    end
 
     def login_path_request?
       path = params[:path]
@@ -208,19 +222,28 @@ module DiscourseDumbcourse
       current_user.present? || CurrentUser.has_auth_cookie?(request.env)
     end
 
+    HCAPTCHA_SRC = "https://hcaptcha.com https://*.hcaptcha.com"
+
+    # The SPA only needs its own origin plus hCaptcha for code, and any origin
+    # for media (avatars/uploads may live on a CDN). The one inline script is
+    # the settings blob, allowed by nonce.
     def relax_security_headers
-      response.headers[
-        "Content-Security-Policy"
-      ] = "default-src * data: blob: 'unsafe-inline' 'unsafe-eval' http: https:;"
-      response.headers["Cross-Origin-Opener-Policy"] = "unsafe-none"
-      response.headers["Cross-Origin-Embedder-Policy"] = "unsafe-none"
-      response.headers["Cross-Origin-Resource-Policy"] = "cross-origin"
-      response.headers["X-Frame-Options"] = "ALLOWALL"
-      response.headers.delete("X-Content-Type-Options")
-      response.headers.delete("X-XSS-Protection")
-      response.headers["Referrer-Policy"] = "unsafe-url"
-      response.headers["X-Permitted-Cross-Domain-Policies"] = "all"
-      response.headers.delete("Permissions-Policy")
+      response.headers["Content-Security-Policy"] = [
+        "default-src 'self'",
+        "script-src 'self' 'nonce-#{csp_nonce}' #{HCAPTCHA_SRC}",
+        "style-src 'self' 'unsafe-inline' #{HCAPTCHA_SRC}",
+        "img-src * data: blob:",
+        "media-src * data: blob:",
+        "font-src * data:",
+        "connect-src 'self' #{HCAPTCHA_SRC} http://localhost:8080 http://127.0.0.1:8080",
+        "frame-src #{HCAPTCHA_SRC}",
+        "frame-ancestors 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+      ].join("; ")
+      response.headers["X-Frame-Options"] = "SAMEORIGIN"
+      response.headers["X-Content-Type-Options"] = "nosniff"
+      response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     end
   end
 end
