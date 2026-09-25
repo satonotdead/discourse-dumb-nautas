@@ -4,7 +4,7 @@ import AdminAreaSettings from "discourse/admin/components/admin-area-settings";
 export default <template>
   <AdminAreaSettings
     @categories={{array "jtech_smtp"}}
-    @path="/admin/plugins/jtech-tools/smtp"
+    @path="/admin/plugins/discourse-dumb-nautas/smtp"
     @filter={{@controller.filter}}
     @adminSettingsFilterChangedCallback={{@controller.adminSettingsFilterChangedCallback}}
     @showBreadcrumb={{false}}

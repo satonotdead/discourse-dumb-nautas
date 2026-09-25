@@ -2,7 +2,7 @@
 
 module DiscourseDumbcourse
   class SseController < ::ActionController::Base
-    requires_plugin "jtech-tools"
+    requires_plugin "discourse-dumb-nautas"
 
     skip_before_action :verify_authenticity_token
 

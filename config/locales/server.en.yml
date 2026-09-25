@@ -47,7 +47,7 @@ en:
       not_a_forum: "The Telegram group has Topics turned off, so the bot cannot create the Reports topic. Enable Topics in the group settings (and give the bot the Manage Topics right); reports are never posted into General."
       generic: "See /logs for the full response and check the bot token."
 
-  jtech_tools:
+  discourse_dumb_nautas:
     admin_actions:
       disabled: "The feature this action belongs to is disabled — enable its settings first."
 
@@ -763,7 +763,7 @@ en:
     disteleplus_forum_upload_measure_now: Measure eligible posts, occurrences,
       unique files, bytes, date range, extensions, oversize files, and prior
       deliveries, including unique content hashes, without sending anything.
-      Results are written to /logs under the [jtech-tools disteleplus] tag,
+      Results are written to /logs under the [discourse-dumb-nautas disteleplus] tag,
       then this switch resets itself.
 
     disteleplus_forum_upload_backfill_now: Start or resume the historical

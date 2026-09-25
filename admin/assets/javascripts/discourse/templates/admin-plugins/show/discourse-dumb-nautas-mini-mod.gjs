@@ -4,7 +4,7 @@ import AdminAreaSettings from "discourse/admin/components/admin-area-settings";
 export default <template>
   <AdminAreaSettings
     @categories={{array "jtech_mini_mod"}}
-    @path="/admin/plugins/jtech-tools/mini-mod"
+    @path="/admin/plugins/discourse-dumb-nautas/mini-mod"
     @filter={{@controller.filter}}
     @adminSettingsFilterChangedCallback={{@controller.adminSettingsFilterChangedCallback}}
     @showBreadcrumb={{false}}

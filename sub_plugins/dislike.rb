@@ -189,7 +189,7 @@ after_initialize do
           reaction_type: "like",
         )
       unless record.persisted?
-        Rails.logger.warn("[jtech-tools dislike] audit row failed: #{record.errors.full_messages}")
+        Rails.logger.warn("[discourse-dumb-nautas dislike] audit row failed: #{record.errors.full_messages}")
       end
     end
 

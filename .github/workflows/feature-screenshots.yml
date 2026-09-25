@@ -32,7 +32,7 @@ jobs:
       # repo's casing) made every plugin CSS request 404 → text/html →
       # "Refused to apply style" in the browser. Commit b284c8d fixed
       # this for local dev; the CI workflow was missed.
-      PLUGIN_NAME: jtech-tools
+      PLUGIN_NAME: discourse-dumb-nautas
       CHEAP_SOURCE_MAPS: "1"
       MINIO_RUNNER_LOG_LEVEL: DEBUG
       MINIO_RUNNER_INSTALL_DIR: /home/discourse/.minio_runner

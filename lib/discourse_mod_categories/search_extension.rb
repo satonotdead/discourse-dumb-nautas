@@ -35,7 +35,7 @@ module DiscourseModCategories
         # The DB-level indexer gate already prevents the leak; this fallback
         # only degrades the belt-and-suspenders pass.
         ::Rails.logger.warn(
-          "[jtech-tools] Search whisper post-filter fell back: #{e.class}: #{e.message}",
+          "[discourse-dumb-nautas] Search whisper post-filter fell back: #{e.class}: #{e.message}",
         )
       end
       result

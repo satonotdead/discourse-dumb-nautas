@@ -4,7 +4,7 @@ import AdminAreaSettings from "discourse/admin/components/admin-area-settings";
 export default <template>
   <AdminAreaSettings
     @categories={{array "jtech_popup_notifications"}}
-    @path="/admin/plugins/jtech-tools/popups"
+    @path="/admin/plugins/discourse-dumb-nautas/popups"
     @filter={{@controller.filter}}
     @adminSettingsFilterChangedCallback={{@controller.adminSettingsFilterChangedCallback}}
     @showBreadcrumb={{false}}

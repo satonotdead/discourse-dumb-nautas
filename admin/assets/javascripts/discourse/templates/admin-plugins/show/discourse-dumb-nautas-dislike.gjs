@@ -10,7 +10,7 @@ const ACTIONS = [
 export default <template>
   <AdminAreaSettings
     @categories={{array "jtech_dislike"}}
-    @path="/admin/plugins/jtech-tools/dislike"
+    @path="/admin/plugins/discourse-dumb-nautas/dislike"
     @filter={{@controller.filter}}
     @adminSettingsFilterChangedCallback={{@controller.adminSettingsFilterChangedCallback}}
     @showBreadcrumb={{false}}

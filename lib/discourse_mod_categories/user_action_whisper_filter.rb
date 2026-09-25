@@ -52,7 +52,7 @@ module DiscourseModCategories
       end
     rescue StandardError => e
       ::Rails.logger.warn(
-        "[jtech-tools] UserActionWhisperFilter fell back: #{e.class}: #{e.message}",
+        "[discourse-dumb-nautas] UserActionWhisperFilter fell back: #{e.class}: #{e.message}",
       )
       rows
     end

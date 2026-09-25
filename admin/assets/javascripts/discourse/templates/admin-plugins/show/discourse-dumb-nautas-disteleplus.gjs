@@ -15,7 +15,7 @@ const ACTIONS = [
 export default <template>
   <AdminAreaSettings
     @categories={{array "jtech_disteleplus"}}
-    @path="/admin/plugins/jtech-tools/disteleplus"
+    @path="/admin/plugins/discourse-dumb-nautas/disteleplus"
     @filter={{@controller.filter}}
     @adminSettingsFilterChangedCallback={{@controller.adminSettingsFilterChangedCallback}}
     @showBreadcrumb={{false}}

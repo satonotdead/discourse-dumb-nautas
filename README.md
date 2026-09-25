@@ -1,6 +1,6 @@
-# Jtech Tools
+# discourse-dumb-nautas
 
-Maintained edition by Criptonautas, based on [JTech-Forums/JtechTools](https://github.com/JTech-Forums/JtechTools) with our own fixes and additions. The plugin keeps the internal name `jtech-tools`, so clone it into that folder.
+Maintained edition by Criptonautas, based on [JTech-Forums/JtechTools](https://github.com/JTech-Forums/JtechTools) with our own fixes and additions. Repo, clone folder and plugin name are all `discourse-dumb-nautas`.
 
 One Discourse plugin with everything JTech Forums runs on top of core. Ten features, each with its own on/off switch in **Admin → Settings → Jtech**.
 
@@ -13,7 +13,7 @@ Requires Discourse 3.0+. Cores older than 2026.8 get a pinned commit via `.disco
 ```bash
 cd /var/discourse
 # add to containers/app.yml under hooks → after_code → cmd:
-#   - git clone https://github.com/satonotdead/discourse-dumb-nautas.git jtech-tools
+#   - git clone https://github.com/satonotdead/discourse-dumb-nautas.git
 ./launcher rebuild app
 ```
 
@@ -82,6 +82,8 @@ Default (non-uploaded) avatars are derived from a user's **username** instead of
 Known limits (Telegram's rules, not ours): the bot can't delete messages older than 48 hours, can't see when Telegram users are typing, can only show one reaction per message, and if your group is converted to a supergroup the chat ID changes — bind it again. The Reports topic needs **Topics** enabled in the group and the bot's *Manage Topics* right.
 
 ## Upgrading, rolling back, removing
+
+- **Switching from upstream `jtech-tools`:** replace the old clone line in `app.yml` with ours (don't run both) and rebuild. Settings and data carry over; the admin page moves to `/admin/plugins/discourse-dumb-nautas`.
 
 - **Upgrade:** pull and `./launcher rebuild app`; migrations run automatically. The upgrade to 0.4.0 turns `mod_categories_enabled` back on if it was stored off (its sub-toggles keep whatever you set).
 - **Roll back:** check out the previous commit and rebuild. Migrations aren't reverted; the added tables and columns are harmless to older code.

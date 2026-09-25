@@ -7,10 +7,10 @@
   ],
   "compilerOptions": {
     "paths": {
-      "discourse/plugins/jtech-tools/*": [
+      "discourse/plugins/discourse-dumb-nautas/*": [
         "./assets/javascripts/*"
       ],
-      "discourse/plugins/jtech-tools/admin/*": [
+      "discourse/plugins/discourse-dumb-nautas/admin/*": [
         "./admin/assets/javascripts/admin/*"
       ],
       "admin/*": ["./node_modules/discourse/declarations/admin/*"],

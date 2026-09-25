@@ -35,7 +35,7 @@ module DiscourseModCategories
       super
     rescue StandardError => e
       ::Rails.logger.warn(
-        "[jtech-tools] SearchIndexer whisper gate fell back: #{e.class}: #{e.message}",
+        "[discourse-dumb-nautas] SearchIndexer whisper gate fell back: #{e.class}: #{e.message}",
       )
       super
     end

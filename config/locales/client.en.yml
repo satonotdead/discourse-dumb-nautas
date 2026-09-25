@@ -459,9 +459,9 @@ en:
       sidebar_section_title: Dumbcourse
       sidebar_link_text: Dumbcourse
       sidebar_link_title: Open Dumbcourse
-    jtech_tools:
+    discourse_dumb_nautas:
       admin:
-        # Tab labels on the /admin/plugins/jtech-tools config page.
+        # Tab labels on the /admin/plugins/discourse-dumb-nautas config page.
         tabs:
           dislike: Dislike
           smtp: Alternate SMTP
@@ -476,11 +476,11 @@ en:
           all_settings: All settings
   admin_js:
     admin:
-      jtech_tools:
+      discourse_dumb_nautas:
         actions:
           title: Maintenance actions
           hint: These run immediately as background jobs. Progress and results
-            appear in /logs under the [jtech-tools] tags; delivery failures
+            appear in /logs under the [discourse-dumb-nautas] tags; delivery failures
             also surface on the admin dashboard.
           register_webhook:
             label: Register Telegram webhook
@@ -515,7 +515,7 @@ en:
       site_settings:
         categories:
           jtech: Jtech
-          jtech_tools: Jtech Tools
+          discourse_dumb_nautas: Dumb Nautas
           jtech_dislike: Jtech — Dislike
           jtech_smtp: Jtech — Alternate SMTP
           jtech_mini_mod: Jtech — Mini-mod

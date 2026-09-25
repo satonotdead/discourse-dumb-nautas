@@ -2,12 +2,12 @@
 
 module Jtech
   # One POST endpoint per maintenance action, driven by real buttons on the
-  # /admin/plugins/jtech-tools tabs. These used to be self-resetting checkbox
+  # /admin/plugins/discourse-dumb-nautas tabs. These used to be self-resetting checkbox
   # settings ("flip on to run"), which read as configuration; a button says
   # what it is. The legacy *_now settings still work (their
   # site_setting_changed hooks remain) so API/console callers are unaffected.
   class AdminActionsController < ::Admin::AdminController
-    requires_plugin "jtech-tools"
+    requires_plugin "discourse-dumb-nautas"
 
     ACTIONS = {
       "register_webhook" => {
@@ -53,7 +53,7 @@ module Jtech
       unless descriptor[:gate].call
         return(
           render json: {
-                   errors: [I18n.t("jtech_tools.admin_actions.disabled")],
+                   errors: [I18n.t("discourse_dumb_nautas.admin_actions.disabled")],
                  },
                  status: :unprocessable_entity
         )

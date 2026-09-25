@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Run via: docker exec app rails runner /var/www/discourse/plugins/jtech-tools/scripts/username_avatar_recalculate.rb
+# Run via: docker exec app rails runner /var/www/discourse/plugins/discourse-dumb-nautas/scripts/username_avatar_recalculate.rb
 #
 # New users get a username-based default avatar automatically once
 # discourse_username_avatar_enabled is on. Existing users who already have a
@@ -51,7 +51,7 @@ User.includes(:user_avatar).find_each do |user|
   begin
     user.user_avatar.update_gravatar!
   rescue => e
-    Rails.logger.warn("jtech-tools username-avatar: failed to refresh avatar for #{user.username}: #{e.message}")
+    Rails.logger.warn("discourse-dumb-nautas username-avatar: failed to refresh avatar for #{user.username}: #{e.message}")
   end
 
   affected += 1

@@ -106,7 +106,7 @@ after_initialize do
       # admin-visible signal. Log and let the message go out on whatever
       # settings were applied so far.
       Rails.logger.error(
-        "[jtech-tools another_smtp] before_email_send failed: #{e.class}: #{e.message}",
+        "[discourse-dumb-nautas another_smtp] before_email_send failed: #{e.class}: #{e.message}",
       )
     end
   end

@@ -11,7 +11,7 @@ export default <template>
       "jtech_mod_notifications"
       "jtech_mod_whispers"
     }}
-    @path="/admin/plugins/jtech-tools/mod"
+    @path="/admin/plugins/discourse-dumb-nautas/mod"
     @filter={{@controller.filter}}
     @adminSettingsFilterChangedCallback={{@controller.adminSettingsFilterChangedCallback}}
     @showBreadcrumb={{false}}

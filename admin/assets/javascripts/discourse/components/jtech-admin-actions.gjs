@@ -11,7 +11,7 @@ import { i18n } from "discourse-i18n";
 
 // Maintenance actions as actual buttons. Each descriptor:
 //   { id, icon, confirm? } — id keys the endpoint and the i18n strings under
-//   admin.jtech_tools.actions.<id>.{label,confirm,done}.
+//   admin.discourse_dumb_nautas.actions.<id>.{label,confirm,done}.
 export default class JtechAdminActions extends Component {
   @service dialog;
   @service toasts;
@@ -23,13 +23,13 @@ export default class JtechAdminActions extends Component {
     const perform = async () => {
       this.running = descriptor.id;
       try {
-        await ajax(`/admin/plugins/jtech-tools/actions/${descriptor.id}`, {
+        await ajax(`/admin/plugins/discourse-dumb-nautas/actions/${descriptor.id}`, {
           type: "POST",
         });
         this.toasts.success({
           duration: 5000,
           data: {
-            message: i18n(`admin.jtech_tools.actions.${descriptor.id}.done`),
+            message: i18n(`admin.discourse_dumb_nautas.actions.${descriptor.id}.done`),
           },
         });
       } catch (error) {
@@ -41,7 +41,7 @@ export default class JtechAdminActions extends Component {
 
     if (descriptor.confirm) {
       this.dialog.confirm({
-        message: i18n(`admin.jtech_tools.actions.${descriptor.id}.confirm`),
+        message: i18n(`admin.discourse_dumb_nautas.actions.${descriptor.id}.confirm`),
         didConfirm: perform,
       });
     } else {
@@ -50,14 +50,14 @@ export default class JtechAdminActions extends Component {
   }
 
   label(descriptor) {
-    return i18n(`admin.jtech_tools.actions.${descriptor.id}.label`);
+    return i18n(`admin.discourse_dumb_nautas.actions.${descriptor.id}.label`);
   }
 
   <template>
     <div class="jtech-admin-actions">
-      <h3>{{i18n "admin.jtech_tools.actions.title"}}</h3>
+      <h3>{{i18n "admin.discourse_dumb_nautas.actions.title"}}</h3>
       <p class="jtech-admin-actions__hint">
-        {{i18n "admin.jtech_tools.actions.hint"}}
+        {{i18n "admin.discourse_dumb_nautas.actions.hint"}}
       </p>
       <div class="jtech-admin-actions__buttons">
         {{#each @actions as |descriptor|}}

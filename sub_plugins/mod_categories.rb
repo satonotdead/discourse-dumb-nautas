@@ -973,7 +973,7 @@ after_initialize do
       scope.reorder(::Arel.sql("(#{effective_bumped_at}) DESC, topics.id DESC"))
     rescue StandardError => e
       ::Rails.logger.warn(
-        "[jtech-tools] topic_query audience-aware sort fell back: #{e.class}: #{e.message}",
+        "[discourse-dumb-nautas] topic_query audience-aware sort fell back: #{e.class}: #{e.message}",
       )
       scope
     end
@@ -1182,7 +1182,7 @@ after_initialize do
       )
     rescue StandardError => e
       # The notify side effect must never block the underlying delete.
-      ::Rails.logger.warn("[jtech-tools] post_destroyed notify failed: #{e.class}: #{e.message}")
+      ::Rails.logger.warn("[discourse-dumb-nautas] post_destroyed notify failed: #{e.class}: #{e.message}")
     end
   end
 
@@ -1275,7 +1275,7 @@ after_initialize do
       )
     rescue StandardError => e
       ::Rails.logger.warn(
-        "[jtech-tools] reviewable transition notify (#{kind}) failed: #{e.class}: #{e.message}",
+        "[discourse-dumb-nautas] reviewable transition notify (#{kind}) failed: #{e.class}: #{e.message}",
       )
     end
   end
@@ -1322,7 +1322,7 @@ after_initialize do
               end
             rescue StandardError => e
               ::Rails.logger.warn(
-                "[jtech-tools] user_note staff notify failed: #{e.class}: #{e.message}",
+                "[discourse-dumb-nautas] user_note staff notify failed: #{e.class}: #{e.message}",
               )
             end
 
@@ -1369,7 +1369,7 @@ after_initialize do
             target_username: target_label,
           )
         rescue StandardError => e
-          ::Rails.logger.warn("[jtech-tools] flag_note notify failed: #{e.class}: #{e.message}")
+          ::Rails.logger.warn("[discourse-dumb-nautas] flag_note notify failed: #{e.class}: #{e.message}")
         end
       end
     end
@@ -1465,7 +1465,7 @@ after_initialize do
       scope.where(user_id: audience_ids)
     rescue StandardError => e
       ::Rails.logger.warn(
-        "[jtech-tools] tracking-state whisper filter fell back: #{e.class}: #{e.message}",
+        "[discourse-dumb-nautas] tracking-state whisper filter fell back: #{e.class}: #{e.message}",
       )
       scope
     end
@@ -1516,7 +1516,7 @@ after_initialize do
       end
     rescue StandardError => e
       ::Rails.logger.warn(
-        "[jtech-tools] whisper search-index toggle failed for post=#{post.id}: " \
+        "[discourse-dumb-nautas] whisper search-index toggle failed for post=#{post.id}: " \
           "#{e.class}: #{e.message}",
       )
     end

@@ -7,7 +7,7 @@ name: Comprehensive Screenshots
 # workflow is the one entry point.
 #
 # Runtime: ~12-15 min. Trigger via:
-#   gh workflow run "Comprehensive Screenshots" --ref <branch> --repo Shalom-Karr/JtechTools
+#   gh workflow run "Comprehensive Screenshots" --ref <branch> --repo satonotdead/discourse-dumb-nautas
 
 on:
   workflow_dispatch:
@@ -24,7 +24,7 @@ jobs:
       RAILS_ENV: test
       PGUSER: discourse
       PGPASSWORD: discourse
-      PLUGIN_NAME: jtech-tools
+      PLUGIN_NAME: discourse-dumb-nautas
       CHEAP_SOURCE_MAPS: "1"
       MINIO_RUNNER_LOG_LEVEL: DEBUG
       MINIO_RUNNER_INSTALL_DIR: /home/discourse/.minio_runner

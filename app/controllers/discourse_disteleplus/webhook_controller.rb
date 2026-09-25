@@ -7,7 +7,7 @@ module DiscourseDisteleplus
   # minimum — verify, parse, enqueue — and answers 200 immediately so
   # Telegram's delivery loop never backs up behind Discourse-side work.
   class WebhookController < ::ApplicationController
-    requires_plugin "jtech-tools"
+    requires_plugin "discourse-dumb-nautas"
 
     skip_before_action :verify_authenticity_token,
                        :redirect_to_login_if_required,

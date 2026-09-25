@@ -2,7 +2,7 @@
 
 module DiscourseDisteleplus
   class ConversationController < ::ApplicationController
-    requires_plugin "jtech-tools"
+    requires_plugin "discourse-dumb-nautas"
     requires_login
     before_action :ensure_enabled
     before_action :ensure_allowed

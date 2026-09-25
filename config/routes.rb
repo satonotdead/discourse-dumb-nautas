@@ -86,20 +86,20 @@ end
 
 # ── Jtech admin maintenance actions (buttons on the plugin tabs) ───────────
 Discourse::Application.routes.append do
-  post "/admin/plugins/jtech-tools/actions/:id" => "jtech/admin_actions#run",
+  post "/admin/plugins/discourse-dumb-nautas/actions/:id" => "jtech/admin_actions#run",
        :constraints => AdminConstraint.new,
        :defaults => {
          format: :json,
        }
 
-  # The plugin's admin tabs (/admin/plugins/jtech-tools/mod, /disteleplus, …)
+  # The plugin's admin tabs (/admin/plugins/discourse-dumb-nautas/mod, /disteleplus, …)
   # are Ember child routes of adminPlugins.show; core only serves the bare
   # plugin page and /settings, so a hard load or shared link to a tab 404s
   # without this. admin#index renders the admin app shell exactly as core
   # does for its own admin pages. Core's earlier /settings route still wins
   # for that path since it is drawn first.
   namespace :admin, constraints: StaffConstraint.new do
-    get "plugins/jtech-tools/*tab" => "admin#index"
+    get "plugins/discourse-dumb-nautas/*tab" => "admin#index"
   end
 end
 
@@ -109,7 +109,7 @@ class DiscourseDumbcourseBasePathConstraint
   # req.path_parameters and req.params carry only the route default here, so
   # comparing either to base_path was always true and the catch-all swallowed
   # every unknown multi-segment GET on the site (proven by
-  # /admin/plugins/jtech-tools/mod being served by Dumbcourse's AppController).
+  # /admin/plugins/discourse-dumb-nautas/mod being served by Dumbcourse's AppController).
   # The request path itself is the only trustworthy source at this stage.
   def matches?(req)
     req.path.split("/")[1].to_s == DiscourseDumbcourse.base_path

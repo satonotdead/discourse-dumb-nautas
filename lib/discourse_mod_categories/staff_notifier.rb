@@ -112,7 +112,7 @@ module ::DiscourseModCategories
         end
     rescue StandardError => e
       ::Rails.logger.warn(
-        "[jtech-tools] staff_notifier fan_out (#{kind}) failed: #{e.class}: #{e.message}",
+        "[discourse-dumb-nautas] staff_notifier fan_out (#{kind}) failed: #{e.class}: #{e.message}",
       )
       nil
     end
@@ -167,7 +167,7 @@ module ::DiscourseModCategories
           ::PostAlerter.push_notification(staff_user, payload)
         rescue StandardError => e
           ::Rails.logger.warn(
-            "[jtech-tools] staff_notifier push enqueue failed: #{e.class}: #{e.message}",
+            "[discourse-dumb-nautas] staff_notifier push enqueue failed: #{e.class}: #{e.message}",
           )
         end
       end
@@ -199,7 +199,7 @@ module ::DiscourseModCategories
       scope.exists?
     rescue StandardError => e
       ::Rails.logger.warn(
-        "[jtech-tools] staff_notifier recent_duplicate? check failed: #{e.class}: #{e.message}",
+        "[discourse-dumb-nautas] staff_notifier recent_duplicate? check failed: #{e.class}: #{e.message}",
       )
       false
     end

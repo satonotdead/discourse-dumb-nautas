@@ -58,7 +58,7 @@ register_asset "stylesheets/disteleplus-native.scss"
 ].each { |name| register_svg_icon(name) }
 
 module ::DiscourseDisteleplus
-  LOG_TAG = "[jtech-tools disteleplus]"
+  LOG_TAG = "[discourse-dumb-nautas disteleplus]"
   GENERAL_TOPIC_IDS = [0, 1].freeze
   # Members of this group are excluded from the /about page's "Our admins" /
   # "Our moderators" lists via core's about_page_hidden_groups setting, so the

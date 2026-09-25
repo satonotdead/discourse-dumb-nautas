@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# name: jtech-tools
-# about: Jtech Tools — the JTech Forums all-in-one plugin. Reaction controls, alternate SMTP relay, mini-mod and moderator tooling, the Dumbcourse app, translator tweaks, smart search, desktop pop-ups, username-based default avatars, and the Telegram chat bridge.
+# name: discourse-dumb-nautas
+# about: discourse-dumb-nautas — Criptonautas' maintained edition of JtechTools, the JTech Forums all-in-one plugin. Reaction controls, alternate SMTP relay, mini-mod and moderator tooling, the Dumbcourse app, translator tweaks, smart search, desktop pop-ups, username-based default avatars, and the Telegram chat bridge.
 # version: 0.4.0
 # authors: TripleU, Shalom_Karr, Ars18
 # url: https://github.com/satonotdead/discourse-dumb-nautas

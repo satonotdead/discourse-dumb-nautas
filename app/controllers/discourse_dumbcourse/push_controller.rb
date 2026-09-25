@@ -2,7 +2,7 @@
 
 module DiscourseDumbcourse
   class PushController < ::ApplicationController
-    requires_plugin "jtech-tools"
+    requires_plugin "discourse-dumb-nautas"
     requires_login except: [:server_info]
     before_action :ensure_dumbcourse_enabled, except: [:server_info]
 

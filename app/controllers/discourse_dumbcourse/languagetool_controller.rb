@@ -6,7 +6,7 @@ require "uri"
 
 module DiscourseDumbcourse
   class LanguagetoolController < ::ApplicationController
-    requires_plugin "jtech-tools"
+    requires_plugin "discourse-dumb-nautas"
     requires_login
 
     def check

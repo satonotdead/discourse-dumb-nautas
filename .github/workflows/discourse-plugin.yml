@@ -24,4 +24,4 @@ jobs:
     # Same fix b284c8d applied for local dev; missing here is why the
     # SCSS bug came back in this PR's system_tests.
     with:
-      name: jtech-tools
+      name: discourse-dumb-nautas

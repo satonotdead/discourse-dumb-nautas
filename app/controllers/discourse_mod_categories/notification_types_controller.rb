@@ -5,7 +5,7 @@ module DiscourseModCategories
   # notifications page shows only these instead of every type Discourse has
   # ever defined.
   class NotificationTypesController < ::ApplicationController
-    requires_plugin "jtech-tools"
+    requires_plugin "discourse-dumb-nautas"
     requires_login
 
     def index
