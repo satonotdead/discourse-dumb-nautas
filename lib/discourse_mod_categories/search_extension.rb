@@ -44,7 +44,6 @@ module DiscourseModCategories
     private
 
     def filter_whispers!(result)
-      return unless defined?(::SiteSetting) && ::SiteSetting.mod_whisper_enabled
       return unless result.respond_to?(:posts)
       posts = result.posts
       return unless posts.is_a?(Array)

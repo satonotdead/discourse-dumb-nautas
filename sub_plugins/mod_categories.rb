@@ -767,6 +767,25 @@ after_initialize do
       post.custom_fields[DiscourseModCategories::POST_WHISPER_TARGET_GROUPS_FIELD] = []
       post.custom_fields[DiscourseModCategories::POST_WHISPER_TARGET_BADGES_FIELD] = []
     end
+
+    # The armed flag wins over a core whisper flag the composer carried over
+    # (replying to a core whisper, e.g. inside a category-lockdown topic): a
+    # core whisper would hide the post from its non-staff targets.
+    post.post_type = ::Post.types[:regular] if post.post_type == ::Post.types[:whisper]
+  end
+
+  # discourse-category-lockdown turns every reply in a "keep replies private"
+  # category into a core whisper, which would hide a mod whisper from its
+  # non-staff targets. The field above is set in :before_create_post, which
+  # runs before lockdown's before_create_tasks, so lockdown can skip it here.
+  if defined?(::CategoryLockdown) && ::CategoryLockdown.respond_to?(:whisper_reply?)
+    module ::DiscourseModCategories::LockdownWhisperReplyPatch
+      def whisper_reply?(post)
+        return false if post.custom_fields.key?(::DiscourseModCategories::POST_WHISPER_TARGETS_FIELD)
+        super
+      end
+    end
+    ::CategoryLockdown.singleton_class.prepend(::DiscourseModCategories::LockdownWhisperReplyPatch)
   end
 
   # Notify the whisper audience once the post exists. Staff-authored whispers
@@ -1397,7 +1416,6 @@ after_initialize do
       module UserActionStreamWhisperFilterPatch
         def stream(opts = nil)
           rows = super
-          return rows unless SiteSetting.mod_whisper_enabled
           return rows if rows.blank?
 
           guardian = opts.is_a?(Hash) ? opts[:guardian] : nil
@@ -1424,7 +1442,6 @@ after_initialize do
   # and we narrow it to audience-only when the post is one of OUR whispers.
   register_modifier(:topic_tracking_state_publish_unread_scope) do |scope, post|
     begin
-      next scope unless SiteSetting.mod_whisper_enabled
       next scope unless post.is_a?(::Post)
       next scope unless post.custom_fields.key?(DiscourseModCategories::POST_WHISPER_TARGETS_FIELD)
 

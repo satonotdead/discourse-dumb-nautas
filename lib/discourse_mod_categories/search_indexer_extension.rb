@@ -43,7 +43,6 @@ module DiscourseModCategories
     private
 
     def whisper_post?(obj)
-      return false unless defined?(::SiteSetting) && ::SiteSetting.mod_whisper_enabled
       return false unless obj.is_a?(::Post)
       return false unless obj.id
 

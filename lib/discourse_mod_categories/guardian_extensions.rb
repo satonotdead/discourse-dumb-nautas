@@ -48,7 +48,8 @@ module DiscourseModCategories
     # the topic's cumulative whisper participants. Anyone else (and anonymous
     # viewers) cannot see it.
     def can_see_post?(post)
-      return super unless SiteSetting.mod_whisper_enabled
+      # No feature-switch check: whispers already written stay private when
+      # the feature (or the whole plugin) is switched off.
       return super unless post.is_a?(::Post)
       unless post.custom_fields.key?(DiscourseModCategories::POST_WHISPER_TARGETS_FIELD)
         return super

@@ -18,6 +18,35 @@ gem "rwordnet", "2.0.0", require: false
 # discourse_username_avatar_enabled) for fine-grained control.
 enabled_site_setting :jtech_enabled
 
+# `depends_on` in settings.yml only hides settings in the admin UI; the code
+# still read each switch on its own, so a feature kept running with its parent
+# (or jtech_enabled) off. Every boolean switch here now reads false while any
+# of its parent switches in this plugin is off; switches without a parent
+# follow jtech_enabled. Stored values and the admin UI are untouched, and the
+# client settings go through the same readers, so the front end agrees.
+JTECH_SWITCH_PARENTS =
+  begin
+    all =
+      YAML
+        .safe_load(File.read(File.expand_path("config/settings.yml", __dir__)))
+        .values
+        .grep(Hash)
+        .reduce({}, :merge)
+    switches = all.select { |_, o| o.is_a?(Hash) && [true, false].include?(o["default"]) }
+    switches.except("jtech_enabled").to_h do |name, o|
+      parents = Array(o["depends_on"]) & switches.keys
+      [name, parents.empty? ? ["jtech_enabled"] : parents]
+    end
+  end
+
+SiteSetting.singleton_class.prepend(
+  Module.new do
+    JTECH_SWITCH_PARENTS.each do |name, parents|
+      define_method(name) { |*args| super(*args) && parents.all? { |p| public_send(p) } }
+    end
+  end,
+)
+
 # Load each sub-plugin's body in the Plugin::Instance context so that all
 # Discourse plugin DSL methods — after_initialize, on(:event), register_asset,
 # register_svg_icon, add_to_serializer, reloadable_patch, register_html_builder,

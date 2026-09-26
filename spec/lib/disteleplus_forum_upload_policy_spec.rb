@@ -24,6 +24,8 @@ RSpec.describe DiscourseDisteleplus::ForumUploadPolicy do
   end
 
   before do
+    SiteSetting.disteleplus_enabled = true
+    SiteSetting.disteleplus_forum_uploads_enabled = true
     SiteSetting.disteleplus_forum_upload_category_ids = ""
     SiteSetting.disteleplus_forum_upload_include_restricted_categories = false
   end

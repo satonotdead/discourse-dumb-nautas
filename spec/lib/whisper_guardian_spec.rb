@@ -129,8 +129,9 @@ RSpec.describe "Whisper Guardian" do
         make_whisper([target.id])
       end
 
-      it "falls back to core visibility" do
-        expect(Guardian.new(stranger).can_see_post?(post)).to eq(true)
+      it "keeps existing whispers hidden" do
+        expect(Guardian.new(stranger).can_see_post?(post)).to eq(false)
+        expect(Guardian.new(target).can_see_post?(post)).to eq(true)
       end
     end
   end

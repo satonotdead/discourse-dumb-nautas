@@ -17,7 +17,6 @@ module DiscourseModCategories
     module_function
 
     def apply(scope, user)
-      return scope unless SiteSetting.mod_whisper_enabled
       return scope if user&.staff?
 
       field = DiscourseModCategories::POST_WHISPER_TARGETS_FIELD

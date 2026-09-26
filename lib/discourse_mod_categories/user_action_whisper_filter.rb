@@ -36,7 +36,6 @@ module DiscourseModCategories
     # original array on any error so an upstream Discourse change can't
     # 500 the /u/{user}/activity page.
     def apply(rows, viewer)
-      return rows unless SiteSetting.mod_whisper_enabled
       return rows if rows.blank?
       return rows if viewer&.staff?
 

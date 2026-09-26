@@ -350,14 +350,12 @@ RSpec.describe "Moderator whisper" do
       SiteSetting.mod_whisper_enabled = false
     end
 
-    it "shows the (former) whisper post to everyone" do
+    it "keeps the existing whisper hidden from non-recipients" do
       sign_in(stranger)
       visit("/t/#{topic.slug}/#{topic.id}")
       expect(page).to have_css("#topic-title", wait: 10)
-      # With the feature off, the post is a plain post visible to all.
-      expect(page).to have_css(".topic-post", minimum: 2, wait: 10)
-      expect(page).to have_no_css(".mod-whisper-banner")
-      shot("74_plugin_disabled_visible_to_all")
+      expect(page).to have_css(".topic-post", count: 1, wait: 10)
+      shot("74_plugin_disabled_whisper_stays_hidden")
     end
   end
 end
