@@ -58,3 +58,22 @@ RSpec.describe "Dumbcourse app shell" do
     end
   end
 end
+
+RSpec.describe "Dumbcourse login with SSO" do
+  before do
+    SiteSetting.dumbcourse_enabled = true
+    SiteSetting.discourse_connect_url = "https://idp.example.com/sso"
+    SiteSetting.enable_discourse_connect = true
+  end
+
+  it "sends anonymous visitors to Discourse login and back to the app" do
+    get "/dumb/latest"
+    expect(response).to redirect_to("/login")
+    expect(cookies[:destination_url]).to eq("/dumb/")
+  end
+
+  it "still serves the app's assets" do
+    get "/dumb/dumbcourse.js"
+    expect(response.status).to eq(200)
+  end
+end

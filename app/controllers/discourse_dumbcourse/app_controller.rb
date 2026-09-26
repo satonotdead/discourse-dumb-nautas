@@ -105,6 +105,7 @@ module DiscourseDumbcourse
         onlineGlowEnabled: SiteSetting.dumbcourse_online_glow_enabled,
         languagetoolEnabled: SiteSetting.dumbcourse_languagetool_enabled,
         leaderboardId: SiteSetting.dumbcourse_leaderboard_id,
+        externalLogin: external_login?,
         customEmojis: custom_reaction_emojis,
         enabledReactions: enabled_reactions,
       }
@@ -166,9 +167,33 @@ module DiscourseDumbcourse
 
     def redirect_anonymous_to_login
       return if authenticated?
+
+      if external_login?
+        return if asset_request?
+        return redirect_to_discourse_login
+      end
       return if login_path_request?
 
       redirect_to "#{Discourse.base_path}#{DiscourseDumbcourse.base_path_with_slash}/login"
+    end
+
+    # SSO (DiscourseConnect) or any external provider such as an OIDC
+    # Authentik: the app's own password form can't sign anyone in, so login
+    # goes through Discourse. Sites with only local logins keep the app form.
+    def external_login?
+      SiteSetting.enable_discourse_connect || !SiteSetting.enable_local_logins ||
+        Discourse.enabled_authenticators.any?
+    end
+
+    # Discourse sends the user back to this cookie after DiscourseConnect or
+    # OmniAuth, then deletes it, so logins started on the main site are untouched.
+    def redirect_to_discourse_login
+      cookies[:destination_url] = "#{Discourse.base_path}#{DiscourseDumbcourse.base_path_with_slash}/"
+      redirect_to "#{Discourse.base_path}/login"
+    end
+
+    def asset_request?
+      %w[dumbcourse.css dumbcourse.js emoji_map.json].include?(request.path.split("/").last.to_s)
     end
 
     def ensure_enabled

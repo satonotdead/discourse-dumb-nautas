@@ -2337,7 +2337,14 @@ function confirm(msg) {
     });
   });
 }
+// SSO sites: login and signup go through Discourse (and its identity
+// provider), which sends the user back here via the destination_url cookie.
+function goToDiscourseLogin() {
+  document.cookie = 'destination_url=' + encodeURIComponent(BASE_PATH + '/') + '; path=/; SameSite=Lax';
+  location.replace(PROXY + '/login');
+}
 function renderLogin() {
+  if (window.DUMBCOURSE_SETTINGS && DUMBCOURSE_SETTINGS.externalLogin) return goToDiscourseLogin();
   document.body.classList.add('auth-mode');
   setTitle(SITE_TITLE);
   document.title = 'Sign in - ' + SITE_TITLE + ' Dumbcourse';
@@ -2476,6 +2483,7 @@ function renderLogin() {
   updateSiteUI();
 }
 function renderSignup() {
+  if (window.DUMBCOURSE_SETTINGS && DUMBCOURSE_SETTINGS.externalLogin) return goToDiscourseLogin();
   document.body.classList.add('auth-mode');
   setTitle(SITE_TITLE);
   document.title = 'Create account - ' + SITE_TITLE + ' Dumbcourse';
