@@ -94,27 +94,9 @@ module DiscourseDumbcourse
           []
         end
 
-      # The captcha settings belong to discourse-captcha; reading them raises
-      # NoMethodError when that plugin is absent, so guard like the emoji and
-      # reactions lookups below.
-      hcaptcha_enabled =
-        begin
-          SiteSetting.discourse_captcha_enabled
-        rescue StandardError
-          false
-        end
-      hcaptcha_site_key =
-        begin
-          SiteSetting.hcaptcha_site_key.to_s
-        rescue StandardError
-          ""
-        end
-
       settings = {
         defaultTheme: SiteSetting.dumbcourse_default_theme,
         defaultView: SiteSetting.dumbcourse_default_view,
-        hcaptchaEnabled: hcaptcha_enabled,
-        hcaptchaSiteKey: hcaptcha_site_key,
         basePath: DiscourseDumbcourse.base_path_with_slash,
         paginationEnabled: SiteSetting.dumbcourse_pagination_enabled,
         topicsPerPage: SiteSetting.dumbcourse_topics_per_page,
@@ -137,30 +119,6 @@ module DiscourseDumbcourse
       base_path = DiscourseDumbcourse.base_path_with_slash
       html = html.gsub(%r{"/dumb(?=/|")}, "\"#{base_path}")
       render plain: html, content_type: "text/html; charset=utf-8"
-    end
-
-    def hcaptcha
-      captcha_enabled =
-        begin
-          SiteSetting.discourse_captcha_enabled
-        rescue StandardError
-          false
-        end
-      raise Discourse::NotFound unless captcha_enabled
-      token = params[:token].to_s
-      raise Discourse::InvalidAccess.new if token.blank?
-
-      temp_id = SecureRandom.uuid
-      Discourse.redis.setex("hCaptchaToken_#{temp_id}", 2.minutes.to_i, token)
-      cookies.encrypted[:h_captcha_temp_id] = {
-        value: temp_id,
-        httponly: true,
-        secure: SiteSetting.force_https,
-        expires: 2.minutes.from_now,
-        same_site: :none,
-      }.compact
-
-      render json: { success: "OK" }
     end
 
     # Resolves a request path to a regular file strictly inside public_root, or
@@ -203,7 +161,6 @@ module DiscourseDumbcourse
       return true if path == "signup" || path&.start_with?("signup/")
       return true if path == "register" || path&.start_with?("register/")
       return true if path == "emoji_map.json"
-      return true if path == "hcaptcha"
       false
     end
 
@@ -222,21 +179,18 @@ module DiscourseDumbcourse
       current_user.present? || CurrentUser.has_auth_cookie?(request.env)
     end
 
-    HCAPTCHA_SRC = "https://hcaptcha.com https://*.hcaptcha.com"
-
-    # The SPA only needs its own origin plus hCaptcha for code, and any origin
-    # for media (avatars/uploads may live on a CDN). The one inline script is
-    # the settings blob, allowed by nonce.
+    # The SPA only needs its own origin for code, and any origin for media
+    # (avatars/uploads may live on a CDN). The one inline script is the
+    # settings blob, allowed by nonce.
     def relax_security_headers
       response.headers["Content-Security-Policy"] = [
         "default-src 'self'",
-        "script-src 'self' 'nonce-#{csp_nonce}' #{HCAPTCHA_SRC}",
-        "style-src 'self' 'unsafe-inline' #{HCAPTCHA_SRC}",
+        "script-src 'self' 'nonce-#{csp_nonce}'",
+        "style-src 'self' 'unsafe-inline'",
         "img-src * data: blob:",
         "media-src * data: blob:",
         "font-src * data:",
-        "connect-src 'self' #{HCAPTCHA_SRC} http://localhost:8080 http://127.0.0.1:8080",
-        "frame-src #{HCAPTCHA_SRC}",
+        "connect-src 'self' http://localhost:8080 http://127.0.0.1:8080",
         "frame-ancestors 'self'",
         "object-src 'none'",
         "base-uri 'self'",

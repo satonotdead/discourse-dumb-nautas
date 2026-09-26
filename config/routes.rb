@@ -124,8 +124,6 @@ Discourse::Application.routes.append do
           defaults: {
             dumbcourse_base_path: DiscourseDumbcourse.base_path,
           } do
-      post "/hcaptcha" => "app#hcaptcha"
-
       # Push notification endpoints (must be before catch-all)
       scope "/push", defaults: { format: :json } do
         get "/info" => "push#server_info"

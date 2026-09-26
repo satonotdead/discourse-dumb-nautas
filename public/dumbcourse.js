@@ -51,12 +51,8 @@ var SITE_SETTINGS = {
   userFields: [],
   userFieldMaxLength: 0
 };
-var HCAPTCHA_ENABLED = false;
-var HCAPTCHA_SITE_KEY = '';
 var LT_ENABLED = window.DUMBCOURSE_SETTINGS && window.DUMBCOURSE_SETTINGS.languagetoolEnabled;
 var LEADERBOARD_ID = (window.DUMBCOURSE_SETTINGS && window.DUMBCOURSE_SETTINGS.leaderboardId) || 0;
-var HCAPTCHA_WIDGET_ID = null;
-var HCAPTCHA_LOAD_PROMISE = null;
 var API_INFLIGHT = {};
 var API_CACHE = {};
 var RATE_LIMIT_UNTIL = 0;
@@ -320,94 +316,6 @@ function setFavicon(url) {
   }
   link.href = href;
 }
-function ensureHCaptchaReady() {
-  if (!HCAPTCHA_ENABLED || !HCAPTCHA_SITE_KEY) return Promise.resolve(false);
-  if (window.hcaptcha && typeof window.hcaptcha.render === 'function') return Promise.resolve(true);
-  if (HCAPTCHA_LOAD_PROMISE) return HCAPTCHA_LOAD_PROMISE;
-  HCAPTCHA_LOAD_PROMISE = new Promise(function (resolve) {
-    try {
-      var script = document.createElement('script');
-      script.src = 'https://hcaptcha.com/1/api.js?render=explicit';
-      script.async = true;
-      script.defer = true;
-      script.onload = function () {
-        resolve(!!(window.hcaptcha && typeof window.hcaptcha.render === 'function'));
-      };
-      script.onerror = function () {
-        resolve(false);
-      };
-      document.head.appendChild(script);
-    } catch (e) {
-      resolve(false);
-    }
-  });
-  return HCAPTCHA_LOAD_PROMISE;
-}
-function renderHCaptchaBox() {
-  var box = document.getElementById('hcaptchaBox');
-  if (!box) return;
-  if (!HCAPTCHA_ENABLED || !HCAPTCHA_SITE_KEY) {
-    box.style.display = 'none';
-    return;
-  }
-  box.style.display = 'block';
-  var errEl = document.getElementById('hcaptchaError');
-  if (errEl) {
-    errEl.style.display = 'none';
-    errEl.textContent = '';
-  }
-  ensureHCaptchaReady().then(function (ok) {
-    if (!ok) {
-      if (errEl) {
-        errEl.textContent = 'Captcha failed to load. Please refresh or use the full site to sign up.';
-        errEl.style.display = 'block';
-      }
-      return;
-    }
-    try {
-      if (window.hcaptcha && HCAPTCHA_WIDGET_ID !== null && typeof window.hcaptcha.reset === 'function') {
-        window.hcaptcha.reset(HCAPTCHA_WIDGET_ID);
-      }
-      HCAPTCHA_WIDGET_ID = window.hcaptcha.render('hcaptchaField', {
-        sitekey: HCAPTCHA_SITE_KEY
-      });
-    } catch (e) {
-      if (errEl) {
-        errEl.textContent = 'Captcha failed to load. Please refresh or use the full site to sign up.';
-        errEl.style.display = 'block';
-      }
-    }
-  });
-}
-function resetHCaptcha() {
-  if (window.hcaptcha && HCAPTCHA_WIDGET_ID !== null) {
-    try {
-      window.hcaptcha.reset(HCAPTCHA_WIDGET_ID);
-    } catch (e) {}
-  }
-}
-function ensureHCaptchaToken() {
-  if (!HCAPTCHA_ENABLED || !HCAPTCHA_SITE_KEY) return Promise.resolve(false);
-  if (!window.hcaptcha || HCAPTCHA_WIDGET_ID === null) {
-    return Promise.reject(new Error('Captcha failed to load. Please refresh.'));
-  }
-  var token = '';
-  try {
-    token = window.hcaptcha.getResponse(HCAPTCHA_WIDGET_ID) || '';
-  } catch (e) {}
-  if (!token) return Promise.reject(new Error('Please complete the captcha'));
-  return api(BASE_PATH + '/hcaptcha', {
-    method: 'POST',
-    body: {
-      token: token
-    },
-    nocache: true,
-    nodup: true
-  }).then(function () {
-    return true;
-  });
-}
-
 function loadSite() {
   return fetch(PROXY + '/site.json', {
     headers: {
@@ -2627,17 +2535,12 @@ function renderSignup() {
         <input type="password" id="signupPass" placeholder="Password" tabindex="0"></div>
       <div class="field"><label for="signupPass2">Confirm Password</label>
         <input type="password" id="signupPass2" placeholder="Confirm password" tabindex="0"></div>
-      <div id="hcaptchaBox" class="field hcaptcha-box" style="display:none">
-        <div id="hcaptchaField"></div>
-        <div id="hcaptchaError" class="error" style="display:none"></div>
-      </div>
       <div id="signupError" class="error" style="display:none"></div>
       <div id="signupSuccess" class="success" style="display:none"></div>
       <button id="signupBtn" style="width:100%" tabindex="0">Create Account</button>
       <div class="login-divider"><span>or</span></div>
       <a class="link-btn" href="${BASE_PATH}/" tabindex="0">Back to Sign In</a>
     </div>`;
-  renderHCaptchaBox();
   function getUserFieldValue(field) {
     if (!field || !field.id) return '';
     var el = document.getElementById('signupField_' + field.id);
@@ -2663,7 +2566,6 @@ function renderSignup() {
     var errEl = document.getElementById('signupError');
     var okEl = document.getElementById('signupSuccess');
     var btn = document.getElementById('signupBtn');
-    var hcaptchaUsed = false;
     errEl.style.display = 'none';
     okEl.style.display = 'none';
     var userFieldValues = {};
@@ -2720,8 +2622,7 @@ function renderSignup() {
           if (emailCheck && emailCheck.errors && emailCheck.errors.length) {
             throw new Error(emailCheck.errors.join(', '));
           }
-          return ensureHCaptchaToken().then(function (used) {
-            if (used) hcaptchaUsed = true;
+          return Promise.resolve().then(function () {
             var headers = {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Accept': 'application/json',
@@ -2780,7 +2681,6 @@ function renderSignup() {
       errEl.textContent = e.message;
       errEl.style.display = 'block';
     }).then(function () {
-      if (hcaptchaUsed) resetHCaptcha();
       btn.disabled = false;
       btn.textContent = 'Create Account';
     });
@@ -6297,8 +6197,6 @@ if (!topicPostersVisibility) {
     topicPostersVisibility = 'none';
   }
 }
-HCAPTCHA_ENABLED = !!DUMBCOURSE_SETTINGS.hcaptchaEnabled;
-HCAPTCHA_SITE_KEY = DUMBCOURSE_SETTINGS.hcaptchaSiteKey || '';
 if (!storageGet('jt_theme', '')) {
   if (defaultTheme === 'light' || defaultTheme === 'dark') {
     storageSet('jt_theme', defaultTheme);
