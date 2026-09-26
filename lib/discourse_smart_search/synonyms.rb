@@ -13,6 +13,10 @@ module ::DiscourseSmartSearch
   #      bundled inside the gem. Covers general English (bug ↔ defect
   #      ↔ glitch, fast ↔ quick ↔ rapid, …) so we don't hand-curate it.
   #
+  #   3. Spanish synonym groups (`config/dictionaries/smart_search_synonyms_es.txt`,
+  #      from the Open Multilingual Wordnet, CC BY 3.0). Accent-insensitive.
+  #      Used instead of WordNet when the request locale is Spanish.
+  #
   # Either backend's failure is non-fatal: a missing gem, a missing/
   # malformed YAML, or a WordNet lookup raise all degrade silently to
   # "just the input word" — search then behaves like vanilla Discourse.
@@ -24,6 +28,8 @@ module ::DiscourseSmartSearch
   module Synonyms
     DEFAULT_PATH =
       ::File.expand_path("../../config/dictionaries/smart_search_synonyms.yml", __dir__)
+    SPANISH_PATH =
+      ::File.expand_path("../../config/dictionaries/smart_search_synonyms_es.txt", __dir__)
 
     CACHE_LIMIT = 2000
 
@@ -40,12 +46,20 @@ module ::DiscourseSmartSearch
         key = word.to_s.downcase.strip
         return [] if key.empty?
 
-        cached = cache[key]
+        spanish = spanish?
+        cache_key = "#{spanish ? "es" : "en"}:#{key}"
+        cached = cache[cache_key]
         return cached if cached
 
-        result = lookup_uncached(key)
-        cache_set(key, result)
+        result = lookup_uncached(key, spanish)
+        cache_set(cache_key, result)
         result
+      end
+
+      # Discourse sets I18n.locale per request: the user's own language when
+      # users may pick one, the site default otherwise.
+      def spanish?
+        ::I18n.locale.to_s.start_with?("es")
       end
 
       # Forces a fresh load of the YAML overlay + clears the cache.
@@ -85,17 +99,49 @@ module ::DiscourseSmartSearch
 
       private
 
-      def lookup_uncached(key)
+      def lookup_uncached(key, spanish)
         # 1. Overlay (curated tech jargon).
         hit = overlay_index[key]
         return hit if hit
 
-        # 2. WordNet (general English).
-        wn = wordnet_synonyms_for(key)
-        return wn if wn.size > 1
+        # 2. The searcher's language only — never mix dictionaries.
+        found = spanish ? spanish_synonyms_for(key) : wordnet_synonyms_for(key)
+        return found if found.size > 1
 
         # 3. Default — just the word itself.
         [key].freeze
+      end
+
+      # The file lists groups smallest first (the precise senses), so each
+      # word's groups arrive already in that order.
+      def spanish_synonyms_for(key)
+        groups = spanish_index[unaccent(key)]
+        return [] unless groups
+        ([key] + groups.flatten).uniq.first(MAX_SYNONYMS_PER_WORD).freeze
+      end
+
+      def spanish_index
+        @spanish_index ||=
+          begin
+            index = Hash.new { |h, k| h[k] = [] }
+            ::File.foreach(SPANISH_PATH, chomp: true) do |line|
+              next if line.empty? || line.start_with?("#")
+              words = line.split(",").freeze
+              words.each { |w| index[unaccent(w)] << words }
+            end
+            index.default_proc = nil
+            index
+          rescue StandardError => e
+            ::Rails.logger.warn("[smart-search] Spanish dictionary unavailable: #{e.class}: #{e.message}")
+            {}
+          end
+      end
+
+      # Spanish accents only: plain tr is far cheaper than transliterate when
+      # indexing ~70k words on first use.
+      def unaccent(word)
+        return word.downcase if word.ascii_only?
+        word.downcase.tr("áéíóúüñàèìòù", "aeiouunaeiou")
       end
 
       def wordnet_synonyms_for(key)

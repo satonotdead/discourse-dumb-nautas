@@ -99,6 +99,73 @@ module ::DiscourseSmartSearch
       how
       why
       where
+      el
+      la
+      los
+      las
+      un
+      una
+      unos
+      unas
+      lo
+      al
+      del
+      de
+      en
+      por
+      para
+      con
+      sin
+      sobre
+      entre
+      hasta
+      desde
+      que
+      qué
+      como
+      cómo
+      cuando
+      cuándo
+      donde
+      dónde
+      quien
+      quién
+      cual
+      cuál
+      y
+      e
+      o
+      u
+      ni
+      pero
+      si
+      sí
+      se
+      su
+      sus
+      mi
+      mis
+      tu
+      tus
+      es
+      son
+      ser
+      fue
+      está
+      están
+      hay
+      muy
+      más
+      menos
+      ya
+      este
+      esta
+      esto
+      ese
+      esa
+      eso
+      aquel
+      aquella
     ].freeze
 
     # A token is "expandable" if it's all letters/digits/hyphens — i.e.
