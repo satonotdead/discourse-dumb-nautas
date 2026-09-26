@@ -63,9 +63,10 @@ en:
     # admin_js.admin.site_settings.categories.
 
     # ── Jtech (master) ─────────────────────────────────────────────────────
-    jtech_enabled: Master gate for the whole Jtech plugin bundle. Every
-      sub-plugin also has its own enable switch on its tab for fine-grained
-      control.
+    jtech_enabled: Master switch for the whole plugin. Off turns every
+      feature off, whatever its own switch says. Each feature also has its
+      own switch on its tab, and a sub-setting only works while its parent
+      switch is on.
 
     # ── Jtech — Dislike ────────────────────────────────────────────────────
     discourse_no_likes_enabled: Turn on phantom reactions. When off, likes and
@@ -390,10 +391,9 @@ en:
     mod_whisper_enabled: Master switch for whispers — independent of Enable
       Mod, so whispers keep working when the rest of the module is off. Staff
       post in-topic messages visible only to staff, the author, the topic's
-      whisper participants and any explicit targets. WARNING — turning this
-      OFF does not delete existing whispers; it makes every one of them
-      visible to anyone who can read the topic, and re-indexes them for
-      search.
+      whisper participants and any explicit targets. Turning this off stops
+      new whispers; existing ones stay hidden from everyone outside their
+      audience.
 
     mod_whisper_add_participant_enabled: Lets staff add a user to a topic's
       whisper conversation. The user is notified and can then read every
@@ -444,8 +444,9 @@ en:
     smart_search_enabled: When a search returns few results, run it again
       with synonyms substituted and merge the extra hits in, so that "js"
       also finds posts that only say "javascript" and "k8s" finds
-      "kubernetes". Synonyms come from a bundled English lexical database
-      (WordNet) plus a tech-jargon dictionary shipped with the plugin; add
+      "kubernetes". Synonyms come from bundled English (WordNet) and Spanish
+      (Open Multilingual Wordnet) dictionaries plus a tech-jargon list — each
+      search uses only the searcher's language; add
       your own groups in {{setting:smart_search_extra_synonyms}}. Everything
       runs in-process — no external services, no API keys — and any failure
       falls back to ordinary Discourse search.

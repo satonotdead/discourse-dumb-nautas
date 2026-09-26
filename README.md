@@ -2,7 +2,7 @@
 
 Maintained edition by Criptonautas, based on [JTech-Forums/JtechTools](https://github.com/JTech-Forums/JtechTools) with our own fixes and additions. Repo, clone folder and plugin name are all `discourse-dumb-nautas`.
 
-One Discourse plugin with everything JTech Forums runs on top of core. Ten features, each with its own on/off switch in **Admin → Settings → Jtech**.
+One Discourse plugin with everything JTech Forums runs on top of core. Ten features, each with its own on/off switch in **Admin → Settings → Dumb Nautas**.
 
 ## Supported versions
 
@@ -52,7 +52,9 @@ Gives category moderators (people who moderate a category through a group) extra
 In categories you pick, likes stop mattering: they're hidden from history, don't count toward leaderboards, and the like notification is quietly removed. Optionally hide the like button entirely or allow it only for certain groups.
 
 ### Smart search
-When a search finds too little, it quietly retries with synonyms (English dictionary + a short list of tech abbreviations like `js`/`javascript`, `k8s`/`kubernetes`) and merges the results. Runs locally, no API keys. If anything goes wrong you just get normal search results.
+When a search finds too little, it quietly retries with synonyms (English and Spanish dictionaries + a short list of tech abbreviations like `js`/`javascript`, `k8s`/`kubernetes`) and merges the results. Each search uses only the searcher's language (Spanish ignores accents). Runs locally, no API keys. If anything goes wrong you just get normal search results.
+
+The Spanish dictionary is derived from the [Multilingual Central Repository 3.0](http://adimen.si.ehu.es/web/MCR/) via the [Open Multilingual Wordnet](https://github.com/omwn/omw-data), CC BY 3.0.
 
 ### Desktop pop-up notifications
 A small card in the top-right corner when you get a notification, with the person's avatar, the topic title and a preview. Click it to jump there. Desktop only, each user turns it on in their account settings.
@@ -92,7 +94,7 @@ Known limits (Telegram's rules, not ours): the bot can't delete messages older t
 ## Security model
 
 - Staff/mod endpoints go through Discourse's guardian and `AdminConstraint`; Disteleplus is limited to `disteleplus_allowed_groups`, and the Telegram webhook requires its secret.
-- Dumbcourse is a separate SPA with a strict CSP (own origin + hCaptcha), no cross-origin framing, and CSRF-checked writes. It only serves files from its own `public/` folder.
+- Dumbcourse is a separate SPA with a strict CSP (own origin only), no cross-origin framing, and CSRF-checked writes. It only serves files from its own `public/` folder.
 - Secrets (bot token, SMTP password, LanguageTool keys) are secret site settings and aren't logged.
 - Report vulnerabilities as described in `SECURITY.md`.
 

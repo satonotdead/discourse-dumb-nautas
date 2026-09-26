@@ -1,0 +1,293 @@
+es:
+  disteleplus:
+    title: Disteleplus
+    notification: "%{username} te mencionó en Disteleplus"
+    notification_with_preview: "%{username} te mencionó: %{excerpt}"
+    poll_closed_notification: "Tu encuesta se cerró: %{question}"
+    upload_only: Envió un adjunto
+    reaction_notice: "reaccionó %{emoji}"
+    test_message: "✅ <b>%{site}</b> llega a este grupo. La conversación está en %{url}"
+    reports:
+      approve: Aprobar
+      deny: Rechazar
+      more: Más
+      open_in_discourse: Abrir en Discourse
+      about: Sobre
+      reported_by: Reportado por
+      reason: Motivo
+      status: Estado
+      resolved: "Resuelto (%{status})"
+      resolved_by: "Resuelto (%{status}) por @%{username}"
+      not_authorized: "Sin permiso. Tu id de Telegram es %{telegram_id} (@%{username}); alguien de admin tiene que agregarlo como telegram_id en tu fila de disteleplus_user_map, apuntando a una cuenta del team."
+      rate_limited: Demasiadas acciones seguidas.
+      unknown_action: Acción desconocida.
+      disabled: Los reportes están desactivados en los ajustes.
+      gone: Este reporte ya no existe.
+      already_resolved: Ya resuelto; actualizando el mensaje.
+      details_sent: Detalles abajo.
+      no_action: No hay ninguna acción disponible para este reporte.
+      action_done: "Hecho: %{action}."
+      action_failed: La acción falló. Detalles en /logs.
+      new_features: Hay novedades de Discourse
+      new_features_link: Ver «Novedades»
+      admin_problems: El panel de administración reporta problemas
+      admin_problems_link: Abrir el panel
+      official_warning: Se emitió un aviso oficial
+      types:
+        flagged_post: Respuesta reportada
+        queued_post: Respuesta pendiente de aprobar
+        user: Revisión de perfil
+        post: Revisión de respuesta
+    telegram_error_hints:
+      chat_not_found: "Telegram no reconoce este id de chat. Conviene revisar disteleplus_telegram_chat_id o correr /disteleplus_bind_general en el grupo (pasar a supergrupo cambia el id)."
+      forbidden: "El bot salió del grupo o perdió permisos. Hay que volver a agregarlo como admin."
+      topic_not_found: "El tema de Telegram configurado ya no existe. Se vuelve a vincular con /disteleplus_bind_general o /disteleplus_bind_uploads."
+      not_a_forum: "El grupo de Telegram no tiene los temas activados, así que el bot no puede crear el tema de reportes. Hay que activarlos y dar al bot el permiso de gestionar temas; los reportes nunca van a General."
+      generic: "La respuesta completa está en /logs; conviene revisar el token del bot."
+
+  discourse_dumb_nautas:
+    admin_actions:
+      disabled: "La función de esta acción está desactivada; primero hay que activarla."
+
+  dashboard:
+    problem:
+      disteleplus_telegram: "Disteleplus no pudo entregar a Telegram (%{at}): <code>%{description}</code> — %{hint}"
+
+  site_settings:
+    # ── Maestro ────────────────────────────────────────────────────────────
+    jtech_enabled: Interruptor general del plugin. Apagado desactiva todas las funciones, digan lo que digan sus propios interruptores. Cada ajuste secundario solo funciona con su interruptor padre encendido.
+
+    # ── Dislike ────────────────────────────────────────────────────────────
+    discourse_no_likes_enabled: Activa los me gusta fantasma. Apagado, los me gusta y reacciones funcionan como en Discourse y nada de abajo tiene efecto.
+    no_reactions_category_ids: Categorías donde los me gusta y reacciones son «fantasma». Sin categorías no pasa nada. Las subcategorías se agregan una a una.
+    dislike_hide_like_button: Oculta los botones de me gusta y reacción en esas categorías y rechaza los que lleguen por la API. Los existentes se mantienen. Anula {{setting:dislike_allowed_like_groups}}.
+    dislike_allowed_like_groups: Solo estos grupos pueden dar me gusta en esas categorías. Vacío significa «cualquiera con sesión», no «nadie».
+    dislike_show_in_history: Mantiene los me gusta fantasma en «Me gusta dados» y «Me gusta recibidos». Apagado, no aparecen y se borra el aviso al autor; ver {{setting:dislike_notification_cleanup_window_seconds}}.
+    dislike_notification_cleanup_window_seconds: Cuánto mirar hacia atrás para borrar el aviso de me gusta. Subirlo solo si quedan avisos; una ventana larga puede borrar el de otra persona en la misma respuesta. Solo con {{setting:dislike_show_in_history}} apagado.
+    dislike_count_in_leaderboard: Los me gusta fantasma cuentan en likes_given y likes_received (ranking, tarjetas, directorio y retos). Apagado, los contadores no cambian y {{setting:purge_phantom_likes_now}} los recalcula sin las categorías restringidas.
+    dislike_record_audit_trail: Guarda una fila por me gusta fantasma en la tabla discourse_no_likes_phantoms, consultable con Data Explorer. Apagado ahorra una escritura por me gusta.
+    purge_phantom_likes_now: Corre ahora la limpieza retroactiva y se apaga sola. Completa la tabla de auditoría, recalcula los contadores (salvo con {{setting:dislike_count_in_leaderboard}}) y borra la actividad (salvo con {{setting:dislike_show_in_history}}). No borra me gusta ni avisos.
+
+    # ── SMTP alternativo ───────────────────────────────────────────────────
+    discourse_another_email_enabled: Envía el correo del foro por el relé de abajo en lugar del DISCOURSE_SMTP_* del servidor. Solo cambian host, puerto, cifrado y credenciales. Afecta a todo el correo saliente, incluido el SMTP de grupos, que deja de usar sus propias credenciales.
+    discourse_another_email_smtp_address: Host o IP del relé, sin esquema, puerto ni ruta. Vacío usa el SMTP del servidor y se ignora el resto.
+    discourse_another_email_smtp_port: 587 para STARTTLS, 465 para TLS implícito, 25 para un relé sin autenticar en red privada. Tiene que coincidir con el cifrado.
+    discourse_another_email_smtp_security: Cifrado de la conexión. STARTTLS (oportunista) cifra solo si el relé lo ofrece; STARTTLS (obligatorio) falla si no. TLS implícito para el 465; Ninguno solo en red privada de confianza.
+    discourse_another_email_smtp_openssl_verify_mode: «No verificar» solo si el relé usa un certificado autofirmado o con otro nombre. Quita la protección contra interceptación.
+    discourse_another_email_smtp_authentication_mode: Mecanismo SMTP AUTH. PLAIN y LOGIN envían la contraseña legible; van con TLS. Ninguno para relés sin autenticación.
+    discourse_another_email_smtp_username: Usuario SMTP AUTH. Suele ser un correo; algunos proveedores usan un valor fijo (SendGrid usa «apikey»). Se ignora con {{setting:discourse_another_email_force_smtp_username_to_sender}}.
+    discourse_another_email_smtp_password: Contraseña o clave API SMTP. No se puede volver a leer una vez guardada; conviene verificarla antes.
+    discourse_another_email_force_from_domain: Cambia el dominio de todos los remitentes a este, manteniendo la parte local (noreply@foro.ejemplo pasa a noreply@ejemplo.com). Para relés que solo aceptan su dominio. Vacío no cambia nada.
+    discourse_another_email_force_smtp_username_to_sender: Se autentica en el relé con el remitente de cada mensaje (sin +etiqueta y después del cambio de dominio). Reemplaza al usuario. Solo para relés que lo exigen y si la contraseña vale para todos los remitentes.
+    discourse_another_email_smtp_domain: Dominio anunciado en HELO/EHLO. Vacío usa el global. Para relés que rechazan un HELO que no resuelve.
+    discourse_another_email_smtp_open_timeout_seconds: Segundos de espera para abrir la conexión con el relé.
+    discourse_another_email_smtp_read_timeout_seconds: Segundos de espera para cada respuesta del relé.
+
+    # ── Mini-mod ───────────────────────────────────────────────────────────
+    mini_mod_enabled: Interruptor de Mini-mod. Solo afecta a quienes moderan una categoría (grupos de moderación de categoría, con {{setting:enable_category_group_moderation}}). Nunca a la moderación global ni al team.
+    mini_mod_manage_all_categories: Alcance de los permisos de abajo. Apagado, solo en las categorías que moderan. Encendido, en todas, pueden crear categorías principales y se activa «Mini mod can edit topics». Es el ajuste más amplio.
+    mini_mod_can_create_categories: Permite crear categorías. Sin alcance total, solo subcategorías de las que moderan. Nunca borrar.
+    mini_mod_can_edit_categories: Permite editar los ajustes de las categorías que moderan (o de todas, con alcance total).
+    mini_mod_can_edit_topics: Permite editar cualquier historia visible (título, categoría, etiquetas y texto) salvo si está bloqueada. Es global. Requiere alcance total.
+    mini_mod_can_move_topics: Permite mover historias a las categorías que moderan (o a cualquiera visible, con alcance total).
+    mini_mod_manage_tags: Permite crear, renombrar y administrar etiquetas como el team. Es global. Los grupos de etiquetas siguen siendo del team. Requiere {{setting:tagging_enabled}}.
+    mini_mod_can_post_in_closed_topics: Restricción, no permiso. Apagado, quien modera una categoría no puede responder en historias cerradas. Encendido, comportamiento normal.
+    mini_mod_can_reopen_topics: Restricción, no permiso. Apagado, no se pueden reabrir historias cerradas y se oculta el botón. Encendido, comportamiento normal.
+    tl4_can_post_in_closed_topics: Restricción para todo NC4, no solo quienes moderan categorías. Apagado, no se responde en historias cerradas. Requiere {{setting:mini_mod_enabled}}.
+    tl4_can_reopen_topics: Restricción para todo NC4. Apagado, no se reabren historias cerradas y se oculta el botón. Requiere {{setting:mini_mod_enabled}}.
+
+    # ── Moderación ─────────────────────────────────────────────────────────
+    mod_categories_enabled: Interruptor de los poderes de moderación de este módulo (categorías, herramientas de historias, listas, notas y avisos al team). Las respuestas privadas, el filtro de notificaciones y el marcado automático tienen su propio interruptor.
+    mod_moderators_can_create_categories: La moderación puede crear categorías (en Discourse es solo de admin). Global.
+    mod_moderators_can_edit_categories: La moderación puede editar cualquier categoría, SEGURIDAD INCLUIDA, así que puede darse acceso a categorías privadas. Solo con plena confianza en todo el team.
+    mod_moderators_can_delete_categories: La moderación puede borrar categorías vacías, sin subcategorías y que no sean «Sin categoría».
+
+    # ── Moderación: historias ──────────────────────────────────────────────
+    precheck_new_topic_enabled: Muestra un aviso «antes de publicar» al crear una historia en categorías que lo tengan. Se configura en la categoría.
+    topic_footer_message_enabled: Permite fijar un mensaje al final de una historia. Es PÚBLICO; para texto del team están las notas privadas.
+    mod_pin_post_enabled: Permite fijar cualquier respuesta al final de la historia. Lo ve toda la comunidad.
+    mod_topic_require_reply_approval_enabled: Permite marcar historias para que sus respuestas pasen por la cola de revisión. El team publica normal. Apagarlo detiene la cola pero conserva las marcas.
+    mod_pm_badge_group_enabled: Permite al team sumar a un mensaje personal a quienes tengan un reto. Se ven entre sí. La búsqueda es solo del team.
+
+    # ── Moderación: listas ─────────────────────────────────────────────────
+    mod_first_post_checklist_enabled: Lista que hay que aceptar antes de publicar, hasta el nivel que marque la lista (NC2 por defecto). El team queda exento. Incluye registro y pedido de reaceptar.
+    mod_targeted_checklists_enabled: Listas para personas puntuales que bloquean sus respuestas hasta aceptarlas, sin importar nivel, moderación incluida. Nunca admins.
+    mod_topic_prompt_checklist_enabled: Lista o declaración obligatoria antes de responder en una historia puntual. Aplica a todo el mundo, team incluido; se puede pedir en cada respuesta.
+    topic_reply_prompt_enabled: Heredado; lo reemplazan los avisos previos por historia. Solo muestra avisos viejos. Conviene apagarlo cuando ninguna historia dependa de ellos.
+
+    # ── Moderación: notas ──────────────────────────────────────────────────
+    mod_topic_private_notes_enabled: Permite al team agregar notas privadas con respuestas a cualquier historia. Nunca llegan al resto de la comunidad.
+    mod_moderators_can_edit_others_notes: "La moderación puede editar o borrar notas ajenas. No hay historial: el cambio no se recupera. Autores y admins siempre pueden."
+    mod_note_view_tracking_enabled: Registra quién del team abrió las notas de una historia y cuándo, y lo muestra («Vista por N»).
+    mod_notes_feed_enabled: Pestaña del escudo en el menú del team, con notas y eventos del foro y su contador sincronizado.
+
+    # ── Moderación: notificaciones ─────────────────────────────────────────
+    mod_notify_staff_on_topic_notes: Avisa al resto del team cuando alguien escribe o responde una nota. Incluye los primeros 300 caracteres.
+    mod_notify_staff_on_post_actions: Avisa al resto del team cuando la moderación borra una respuesta o rechaza una en cola. Las aprobaciones van aparte ({{setting:mod_notify_staff_on_post_approved}}).
+    mod_notify_staff_on_post_approved: "Avisa al resto del team cuando se aprueba una respuesta en cola. Apagado por defecto: genera ruido."
+    mod_notify_staff_on_user_notes: Avisa al resto del team cuando se agrega una nota a un perfil. Requiere discourse-user-notes.
+    mod_notify_staff_on_flag_notes: Avisa al resto del team cuando se agrega una nota a un reporte en la cola.
+    mod_notify_whisper_targets: Avisa a quienes reciben una respuesta privada y a quienes se suman a las de una historia. Apagado, llegan sin aviso.
+    mod_auto_mark_notifications_seen: Abrir una historia o la cola de revisión marca como leídos los avisos de notas y respuestas privadas de este plugin. No toca los demás.
+    mod_notification_type_filter_enabled: Agrega un filtro por tipo en la página de notificaciones y una vista de notas para el team. Lo primero a apagar si esa página falla.
+
+    # ── Moderación: respuestas privadas ────────────────────────────────────
+    mod_whisper_enabled: Interruptor de las respuestas privadas. El team publica respuestas dentro de la historia que solo ven el team, quien la escribió, quienes participan en privado y las personas elegidas. Apagado impide respuestas privadas nuevas; las existentes siguen ocultas para el resto.
+    mod_whisper_add_participant_enabled: Permite al team sumar personas a las respuestas privadas de una historia. Reciben aviso y ven todas las respuestas privadas de la historia, también las anteriores.
+    mod_whisper_convert_enabled: Permite al team convertir respuestas en privadas y al revés, y cambiar a quién van. Afecta a su visibilidad en la búsqueda.
+    mod_whisper_badge_targeting_enabled: "Permite responder en privado a quienes tengan un reto. Se comprueba al leer: quien lo gane después ve las anteriores y quien lo pierda deja de verlas."
+    mod_whisper_audience_aware_topic_list: Una respuesta privada no sube la historia en «Recientes» para quien no puede leerla. Cuesta dos joins por listado; apagado, la sube para todo el mundo.
+
+    # ── Traductor ──────────────────────────────────────────────────────────
+    translator_tweaks_enabled: Ajustes sobre el plugin discourse-translator; sin él no hacen nada. El globo responde al momento; el proxy se aplica al arrancar, así que apagarlo requiere reiniciar.
+    translator_tweaks_worker_url: "URL base que reemplaza a translation.googleapis.com, con la ruta /language/translate/v2 completa. Vacío llama a Google directo. Todo lo que se traduce pasa por este host: solo un proxy propio. Requiere reiniciar (./launcher restart app)."
+    translator_tweaks_hide_untranslatable: Oculta el globo en respuestas sin idioma detectado en vez de mostrar uno que no hace nada. Sin reinicio.
+
+    # ── Búsqueda inteligente ───────────────────────────────────────────────
+    smart_search_enabled: Si una búsqueda da pocos resultados, la repite con sinónimos y suma lo nuevo («js» encuentra «javascript»). Diccionarios de inglés (WordNet) y español (Open Multilingual Wordnet) más una lista técnica; cada búsqueda usa solo el idioma de quien busca. Todo local; si falla, búsqueda normal. Grupos propios en {{setting:smart_search_extra_synonyms}}.
+    smart_search_minimum_results: Los sinónimos solo se prueban si la búsqueda original da menos de esta cantidad de resultados. Más alto, más consultas. 1 = solo cuando no hay nada.
+    smart_search_variant_limit: Cuántas búsquedas con sinónimos, además de la original. 2 = todas las palabras y solo la primera; 1 = solo todas.
+    smart_search_extra_synonyms: Grupos de sinónimos propios, en minúsculas y separados por comas, por ejemplo «cripto,criptomoneda,criptoactivo». Aplica al momento.
+
+    # ── Avisos emergentes ──────────────────────────────────────────────────
+    popup_notifications_enabled: Muestra una tarjeta arriba a la derecha al llegar una notificación. Solo escritorio. No cambia la campana ni el estado de lectura. Cada persona lo activa en Preferencias → Cuenta.
+    popup_notifications_default_enabled: Valor inicial de la preferencia para quien no la tocó. Conviene apagado, para no activarlo a toda la comunidad de golpe.
+    popup_notifications_timeout_seconds: Segundos que la tarjeta queda en pantalla. Clic en ella abre la notificación; clic afuera las cierra todas.
+    popup_notifications_max_stack: Máximo de tarjetas apiladas. Al llenarse, la nueva saca a la más vieja.
+    popup_notifications_excluded_types: Tipos que no generan tarjeta (por ejemplo, me gusta). Siguen en la campana. Vacío para todos.
+
+    # ── Dumbcourse ─────────────────────────────────────────────────────────
+    dumbcourse_enabled: Sirve la app Dumbcourse en la ruta de abajo. Apagado, esa ruta da 404.
+    dumbcourse_base_path: Primer segmento de la URL, sin barras («dumb» la sirve en /dumb). No puede chocar con rutas de Discourse como admin, t o u. Sin reinicio.
+    dumbcourse_default_theme: Esquema de color inicial. Cada visita puede cambiarlo y queda guardado en su navegador.
+    dumbcourse_default_view: Lista que se abre en la raíz. «Mis respuestas» cae a Recientes sin sesión.
+    dumbcourse_show_category_names: Muestra la categoría en cada fila de la lista.
+    dumbcourse_topic_posters_visibility: En qué dispositivos se ven los avatares de quienes participaron último.
+    dumbcourse_online_glow_enabled: Resalta el avatar de quienes están conectados.
+    dumbcourse_leaderboard_id: ID del ranking de discourse-gamification que se muestra en el menú. 0 lo oculta.
+    dumbcourse_sidebar_link_enabled: Agrega un enlace a Dumbcourse en la barra lateral del foro.
+    dumbcourse_pagination_enabled: Botones Anterior/Siguiente en vez de scroll infinito.
+    dumbcourse_topics_per_page: Historias por página. Solo con paginación. Máximo 100.
+    dumbcourse_push_enabled: Permite registrar dispositivos para notificaciones push y publicarlas en Redis. Solo llega a la app nativa; hace falta un servicio aparte escuchando los canales dumbcourse_push.
+    dumbcourse_languagetool_enabled: Agrega un botón «Refinar» en los editores de Dumbcourse que envía el borrador a LanguageTool y aplica la primera sugerencia de cada error, sin revisión ni deshacer. No afecta al editor de Discourse.
+    dumbcourse_languagetool_mode: Qué LanguageTool usar. Servidor propio usa la URL y el secreto; la API usa endpoint, usuario y clave.
+    dumbcourse_languagetool_url: "Solo servidor propio. Dirección del servidor, p. ej. https://lt.ejemplo.com. Se agrega /v2/check si falta. Siempre con https://, o el secreto viaja en claro."
+    dumbcourse_languagetool_secret: "Solo servidor propio, opcional. Se envía como «Authorization: Bearer <valor>». Para otra cabecera: «Nombre-Cabecera: valor»."
+    dumbcourse_languagetool_api_url: Solo API. Endpoint de LanguageTool. Se deja así salvo que den uno dedicado.
+    dumbcourse_languagetool_api_username: Solo API, opcional. Correo de la cuenta Premium. Vacío para la versión gratuita. Con usuario, también hace falta la clave.
+    dumbcourse_languagetool_api_key: Solo API. Clave asociada al usuario de arriba; sin usuario, LanguageTool la rechaza.
+
+    # ── Disteleplus ────────────────────────────────────────────────────────
+    disteleplus_enabled: Puente bidireccional entre un grupo de Telegram y la conversación nativa /disteleplus. Nada de abajo funciona sin esto. No requiere el plugin de Chat.
+    disteleplus_bot_token: Token de @BotFather (/newbot). El bot tiene que estar en el grupo, ser admin y tener el modo privacidad desactivado (/setprivacy), o no recibe mensajes.
+    disteleplus_telegram_chat_id: ID numérico del grupo, negativo (p. ej. -1001234567890). Sale de @RawDataBot o getUpdates. Los mensajes de otros grupos se ignoran.
+    disteleplus_setup_commands_enabled: Permite configurar el puente desde Telegram con comandos /disteleplus_* (admins del grupo). Vincular reportes exige estar mapeado a admin del foro. Conviene apagarlo después de configurar.
+    disteleplus_chat_topic_id: ID opcional del tema de Telegram para la conversación. 0 usa General (salvo el tema de archivo de adjuntos).
+    disteleplus_webhook_secret: Secreto que Telegram devuelve en X-Telegram-Bot-Api-Secret-Token; es lo único que autentica el webhook. Vacío se genera al usar «Registrar webhook de Telegram». Si se cambia a mano, hay que volver a registrarlo.
+    disteleplus_chat_channel_id: ID del canal de chat viejo. Solo lo usa el importador de historial.
+    disteleplus_allowed_groups: Grupos que pueden usar la conversación. Por defecto el team. Admins siempre pueden.
+    disteleplus_bridge_bot_username: Cuenta del foro que publica los mensajes de Telegram sin cuenta asociada. Se crea sola (NC4) si no existe.
+    disteleplus_user_map: Cuentas de Telegram que publican como una cuenta puntual del foro. Quien controle esa cuenta de Telegram publica como esa persona, así que solo con gente de confianza y con el ID numérico para el team (los botones de reportes solo aceptan filas con ID numérico).
+    disteleplus_auto_match_usernames: Asocia sola a quien tenga el mismo @usuario en Telegram y en el foro. Nunca cuentas del team, que requieren fila en {{setting:disteleplus_user_map}}.
+    disteleplus_user_mappings: "Heredado, reemplazado por {{setting:disteleplus_user_map}}. Ya no se lee."
+    disteleplus_encrypt_at_rest: Cifra el texto de los mensajes en la base de datos (AES-256, clave derivada del secreto del sitio). La búsqueda descifra en el servidor.
+    disteleplus_typing_to_telegram: Muestra «escribiendo…» en Telegram mientras alguien escribe en el foro. Al revés no es posible.
+    disteleplus_read_receipts_enabled: Muestra «Visto por N» en los mensajes propios. Solo cuenta lecturas del foro.
+    disteleplus_quote_in_topic_enabled: Ofrece «Citar en una historia nueva» en el menú del mensaje.
+    disteleplus_polls_enabled: Crea encuestas reales del foro desde la conversación. A Telegram llega la pregunta con un enlace para votar acá.
+    disteleplus_polls_topic_id: Historia oculta que guarda las encuestas. Se gestiona sola.
+    disteleplus_event_messages: Eventos del foro que publican un mensaje automático en la conversación (historias nuevas, primeros accesos, suspensiones, silenciados). No van a Telegram ni generan avisos.
+    disteleplus_bridge_uploads: Copia fotos, documentos, video y audio en ambos sentidos hasta el límite de abajo. Apagado, se reemplazan por un texto.
+    disteleplus_max_upload_mb: Los archivos más grandes no se copian. Máximo 20 MB, límite de la API de bots.
+    disteleplus_bridge_edits: Las ediciones se reflejan del otro lado. Editar en el foro un mensaje de Telegram solo cambia la copia del foro.
+    disteleplus_bridge_deletes: Borrar un mensaje lo borra también en Telegram (menos de 48 h y con permiso de borrado). Lo borrado en Telegram no se refleja acá.
+    disteleplus_bridge_polls: Muestra las encuestas de Telegram como texto que se actualiza con los votos. No se vota desde el foro.
+    disteleplus_bridge_reaction_notices: Cuando alguien reacciona en el foro, publica «Nombre reaccionó 👍» bajo la copia en Telegram, sin aviso.
+    disteleplus_bridge_reactions: Las reacciones de Telegram aparecen acá. Hacia Telegram solo entra una reacción por mensaje, la última.
+    disteleplus_forum_uploads_enabled: Copia los adjuntos de las respuestas del foro a un tema de Telegram como archivo. Excluye mensajes personales, respuestas privadas, ocultas y categorías restringidas.
+    disteleplus_forum_upload_topic_id: message_thread_id del tema de archivo. Distinto de {{setting:disteleplus_chat_topic_id}} y nunca 1 (General). Más simple con /disteleplus_create_uploads en Telegram.
+    disteleplus_forum_upload_topic_name: Nombre del tema de archivo al crearlo el bot.
+    disteleplus_forum_upload_category_ids: Categorías cuyos adjuntos se copian. Vacío para todas las válidas. Las subcategorías no se incluyen solas.
+    disteleplus_forum_upload_include_restricted_categories: Copia también adjuntos de categorías restringidas. Puede exponer material privado a todo el grupo de Telegram. Mensajes personales y respuestas privadas siguen excluidos.
+    disteleplus_forum_upload_max_mb: Tamaño máximo copiado a Telegram (la API limita a 50 MB). Los más grandes se reemplazan por un enlace.
+    disteleplus_forum_upload_backfill_batch_size: Adjuntos viejos revisados por lote.
+    disteleplus_forum_upload_backfill_pause_seconds: Pausa entre lotes. Se puede reanudar sin duplicar.
+    disteleplus_forum_upload_backfill_spacing_seconds: Separación mínima entre envíos viejos. 4 s (15 por minuto) queda bajo el límite de Telegram.
+    disteleplus_forum_upload_measure_now: Mide lo que se copiaría sin enviar nada y lo escribe en /logs ([discourse-dumb-nautas disteleplus]). Se apaga solo.
+    disteleplus_forum_upload_backfill_now: Empieza o reanuda la copia de adjuntos viejos, por lotes. Se apaga solo.
+    disteleplus_chat_button_opens_bridge: El botón de chat y /chat abren directo la conversación del puente. Requiere {{setting:disteleplus_chat_channel_id}}.
+    disteleplus_lock_chat_ui: Reduce el chat a esta conversación. Crear canales, mensajes directos e hilos queda bloqueado para todo el mundo, admins incluidos, y las páginas del chat redirigen al puente. Requiere {{setting:disteleplus_chat_channel_id}}.
+    disteleplus_lock_chat_exempt_admins: Con el bloqueo, admins pueden seguir viendo las páginas del chat. Crear sigue bloqueado.
+    disteleplus_force_channel_notifications: Pone a toda la gente de los grupos permitidos en notificación «siempre». Se sincroniza cada 30 min. Push requiere {{setting:push_notifications_prompt}} y que cada persona lo acepte.
+    disteleplus_notification_sync_now: Sincroniza ahora las notificaciones del canal. Se apaga solo.
+    disteleplus_voice_notes_enabled: Botón de micrófono para grabar notas de voz y reproductor compacto. Llegan a Telegram como notas de voz. Agrega ogg, webm, m4a y opus a {{setting:authorized_extensions}}. Las grabaciones WebM necesitan ffmpeg en el servidor para ir como nota de voz.
+    disteleplus_voice_note_max_seconds: Duración máxima de una nota de voz.
+    disteleplus_voice_notes_bridge_channel_only: Micrófono solo en el canal del puente.
+    disteleplus_voice_player_all_audio: Usa el reproductor compacto para todo el audio del chat.
+    disteleplus_forum_post_notifications_enabled: Publica un resumen de las respuestas nuevas del foro en la conversación y en Telegram. Nunca mensajes personales, respuestas privadas, ocultas ni categorías restringidas.
+    disteleplus_forum_post_categories: Solo estas categorías (y sus subcategorías). Vacío para todas las públicas.
+    disteleplus_forum_post_tags: Solo historias con alguna de estas etiquetas. Vacío para cualquiera.
+    disteleplus_forum_post_first_post_only: Solo el inicio de cada historia.
+    disteleplus_forum_post_excerpt_length: Caracteres del extracto. 0 solo título.
+    disteleplus_reports_enabled: Refleja la cola de revisión en un tema de Telegram con botones Aprobar / Rechazar / Más. Solo funcionan para el team mapeado por ID numérico en {{setting:disteleplus_user_map}}. Se vincula con /disteleplus_bind_reports.
+    disteleplus_reports_chat_id: ID del chat de Telegram para reportes. Vacío usa el grupo del puente ({{setting:disteleplus_telegram_chat_id}}). Conviene un grupo privado del team para no exponer contenido reportado.
+    disteleplus_reports_topic_id: "ID del tema de reportes. Se deja en 0: el plugin lo crea con el nombre {{setting:disteleplus_reports_topic_name}} (necesita temas activados y permiso de gestionar temas)."
+    disteleplus_reports_topic_name: Nombre del tema de reportes en Telegram.
+    disteleplus_reports_excerpt_length: Caracteres del contenido mostrados en el reporte. 0 lo oculta.
+    disteleplus_reports_admin_notices: Publica también en el tema de reportes las novedades, problemas del panel y avisos oficiales (sin su texto).
+    disteleplus_forum_post_link_preview: Deja que Telegram muestre la vista previa del enlace.
+    disteleplus_send_test_message_now: Envía un mensaje de prueba al grupo. Se apaga solo; los fallos salen en el panel.
+    disteleplus_register_webhook_now: Registra el webhook en Telegram (genera el secreto si falta) e instala el menú /disteleplus_*. Se apaga solo; el resultado queda en /logs («setWebhook OK»). Se repite al cambiar token, secreto o dominio. {{setting:disteleplus_setup_commands_enabled}} actualiza el menú solo.
+
+    # ── Avatar por nombre ──────────────────────────────────────────────────
+    discourse_username_avatar_enabled: Genera los avatares por defecto a partir del nombre de usuario en vez del correo. No afecta a quien subió su avatar.
+
+    placeholder:
+      discourse_another_email_smtp_address: smtp.ejemplo.com
+      discourse_another_email_smtp_username: usuario@ejemplo.com
+      discourse_another_email_smtp_domain: foro.ejemplo.com
+      discourse_another_email_force_from_domain: ejemplo.com
+      disteleplus_telegram_chat_id: "-1001234567890"
+      disteleplus_bot_token: "123456789:AAE…"
+
+    keywords:
+      discourse_no_likes_enabled: dislike|me gusta|fantasma
+      no_reactions_category_ids: dislike|reacciones|fantasma
+      dislike_show_in_history: actividad|me gusta dados|me gusta recibidos
+      dislike_count_in_leaderboard: estadísticas|likes_given|likes_received|ranking
+      purge_phantom_likes_now: purgar|recalcular
+      discourse_another_email_enabled: smtp|relé|correo saliente
+      discourse_another_email_smtp_address: smtp|relé|servidor
+      discourse_another_email_smtp_security: tls|ssl|starttls|cifrado
+      discourse_another_email_smtp_openssl_verify_mode: tls|ssl|certificado
+      mini_mod_enabled: mini-mod|moderación de categoría
+      mini_mod_manage_all_categories: mini-mod|alcance|todas las categorías
+      mini_mod_manage_tags: mini-mod|etiquetas|renombrar etiqueta
+      tl4_can_post_in_closed_topics: mini-mod|nc4|nivel 4|historia cerrada
+      tl4_can_reopen_topics: mini-mod|nc4|nivel 4|reabrir
+      translator_tweaks_worker_url: cloudflare|worker|proxy|googleapis|traducir
+      translator_tweaks_hide_untranslatable: globo|traducir|idioma detectado
+      smart_search_extra_synonyms: sinónimos|diccionario|búsqueda
+      popup_notifications_excluded_types: aviso|ruido|me gusta|silenciar
+      dumbcourse_base_path: ruta|url|spa
+      dumbcourse_languagetool_secret: gramática|ortografía|token
+      disteleplus_user_map: telegram|mapeo|identidad|suplantar
+      disteleplus_chat_channel_id: telegram|puente|canal
+      disteleplus_reports_enabled: reportes|cola de revisión|moderación|aprobar|rechazar
+      disteleplus_reports_chat_id: reportes|grupo admin|moderación
+      disteleplus_reports_admin_notices: novedades|panel|problemas|avisos
+      disteleplus_auto_match_usernames: identidad|suplantar|seguridad
+      discourse_username_avatar_enabled: avatar|gravatar|nombre de usuario|avatar de letra
+
+    errors:
+      translator_tweaks_invalid_worker_url: tiene que ser una URL https:// completa sin espacios (p. ej. https://ejemplo.workers.dev/language/translate/v2) o quedar vacía para llamar a Google
+      dumbcourse_base_path_invalid: tiene que ser un único segmento con minúsculas, números, guiones y guiones bajos, y no una ruta reservada de Discourse
+
+  discourse_mod_categories:
+    note_notification_alert: '%{username} agregó una nota de moderación en «%{topic}»'
+    note_reply_notification_alert: '%{username} respondió a una nota de moderación en «%{topic}»'
+    post_deleted_notification_alert: '%{username} eliminó una respuesta en «%{topic}»'
+    post_approved_notification_alert: '%{username} aprobó una respuesta en cola en «%{topic}»'
+    post_rejected_notification_alert: '%{username} rechazó una respuesta en cola'
+    user_note_notification_alert: '%{username} agregó una nota a %{target}'
+    flag_note_notification_alert: '%{username} agregó una nota a un reporte sobre %{target}'
