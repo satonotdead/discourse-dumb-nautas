@@ -6,6 +6,8 @@ RSpec.describe DiscourseDisteleplus::UserMatcher do
   fab!(:alice) { Fabricate(:user, username: "alice") }
   fab!(:bob) { Fabricate(:user, username: "bob") }
 
+  before { SiteSetting.disteleplus_enabled = true }
+
   def from(username)
     { "id" => 1, "username" => username }
   end

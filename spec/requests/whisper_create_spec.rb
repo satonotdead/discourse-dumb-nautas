@@ -45,6 +45,7 @@ RSpec.describe "Whisper creation" do
 
   describe "staff-authored targeted whisper" do
     it "stays a regular post even when the composer also sent a core whisper flag" do
+      SiteSetting.whispers_allowed_groups = Group::AUTO_GROUPS[:staff].to_s
       create_post_for(
         moderator,
         { armed_param => true, targets_field => [target.id], :whisper => true },

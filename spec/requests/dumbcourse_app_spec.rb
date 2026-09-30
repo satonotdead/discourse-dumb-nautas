@@ -63,6 +63,7 @@ RSpec.describe "Dumbcourse login with SSO" do
   before do
     SiteSetting.dumbcourse_enabled = true
     SiteSetting.discourse_connect_url = "https://idp.example.com/sso"
+    SiteSetting.discourse_connect_secret = "a" * 32
     SiteSetting.enable_discourse_connect = true
   end
 

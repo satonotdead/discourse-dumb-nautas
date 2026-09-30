@@ -28,5 +28,5 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (message_id => disteleplus_messages.id)
+#  fk_rails_...  (message_id => disteleplus_messages.id) ON DELETE => cascade
 #

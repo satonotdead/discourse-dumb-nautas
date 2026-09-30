@@ -8,7 +8,9 @@ module DiscourseDumbcourse
     include ::CurrentUser
 
     layout false
-    protect_from_forgery with: :exception
+    # GET only; forgery protection would refuse to serve dumbcourse.js as a
+    # "cross-origin" script. The app's writes go through CSRF-checked controllers.
+    skip_forgery_protection
     before_action :ensure_enabled
     before_action :relax_security_headers
     before_action :redirect_anonymous_to_login
