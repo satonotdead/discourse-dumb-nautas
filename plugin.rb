@@ -24,28 +24,34 @@ enabled_site_setting :jtech_enabled
 # of its parent switches in this plugin is off; switches without a parent
 # follow jtech_enabled. Stored values and the admin UI are untouched, and the
 # client settings go through the same readers, so the front end agrees.
-JTECH_SWITCH_PARENTS =
-  begin
-    all =
-      YAML
-        .safe_load(File.read(File.expand_path("config/settings.yml", __dir__)))
-        .values
-        .grep(Hash)
-        .reduce({}, :merge)
-    switches = all.select { |_, o| o.is_a?(Hash) && [true, false].include?(o["default"]) }
-    switches.except("jtech_enabled").to_h do |name, o|
-      parents = Array(o["depends_on"]) & switches.keys
-      [name, parents.empty? ? ["jtech_enabled"] : parents]
+module ::JtechSwitches
+  PARENTS =
+    begin
+      all =
+        YAML
+          .safe_load(File.read(File.expand_path("config/settings.yml", __dir__)))
+          .values
+          .grep(Hash)
+          .reduce({}, :merge)
+      switches = all.select { |_, o| o.is_a?(Hash) && [true, false].include?(o["default"]) }
+      switches
+        .except("jtech_enabled")
+        .to_h do |name, o|
+          parents = Array(o["depends_on"]) & switches.keys
+          [name, parents.empty? ? ["jtech_enabled"] : parents]
+        end
     end
-  end
 
-SiteSetting.singleton_class.prepend(
-  Module.new do
-    JTECH_SWITCH_PARENTS.each do |name, parents|
-      define_method(name) { |*args| super(*args) && parents.all? { |p| public_send(p) } }
+  GATE =
+    Module.new do
+      PARENTS.each do |name, parents|
+        define_method(name) { |*args| super(*args) && parents.all? { |p| public_send(p) } }
+      end
     end
-  end,
-)
+end
+
+# SiteSetting only exists once Rails has loaded, not while plugin.rb runs.
+after_initialize { SiteSetting.singleton_class.prepend(::JtechSwitches::GATE) }
 
 # Load each sub-plugin's body in the Plugin::Instance context so that all
 # Discourse plugin DSL methods — after_initialize, on(:event), register_asset,

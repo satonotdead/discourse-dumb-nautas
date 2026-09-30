@@ -781,7 +781,9 @@ after_initialize do
   if defined?(::CategoryLockdown) && ::CategoryLockdown.respond_to?(:whisper_reply?)
     module ::DiscourseModCategories::LockdownWhisperReplyPatch
       def whisper_reply?(post)
-        return false if post.custom_fields.key?(::DiscourseModCategories::POST_WHISPER_TARGETS_FIELD)
+        if post.custom_fields.key?(::DiscourseModCategories::POST_WHISPER_TARGETS_FIELD)
+          return false
+        end
         super
       end
     end
@@ -1201,7 +1203,9 @@ after_initialize do
       )
     rescue StandardError => e
       # The notify side effect must never block the underlying delete.
-      ::Rails.logger.warn("[discourse-dumb-nautas] post_destroyed notify failed: #{e.class}: #{e.message}")
+      ::Rails.logger.warn(
+        "[discourse-dumb-nautas] post_destroyed notify failed: #{e.class}: #{e.message}",
+      )
     end
   end
 
@@ -1388,7 +1392,9 @@ after_initialize do
             target_username: target_label,
           )
         rescue StandardError => e
-          ::Rails.logger.warn("[discourse-dumb-nautas] flag_note notify failed: #{e.class}: #{e.message}")
+          ::Rails.logger.warn(
+            "[discourse-dumb-nautas] flag_note notify failed: #{e.class}: #{e.message}",
+          )
         end
       end
     end

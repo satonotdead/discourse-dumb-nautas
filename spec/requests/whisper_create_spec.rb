@@ -45,7 +45,10 @@ RSpec.describe "Whisper creation" do
 
   describe "staff-authored targeted whisper" do
     it "stays a regular post even when the composer also sent a core whisper flag" do
-      create_post_for(moderator, { armed_param => true, targets_field => [target.id], whisper: true })
+      create_post_for(
+        moderator,
+        { armed_param => true, targets_field => [target.id], :whisper => true },
+      )
       expect(response.status).to eq(200)
 
       created = Post.find(response.parsed_body["id"])

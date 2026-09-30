@@ -23,13 +23,18 @@ export default class JtechAdminActions extends Component {
     const perform = async () => {
       this.running = descriptor.id;
       try {
-        await ajax(`/admin/plugins/discourse-dumb-nautas/actions/${descriptor.id}`, {
-          type: "POST",
-        });
+        await ajax(
+          `/admin/plugins/discourse-dumb-nautas/actions/${descriptor.id}`,
+          {
+            type: "POST",
+          }
+        );
         this.toasts.success({
           duration: 5000,
           data: {
-            message: i18n(`admin.discourse_dumb_nautas.actions.${descriptor.id}.done`),
+            message: i18n(
+              `admin.discourse_dumb_nautas.actions.${descriptor.id}.done`
+            ),
           },
         });
       } catch (error) {
@@ -41,7 +46,9 @@ export default class JtechAdminActions extends Component {
 
     if (descriptor.confirm) {
       this.dialog.confirm({
-        message: i18n(`admin.discourse_dumb_nautas.actions.${descriptor.id}.confirm`),
+        message: i18n(
+          `admin.discourse_dumb_nautas.actions.${descriptor.id}.confirm`
+        ),
         didConfirm: perform,
       });
     } else {

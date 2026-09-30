@@ -132,7 +132,9 @@ module ::DiscourseSmartSearch
             index.default_proc = nil
             index
           rescue StandardError => e
-            ::Rails.logger.warn("[smart-search] Spanish dictionary unavailable: #{e.class}: #{e.message}")
+            ::Rails.logger.warn(
+              "[smart-search] Spanish dictionary unavailable: #{e.class}: #{e.message}",
+            )
             {}
           end
       end

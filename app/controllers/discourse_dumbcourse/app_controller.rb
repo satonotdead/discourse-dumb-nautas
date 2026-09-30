@@ -188,7 +188,9 @@ module DiscourseDumbcourse
     # Discourse sends the user back to this cookie after DiscourseConnect or
     # OmniAuth, then deletes it, so logins started on the main site are untouched.
     def redirect_to_discourse_login
-      cookies[:destination_url] = "#{Discourse.base_path}#{DiscourseDumbcourse.base_path_with_slash}/"
+      cookies[
+        :destination_url
+      ] = "#{Discourse.base_path}#{DiscourseDumbcourse.base_path_with_slash}/"
       redirect_to "#{Discourse.base_path}/login"
     end
 

@@ -17,7 +17,7 @@ RSpec.describe "Dumbcourse app shell" do
   end
 
   it "never serves files outside its public folder" do
-    ["../plugin.rb", "..%2Fplugin.rb", "../../../../../../etc/passwd"].each do |path|
+    %w[../plugin.rb ..%2Fplugin.rb ../../../../../../etc/passwd].each do |path|
       get "/dumb/#{path}"
       expect(response.body).not_to include("frozen_string_literal")
       expect(response.body).not_to include("root:")

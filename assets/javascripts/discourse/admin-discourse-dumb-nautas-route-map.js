@@ -18,6 +18,8 @@ export default {
     this.route("discourse-dumb-nautas-smart-search", { path: "smart-search" });
     this.route("discourse-dumb-nautas-popups", { path: "popups" });
     this.route("discourse-dumb-nautas-disteleplus", { path: "disteleplus" });
-    this.route("discourse-dumb-nautas-username-avatar", { path: "username-avatar" });
+    this.route("discourse-dumb-nautas-username-avatar", {
+      path: "username-avatar",
+    });
   },
 };

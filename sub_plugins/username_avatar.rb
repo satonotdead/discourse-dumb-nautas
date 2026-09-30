@@ -34,7 +34,5 @@ after_initialize do
     end
   end
 
-  reloadable_patch do
-    ::User.prepend(DiscourseUsernameAvatar::UserEmailHashPatch)
-  end
+  reloadable_patch { ::User.prepend(DiscourseUsernameAvatar::UserEmailHashPatch) }
 end
