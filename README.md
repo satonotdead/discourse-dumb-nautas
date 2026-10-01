@@ -3,6 +3,8 @@
 
 <h1 align="center">Jtech Tools</h1>
 
+<p align="center"><b>Dumb Nautas edition</b> — Criptonautas' build of Jtech Tools. See <a href="EDITION.md">EDITION.md</a> for what it changes and how it syncs.</p>
+
 <p align="center">
   The plugin behind <a href="https://forums.jtechforums.org">JTech Forums</a>: everything we run on top of Discourse, in one place.
 </p>
