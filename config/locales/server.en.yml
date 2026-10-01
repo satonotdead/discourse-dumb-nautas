@@ -68,7 +68,7 @@ en:
     # admin_js.admin.site_settings.categories.
 
     # ── Jtech (master) ─────────────────────────────────────────────────────
-    jtech_enabled: Master gate for the whole Jtech plugin bundle. Every
+    jtech_enabled: Master gate for the whole Dumb Nautas plugin bundle. Every
       sub-plugin also has its own enable switch on its tab for fine-grained
       control.
 
@@ -189,7 +189,7 @@ en:
       applies only to category group moderators — users who moderate a
       category through a category moderation group, set up with
       {{setting:enable_category_group_moderation}}. It never applies to
-      site-wide moderators (those are on the Jtech — Mod tab) and never
+      site-wide moderators (those are on the Dumb Nautas — Mod tab) and never
       changes anything for staff. While this is off, every setting below has
       no effect.
 
@@ -402,7 +402,7 @@ en:
       as new for anyone outside their audience either way.
 
     # ── Jtech — Translator tweaks ──────────────────────────────────────────
-    translator_tweaks_enabled: Master switch for the Jtech tweak to the
+    translator_tweaks_enabled: Master switch for the tweak to the
       upstream discourse-translator plugin. Inert unless that plugin is
       installed. The proxy below is applied once at boot, so turning this
       off doesn't send translation traffic back to Google until the site is
@@ -736,7 +736,7 @@ en:
 
     disteleplus_forum_upload_max_mb: Largest file copied into Telegram. The
       Bot API currently caps bot-sent files at 50 MB. Larger or unreadable
-      files produce a metadata message linking back to JTech instead.
+      files produce a metadata message linking back to the forum instead.
 
     disteleplus_forum_upload_backfill_batch_size: Number of historical upload
       references examined per backfill step. Smaller batches reduce load and
