@@ -75,6 +75,7 @@ export interface BootSettings {
   reactions: { enabled: boolean; main: string; list: string[] };
   noReactionCategoryIds: number[];
   reqpmCountryCode: string;
+  leaderboardId: number;
   tagsEnabled: boolean;
   maxPostLength: number;
   minPostLength: number;
@@ -109,6 +110,8 @@ export interface BootSettings {
     userFields: UserField[];
     providers: AuthProvider[];
     hcaptchaSiteKey: string;
+    // Sign-in happens on the full site (DiscourseConnect or no local logins).
+    external: boolean;
   };
 }
 
@@ -133,6 +136,7 @@ const DEFAULTS: BootSettings = {
   reactions: { enabled: false, main: "heart", list: [] },
   noReactionCategoryIds: [],
   reqpmCountryCode: "1",
+  leaderboardId: 0,
   tagsEnabled: false,
   maxPostLength: 32000,
   minPostLength: 1,
@@ -160,6 +164,7 @@ const DEFAULTS: BootSettings = {
     userFields: [],
     providers: [],
     hcaptchaSiteKey: "",
+    external: false,
   },
 };
 

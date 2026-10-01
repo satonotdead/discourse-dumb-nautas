@@ -237,6 +237,8 @@ export function openMenu(): void {
       menuItem("/notifications", "Notifications", "bell", unreadNotifications())
     );
     items.push(menuItem("/bookmarks", "Bookmarks", "bookmark"));
+    if (settings.leaderboardId)
+      items.push(menuItem("/leaderboard", "Leaderboard", "star"));
     if (
       u.can_send_private_messages ||
       u.new_personal_messages_notifications_count > 0

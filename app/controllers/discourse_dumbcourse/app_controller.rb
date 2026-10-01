@@ -227,6 +227,7 @@ module DiscourseDumbcourse
         reactions: reactions,
         noReactionCategoryIds: no_reaction_category_ids,
         reqpmCountryCode: setting(:reqpm_default_country_code).to_s,
+        leaderboardId: setting(:dumbcourse_leaderboard_id).to_i,
         tagsEnabled: !!SiteSetting.tagging_enabled,
         maxPostLength: SiteSetting.max_post_length,
         minPostLength: SiteSetting.min_post_length,
@@ -403,6 +404,7 @@ module DiscourseDumbcourse
           end,
         hcaptchaSiteKey:
           setting(:discourse_captcha_enabled) ? setting(:hcaptcha_site_key).to_s : "",
+        external: !!SiteSetting.enable_discourse_connect || !local,
       }
     end
 

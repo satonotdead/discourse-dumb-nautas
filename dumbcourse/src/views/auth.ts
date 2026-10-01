@@ -39,6 +39,17 @@ function finishLogin(ctx: RouteContext): void {
   location.replace(APP_ROOT + nextPath(ctx));
 }
 
+// Sites that sign in elsewhere (DiscourseConnect, or only external
+// providers such as an OIDC SSO) use the full site's own sign-in, which
+// returns here through the destination_url cookie.
+function externalLogin(ctx: RouteContext): boolean {
+  if (!settings.auth.external) return false;
+  const secure = location.protocol === "https:" ? "; secure" : "";
+  document.cookie = `destination_url=${encodeURIComponent(APP_ROOT + nextPath(ctx))}; path=/; max-age=600; samesite=lax${secure}`;
+  location.replace(settings.subfolder + "/login");
+  return true;
+}
+
 function honeypot(): Promise<{ value: string; challenge: string }> {
   return get<{ value: string; challenge: string }>("/session/hp.json").then(
     (d) => ({
@@ -128,6 +139,7 @@ export function loginRoute(ctx: RouteContext): void {
     go(nextPath(ctx), { replace: true });
     return;
   }
+  if (externalLogin(ctx)) return;
   s.title("Sign in", { back: false });
   const a = settings.auth;
   const others: SafeHtml[] = [];
@@ -900,6 +912,7 @@ export function linkRoute(ctx: RouteContext): void {
 // ── Sign up ───────────────────────────────────────────────────────────
 
 export function signupRoute(ctx: RouteContext): void {
+  if (externalLogin(ctx)) return;
   const s = useScreen();
   s.title("Create account", { back: true });
   const a = settings.auth;

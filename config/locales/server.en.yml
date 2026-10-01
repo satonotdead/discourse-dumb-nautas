@@ -504,6 +504,8 @@ en:
       email-login and password-reset links. Members who choose "Open forum
       links here" in Dumbcourse's preferences are sent there too. Search
       engine crawlers are never redirected.
+    dumbcourse_leaderboard_id: Id of the discourse-gamification leaderboard
+      Dumbcourse shows in its menu. 0 hides it.
 
     dumbcourse_default_view: Topic list shown when someone opens the app at
       its root URL. "My posts" falls back to Latest for signed-out visitors.

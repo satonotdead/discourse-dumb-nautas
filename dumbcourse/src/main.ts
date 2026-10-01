@@ -35,6 +35,7 @@ import {
 } from "./views/auth.ts";
 import { categoriesRoute } from "./views/categories.ts";
 import { helpRoute } from "./views/help.ts";
+import { leaderboardRoute } from "./views/leaderboard.ts";
 import { bookmarksRoute, draftsRoute, messagesRoute } from "./views/lists.ts";
 import { notificationsRoute } from "./views/notifications.ts";
 import { phoneKeysRoute } from "./views/phone-keys.ts";
@@ -71,6 +72,7 @@ route("/t/*", topicRoute);
 route("/messages", messagesRoute);
 route("/notifications", notificationsRoute);
 route("/bookmarks", bookmarksRoute);
+route("/leaderboard", leaderboardRoute);
 route("/drafts", draftsRoute);
 route("/search", searchRoute);
 route("/review", reviewRoute);
