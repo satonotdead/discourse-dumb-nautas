@@ -21,5 +21,6 @@ export default {
     this.route("discourse-dumb-nautas-username-avatar", {
       path: "username-avatar",
     });
+    this.route("discourse-dumb-nautas-reqpm", { path: "reqpm" });
   },
 };

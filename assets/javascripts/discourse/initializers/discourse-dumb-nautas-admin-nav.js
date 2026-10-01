@@ -51,6 +51,10 @@ const LINKS = [
     route: "adminPlugins.show.discourse-dumb-nautas-username-avatar",
   },
   {
+    label: "discourse_dumb_nautas.admin.tabs.reqpm",
+    route: "adminPlugins.show.discourse-dumb-nautas-reqpm",
+  },
+  {
     label: "discourse_dumb_nautas.admin.tabs.all_settings",
     route: "adminPlugins.show.settings",
   },

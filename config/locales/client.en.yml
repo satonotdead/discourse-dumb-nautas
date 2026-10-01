@@ -146,10 +146,174 @@ en:
         download: Download
         fullscreen: Full screen
         unavailable: This audio could not be loaded.
+    reqpm:
+      title: REQ-PM
+      button:
+        label: REQ-PM
+        title: Request or send contact details
+      menu:
+        label: REQ-PM contacts
+      preferences:
+        nav: REQ-PM
+        title: Your contact card
+        open_hub: Requests and contacts
+        not_yours: Only the member can see their card.
+      sidebar:
+        text: REQ-PM
+        title: Request and exchange contact details
+      notifications:
+        request: wants your contact details
+        shared: sent you their contact details
+      actions:
+        call: Call
+        text: Text
+        chat: Chat
+        email: Email
+        visit: Visit
+        open: Open
+      kinds:
+        phone:
+          field: Number
+          name: Phone
+          short: Phone
+          placeholder: "+1 718 555 0100"
+        sms:
+          field: Number
+          name: Text message
+          short: Text
+          placeholder: "+1 718 555 0100"
+        whatsapp:
+          field: WhatsApp number
+          name: WhatsApp
+          short: WhatsApp
+          placeholder: "+1 718 555 0100"
+        email:
+          field: Address
+          name: Email
+          short: Email
+          placeholder: you@example.com
+        website:
+          field: Link
+          name: Website
+          short: Website
+          placeholder: example.com
+        telegram:
+          field: Username or number
+          name: Telegram
+          short: Telegram
+          placeholder: "@username"
+        signal:
+          field: Number or username
+          name: Signal
+          short: Signal
+          placeholder: "+1 718 555 0100 or name.01"
+        discord:
+          field: Username
+          name: Discord
+          short: Discord
+          placeholder: username
+        custom:
+          field: Details
+          name: Something else
+          short: Other
+          placeholder: How people can reach you
+      contact_list:
+        copy: Copy
+        copied: Copied
+      form:
+        emoji: Emoji
+        label: Name
+        label_placeholder: e.g. Office line
+        value: Details
+        note: Note
+        optional: (optional)
+        note_placeholder: e.g. Evenings only
+        share_by_default: Select by default when sending
+        country_code_hint: "Saved as +%{code} unless you add a country code."
+        add: Add
+        save: Save
+        cancel: Cancel
+      errors:
+        generic: Something went wrong. Please try again.
+      editor:
+        pick_title: How can people reach you?
+        add_first: Add a way to reach you
+        add_another: Add another
+        limit_reached: "Limit of %{max} reached."
+        default_pill: default
+        default_title: Selected by default when sending
+        unreadable: Unreadable — edit and enter it again.
+        move_up: Move up
+        move_down: Move down
+        edit: Edit
+        delete: Remove
+        delete_confirm: "Remove %{name}? Anyone you sent it to will lose it too."
+      user_modal:
+        title: "REQ-PM with %{username}"
+        their_details: Their details
+        nothing_yet: "%{username} hasn't sent you any contact details yet."
+        forget: Remove from my contacts
+        forget_confirm: "Remove %{username}'s details? You'd have to ask again."
+        what_would_you_like: "Anything in particular? (optional)"
+        request: Ask for their details
+        request_sent: Request sent.
+        pending: "Requested %{date}"
+        withdraw: Withdraw request
+        cooldown: "You can ask again on %{date}."
+        unavailable: "%{username} can't be asked for contact details right now."
+        they_asked: "%{username} asked for your contact details"
+        they_would_like: "They'd like: %{kinds}"
+        no_thanks: No thanks
+        declined: Request dismissed.
+        your_details: Your details
+        send: Send selected
+        update_share: Update what they see
+        shared: Sent.
+        stop_sharing: Stop sharing
+        stop_confirm: "Stop sharing your details with %{username}?"
+        stopped: "%{username} can no longer see your details."
+        edit_card: Edit my card
+        cannot_share: "You can't send contact details to %{username} right now."
+        close: Close
+      setup:
+        title: Your contact card
+        lead: Members swap contact details here, and only people you choose see yours.
+        done: All set
+        later: Remind me later
+        never: I'd rather not
+        required_note: Add one to continue.
+        log_out: Log out
+      hub:
+        tabs:
+          requests: Requests
+          contacts: Contacts
+          card: My card
+          shared: Shared with
+        incoming_title: Waiting for your answer
+        wants_yours: wants your contact details
+        choose_what_to_send: Choose what to send
+        no_incoming: No one is waiting for you.
+        outgoing_title: Your requests
+        state:
+          waiting: Waiting
+          answered: Answered
+          expired: Expired
+        open: Open
+        no_outgoing: You haven't asked anyone yet.
+        how_to_request: Ask someone from their user card.
+        filter: Filter by name…
+        shared: shared
+        send_yours: Send yours
+        no_match: No one matches that.
+        no_contacts: No one has sent you their details yet.
+        allow_requests: Let members request my contact details
+        change: Change
+        no_shared: You haven't sent your details to anyone yet.
     jtech_popup_notifications:
       someone: Someone
       # Second half of the toast heading line, "Name — <action>".
       action:
+        reqpm: Contact details (REQ-PM)
         replied: Replied
         mentioned: Mentioned you
         quoted: Quoted you
@@ -473,6 +637,7 @@ en:
           popups: Pop-ups
           disteleplus: Disteleplus
           username_avatar: Username avatar
+          reqpm: REQ-PM
           all_settings: All settings
   admin_js:
     admin:
@@ -531,7 +696,13 @@ en:
           jtech_mod_topic_tools: "Dumb Nautas — Mod: Topic tools"
           jtech_mod_checklists: "Dumb Nautas — Mod: Checklists"
           jtech_username_avatar: Dumb Nautas — Username avatar
+          jtech_reqpm: Dumb Nautas — REQ-PM
         # Dropdown labels for the plugin's translatable enum settings.
+        reqpm:
+          setup_prompt:
+            "off": "Off — never ask"
+            gentle: Gentle — ask nicely, can be snoozed or turned down
+            required: Required — ask on every page until they add one
         dumbcourse:
           view:
             latest: Latest

@@ -1,9 +1,9 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
-import { getOwner } from "@ember/application";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
+import { getOwner } from "@ember/owner";
 import { cancel } from "@ember/runloop";
 import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
@@ -139,7 +139,7 @@ export default class JtechPopupNotification extends Component {
 
   // Icon + action label for a notification. Core types come from the stable
   // enum map; our own `custom` notifications are decoded from their data
-  // markers (whisper, mod-note kinds — which cover flag notes and
+  // markers (whisper, REQ-PM, mod-note kinds — which cover flag notes and
   // queued/pending-post approvals and rejections).
   metaFor(notification) {
     const data = notification.data || {};
@@ -152,6 +152,9 @@ export default class JtechPopupNotification extends Component {
       }
       if (data.mod_whisper) {
         return { icon: "eye", action: "whispered" };
+      }
+      if (data.reqpm) {
+        return { icon: "address-card", action: "reqpm" };
       }
       if (data.mod_note) {
         return MOD_NOTE_KINDS[data.mod_note_kind] || MOD_NOTE_KINDS.note;

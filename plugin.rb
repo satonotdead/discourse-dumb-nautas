@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 # name: discourse-dumb-nautas
-# about: discourse-dumb-nautas — Criptonautas' maintained edition of JtechTools, the JTech Forums all-in-one plugin. Reaction controls, alternate SMTP relay, mini-mod and moderator tooling, the Dumbcourse app, translator tweaks, smart search, desktop pop-ups, username-based default avatars, and the Telegram chat bridge.
+# about: discourse-dumb-nautas — Criptonautas' maintained edition of JtechTools, the JTech Forums all-in-one plugin. Reaction controls, alternate SMTP relay, mini-mod and moderator tooling, the Dumbcourse app, translator tweaks, smart search, desktop pop-ups, username-based default avatars, the Telegram chat bridge, and REQ-PM contact exchange.
 # version: 0.4.0
 # authors: TripleU, Shalom_Karr, Ars18
-# url: https://github.com/satonotdead/discourse-dumb-nautas
+# url: https://github.com/somos-criptonautas/discourse-dumb-nautas
 # required_version: 3.0.0
 
 # Smart-search synonym backend — rwordnet ships the WordNet lexical DB
@@ -15,7 +15,7 @@ gem "rwordnet", "2.0.0", require: false
 # Master gate. Each sub-plugin keeps its own enable setting (e.g.
 # discourse_no_likes_enabled, mini_mod_enabled, mod_categories_enabled,
 # dumbcourse_enabled, discourse_another_email_enabled, smart_search_enabled,
-# discourse_username_avatar_enabled) for fine-grained control.
+# discourse_username_avatar_enabled, reqpm_enabled) for fine-grained control.
 enabled_site_setting :jtech_enabled
 
 # `depends_on` in settings.yml only hides settings in the admin UI; the code
@@ -74,6 +74,7 @@ after_initialize { SiteSetting.singleton_class.prepend(::JtechSwitches::GATE) }
   popup_notifications
   disteleplus
   username_avatar
+  reqpm
 ].each do |sub|
   path = File.expand_path("sub_plugins/#{sub}.rb", __dir__)
   instance_eval(File.read(path), path, 1)

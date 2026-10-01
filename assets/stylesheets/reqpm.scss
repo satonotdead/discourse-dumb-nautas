@@ -1,0 +1,714 @@
+// REQ-PM — contact card, per-user window, page and setup prompt.
+// Deliberately quiet: neutral surfaces and core color variables only, small
+// controls, no brand colors or tinted panels.
+.reqpm-muted {
+  color: var(--primary-medium);
+  font-size: var(--font-down-1);
+}
+
+// ── Kind icon ──────────────────────────────────────────────────────────────
+.reqpm-kind-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background: var(--primary-very-low);
+  color: var(--primary-high);
+  font-size: var(--font-down-1);
+
+  .d-icon {
+    width: 0.9em;
+    height: 0.9em;
+  }
+
+  img.emoji {
+    width: 1.1em;
+    height: 1.1em;
+  }
+}
+
+// ── Received details ───────────────────────────────────────────────────────
+.reqpm-contact-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &__item {
+    display: flex;
+    gap: 0.6em;
+    align-items: center;
+    padding: 0.4em 0;
+    border-bottom: 1px solid var(--primary-low);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name,
+  &__note {
+    color: var(--primary-medium);
+    font-size: var(--font-down-2);
+  }
+
+  &__value {
+    overflow-wrap: anywhere;
+    user-select: all;
+  }
+
+  &__actions {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0.25em;
+  }
+}
+
+// ── Own card editor ────────────────────────────────────────────────────────
+.reqpm-card-editor {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 0.75em;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    align-items: center;
+    padding: 0.35em 0;
+    border-bottom: 1px solid var(--primary-low);
+
+    &--unreadable .reqpm-card-editor__value {
+      color: var(--danger);
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex: 1 1 12em;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    align-items: baseline;
+    color: var(--primary-medium);
+    font-size: var(--font-down-2);
+  }
+
+  &__default {
+    color: var(--primary-low-mid);
+
+    &::before {
+      content: "· ";
+    }
+  }
+
+  &__value {
+    overflow-wrap: anywhere;
+  }
+
+  &__note {
+    color: var(--primary-medium);
+    font-size: var(--font-down-2);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0;
+
+    .btn {
+      padding: 0.25em 0.4em;
+      color: var(--primary-low-mid);
+
+      &:hover .d-icon,
+      &:focus-visible .d-icon {
+        color: var(--primary);
+      }
+    }
+  }
+
+  &__inline-form {
+    flex: 1 1 100%;
+    padding-bottom: 0.5em;
+  }
+
+  &__picker-title {
+    margin: 0 0 0.4em;
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+  }
+
+  &__new {
+    margin-top: 0.4em;
+  }
+}
+
+// The "add a way to reach you" choices: a row of small pills.
+.reqpm-kind-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+  margin-bottom: 0.5em;
+
+  &__tile {
+    display: inline-flex;
+    gap: 0.35em;
+    align-items: center;
+    padding: 0.2em 0.65em 0.2em 0.25em;
+    border: 1px solid var(--primary-low);
+    border-radius: 2em;
+    background: var(--secondary);
+    color: var(--primary);
+    font-size: var(--font-down-1);
+    cursor: pointer;
+
+    .reqpm-kind-icon {
+      font-size: var(--font-down-2);
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--primary-medium);
+    }
+  }
+}
+
+// ── Add / edit form ────────────────────────────────────────────────────────
+.reqpm-method-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 0.6em 0;
+
+  &__head {
+    display: flex;
+    gap: 0.4em;
+    align-items: center;
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+  }
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    align-items: flex-end;
+  }
+
+  &__default {
+    display: flex;
+    gap: 0.4em;
+    align-items: center;
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+    font-weight: normal;
+
+    input {
+      margin: 0;
+    }
+  }
+
+  &__error {
+    color: var(--danger);
+    font-size: var(--font-down-1);
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 0.4em;
+  }
+}
+
+.reqpm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  margin: 0;
+
+  &--grow {
+    flex: 1 1 12em;
+  }
+
+  &__label {
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+    font-weight: normal;
+  }
+
+  &__optional {
+    color: var(--primary-low-mid);
+  }
+
+  &__hint {
+    color: var(--primary-low-mid);
+    font-size: var(--font-down-2);
+    font-weight: normal;
+  }
+
+  input[type] {
+    width: 100%;
+    margin: 0;
+  }
+
+  &--error input[type] {
+    border-color: var(--danger);
+  }
+}
+
+// ── Shared pieces ──────────────────────────────────────────────────────────
+.reqpm-callout {
+  display: flex;
+  gap: 0.5em;
+  align-items: flex-start;
+  margin-bottom: 0.75em;
+  font-size: var(--font-down-1);
+
+  > .d-icon {
+    margin-top: 0.2em;
+    color: var(--primary-medium);
+  }
+
+  &--incoming {
+    padding: 0.1em 0 0.1em 0.75em;
+    border-left: 2px solid var(--primary-low-mid);
+  }
+
+  &--success {
+    color: var(--primary-medium);
+  }
+}
+
+.reqpm-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  align-items: center;
+  margin-top: 0.5em;
+  color: var(--primary-medium);
+  font-size: var(--font-down-1);
+}
+
+.reqpm-error {
+  margin: 0.4em 0;
+  color: var(--danger);
+  font-size: var(--font-down-1);
+}
+
+.reqpm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  margin-bottom: 0.5em;
+}
+
+.reqpm-chip {
+  display: inline-flex;
+  gap: 0.3em;
+  align-items: center;
+  padding: 0.1em 0.55em 0.1em 0.2em;
+  border: 1px solid var(--primary-low);
+  border-radius: 2em;
+  background: var(--secondary);
+  color: var(--primary-medium);
+  font-size: var(--font-down-2);
+  cursor: pointer;
+
+  .reqpm-kind-icon {
+    font-size: var(--font-down-3);
+  }
+
+  &--on {
+    border-color: var(--primary-medium);
+    color: var(--primary);
+  }
+}
+
+.reqpm-section {
+  margin-top: 1em;
+
+  h3 {
+    margin: 0 0 0.4em;
+    color: var(--primary-high);
+    font-size: var(--font-0);
+    font-weight: 600;
+  }
+}
+
+.reqpm-ask {
+  margin-top: 0.5em;
+
+  &__label {
+    margin: 0 0 0.3em;
+    color: var(--primary-medium);
+    font-size: var(--font-down-2);
+  }
+}
+
+.reqpm-share-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0.3em 0 0.6em;
+  padding: 0;
+  list-style: none;
+
+  &__item {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    margin: 0;
+    padding: 0.35em 0;
+    border-bottom: 1px solid var(--primary-low);
+    font-weight: normal;
+    cursor: pointer;
+
+    input {
+      margin: 0;
+    }
+  }
+
+  li:last-child &__item {
+    border-bottom: 0;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    color: var(--primary-medium);
+    font-size: var(--font-down-2);
+  }
+
+  &__value {
+    overflow-wrap: anywhere;
+  }
+}
+
+// ── Per-user window ────────────────────────────────────────────────────────
+.reqpm-user-modal {
+  .d-modal__container {
+    max-width: 32em;
+  }
+
+  &__who {
+    display: flex;
+    gap: 0.6em;
+    align-items: center;
+    margin-bottom: 0.75em;
+  }
+
+  &__username {
+    font-weight: 600;
+  }
+
+  // Answering a request: your own details come first.
+  &__sections {
+    display: flex;
+    flex-direction: column;
+
+    &--answering .reqpm-section--send {
+      order: -1;
+      margin-top: 0;
+    }
+  }
+
+  &__send-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+  }
+
+  &__forget,
+  &__edit-card {
+    margin-top: 0.3em;
+    padding-left: 0;
+    color: var(--primary-medium);
+    font-size: var(--font-down-2);
+  }
+
+  &__decline {
+    margin-top: 0.2em;
+    padding-left: 0;
+  }
+}
+
+// ── Setup prompt ───────────────────────────────────────────────────────────
+.reqpm-setup-modal {
+  .d-modal__container {
+    max-width: 32em;
+  }
+
+  &__lead {
+    margin: 0 0 1em;
+  }
+
+  &__required {
+    margin-right: auto;
+  }
+}
+
+// ── User card / profile button ─────────────────────────────────────────────
+.reqpm-user-button {
+  white-space: nowrap;
+}
+
+// ── Preferences tab ────────────────────────────────────────────────────────
+.reqpm-preferences {
+  max-width: 36em;
+
+  &__title {
+    margin: 0 0 0.25em;
+  }
+
+  &__hub-link {
+    display: inline-block;
+    margin-top: 0.5em;
+    font-size: var(--font-down-1);
+  }
+}
+
+// ── Page ───────────────────────────────────────────────────────────────────
+.reqpm-hub {
+  max-width: 44em;
+  margin: 0 auto;
+  padding-bottom: 2em;
+
+  &__header {
+    margin: 0.75em 0;
+
+    h1 {
+      margin: 0;
+      font-size: var(--font-up-2);
+    }
+
+    p {
+      margin: 0.15em 0 0;
+    }
+  }
+
+  h2 {
+    margin: 1em 0 0.4em;
+    color: var(--primary-high);
+    font-size: var(--font-0);
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+.reqpm-tabs {
+  display: flex;
+  gap: 0.1em;
+  margin-bottom: 0.75em;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--primary-low);
+
+  &__tab {
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 0.35em;
+    align-items: center;
+    margin-bottom: -1px;
+    padding: 0.4em 0.7em;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+    cursor: pointer;
+
+    .d-icon {
+      display: none;
+    }
+
+    &:hover {
+      color: var(--primary);
+    }
+
+    &.active {
+      border-bottom-color: var(--primary-medium);
+      color: var(--primary);
+    }
+  }
+
+  &__count {
+    color: var(--primary-medium);
+    font-size: var(--font-down-2);
+
+    &::before {
+      content: "(";
+    }
+
+    &::after {
+      content: ")";
+    }
+
+    &--alert {
+      color: var(--primary);
+      font-weight: 600;
+    }
+  }
+}
+
+.reqpm-rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reqpm-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  align-items: center;
+  padding: 0.5em 0;
+  border-bottom: 1px solid var(--primary-low);
+
+  &__body {
+    flex: 1 1 14em;
+    min-width: 0;
+    font-size: var(--font-down-1);
+  }
+
+  &__kinds {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25em;
+    align-items: center;
+    margin-top: 0.2em;
+
+    .reqpm-kind-icon {
+      font-size: var(--font-down-3);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+  }
+}
+
+.reqpm-state {
+  margin-left: 0.3em;
+  color: var(--primary-medium);
+  font-size: var(--font-down-2);
+
+  &--answered {
+    color: var(--success);
+  }
+}
+
+.reqpm-empty {
+  color: var(--primary-medium);
+  font-size: var(--font-down-1);
+
+  &--big {
+    padding: 1em 0;
+
+    .d-icon {
+      display: none;
+    }
+
+    p {
+      margin: 0 0 0.25em;
+    }
+  }
+}
+
+.reqpm-filter {
+  width: 100%;
+  margin-bottom: 0.75em;
+}
+
+.reqpm-cards {
+  display: flex;
+  flex-direction: column;
+}
+
+.reqpm-contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  padding: 0.6em 0;
+  border-bottom: 1px solid var(--primary-low);
+
+  &--highlight {
+    padding-left: 0.6em;
+    border-left: 2px solid var(--primary-medium);
+  }
+
+  &__head {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    font-size: var(--font-down-1);
+  }
+
+  &__who {
+    display: flex;
+    flex: 1 1 auto;
+    gap: 0.4em;
+    align-items: baseline;
+    min-width: 0;
+  }
+
+  &__when {
+    white-space: nowrap;
+  }
+
+  &__foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+
+    .btn {
+      font-size: var(--font-down-2);
+    }
+  }
+}
+
+.reqpm-setting {
+  margin-top: 1em;
+  padding-top: 0.75em;
+  border-top: 1px solid var(--primary-low);
+
+  p {
+    margin: 0.3em 0 0;
+  }
+}
+
+@media (width <= 600px) {
+  .reqpm-contact-list__item {
+    flex-wrap: wrap;
+  }
+
+  .reqpm-contact-list__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

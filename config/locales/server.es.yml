@@ -242,6 +242,18 @@ es:
     # ── Avatar por nombre ──────────────────────────────────────────────────
     discourse_username_avatar_enabled: Genera los avatares por defecto a partir del nombre de usuario en vez del correo. No afecta a quien subió su avatar.
 
+    # ── REQ-PM ─────────────────────────────────────────────────────────────
+    reqpm_enabled: REQ-PM permite intercambiar datos de contacto (teléfono, SMS, WhatsApp, correo, web o los propios). Se piden o se envían, eligiendo cuáles. Sin texto libre, cifrados en la base y fuera del alcance del team (ni interfaz, ni API, ni suplantación).
+    reqpm_allowed_groups: Grupos que pueden usar REQ-PM (enviar, pedir y recibir). Quedan fuera siempre las cuentas provisorias, suspendidas, silenciadas y en modo anónimo. trust_level_0 es toda persona registrada; trust_level_1 deja afuera las cuentas nuevas.
+    reqpm_setup_prompt: "Cuánto se insiste a quien no tiene datos de contacto (cuentas nuevas y existentes). «Suave» muestra una ventana que se puede posponer o rechazar. «Obligatorio» la repite en cada página hasta que agreguen al menos uno."
+    reqpm_setup_snooze_days: Días que «Más tarde» oculta la ventana.
+    reqpm_default_country_code: Código de país que se asume para números sin código (p. ej. 54 para Argentina). Los que empiezan con +, 00 o 0 quedan como se escribieron. Vacío no asume ninguno.
+    reqpm_max_methods: Máximo de medios de contacto por tarjeta.
+    reqpm_max_requests_per_day: Máximo de pedidos por persona en 24 horas. Vale también para el team.
+    reqpm_max_shares_per_day: Máximo de envíos de datos por persona en 24 horas. Vale también para el team.
+    reqpm_request_cooldown_days: Días hasta poder pedirle de nuevo a la misma persona, sea cual sea la respuesta. 0 lo desactiva.
+    reqpm_request_expiry_days: Días hasta que vence un pedido sin respuesta.
+
     placeholder:
       discourse_another_email_smtp_address: smtp.ejemplo.com
       discourse_another_email_smtp_username: usuario@ejemplo.com
@@ -278,10 +290,46 @@ es:
       disteleplus_reports_admin_notices: novedades|panel|problemas|avisos
       disteleplus_auto_match_usernames: identidad|suplantar|seguridad
       discourse_username_avatar_enabled: avatar|gravatar|nombre de usuario|avatar de letra
+      reqpm_enabled: reqpm|req-pm|contacto|teléfono|whatsapp|mensaje privado|mp
+      reqpm_setup_prompt: reqpm|bienvenida|campo obligatorio|tarjeta de contacto
 
     errors:
+      reqpm_default_country_code_invalid: tiene que ser un código de hasta 4 dígitos, como 54 o 1, o quedar vacío
       translator_tweaks_invalid_worker_url: tiene que ser una URL https:// completa sin espacios (p. ej. https://ejemplo.workers.dev/language/translate/v2) o quedar vacía para llamar a Google
       dumbcourse_base_path_invalid: tiene que ser un único segmento con minúsculas, números, guiones y guiones bajos, y no una ruta reservada de Discourse
+
+  reqpm:
+    notifications:
+      request: "pide tus datos de contacto"
+      shared: "te envió sus datos de contacto"
+    errors:
+      not_allowed: "REQ-PM no está disponible para esta cuenta."
+      own_session_only: "REQ-PM solo funciona desde la sesión propia."
+      self: "¡Sos vos!"
+      unavailable: "Ahora no se pueden intercambiar datos con esta persona."
+      pending: "Ya hay un pedido a esta persona."
+      cooldown: "Hubo un pedido reciente. Se puede volver a pedir el %{date}."
+      not_found: "Ya no está."
+      nothing_selected: "Marcá al menos un medio de contacto."
+      invalid_methods: "Algunos medios de contacto ya no existen. Recargá la página."
+      unreadable: "Hay un medio de contacto que hay que cargar de nuevo antes de enviarlo."
+      too_many_methods: "Hasta %{max} medios de contacto."
+      invalid_field: "%{problem}"
+      fields:
+        kind: Tipo de contacto
+        value: Dato de contacto
+        label: Nombre
+        emoji: Emoji
+        note: Nota
+      problems:
+        unknown: "%{field} no es válido."
+        blank: "%{field} no puede quedar vacío."
+        too_long: "%{field} es demasiado largo."
+        invalid_characters: "%{field} tiene caracteres no permitidos."
+        phone: "No parece un número de teléfono (5 a 15 dígitos, puede empezar con +)."
+        email: "No parece una dirección de correo."
+        url: "No parece una dirección web (http o https)."
+        handle: "No parece un usuario (letras, números, . _ -)."
 
   discourse_mod_categories:
     note_notification_alert: '%{username} agregó una nota de moderación en «%{topic}»'
