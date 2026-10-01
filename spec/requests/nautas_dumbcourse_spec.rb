@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Dumbcourse, Dumb Nautas additions" do
+RSpec.describe "Dumbcourse, Power Tools Nautas additions" do
   fab!(:user)
 
   before { SiteSetting.dumbcourse_enabled = true }

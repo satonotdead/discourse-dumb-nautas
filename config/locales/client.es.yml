@@ -577,7 +577,7 @@ es:
       logs:
         staff_actions:
           actions:
-            jtech_admin_action: ejecutar acción de Dumb Nautas
+            jtech_admin_action: ejecutar acción de Power Tools Nautas
             mod_post_made_whisper: convertir respuesta en privada
             mod_whisper_made_public: hacer pública una respuesta privada
       jtech_tools:
@@ -607,23 +607,23 @@ es:
             done: Purga en cola.
       site_settings:
         categories:
-          jtech: Dumb Nautas
-          jtech_tools: Dumb Nautas
-          jtech_dislike: Dumb Nautas — Dislike
-          jtech_smtp: Dumb Nautas — SMTP alternativo
-          jtech_mini_mod: Dumb Nautas — Mini-mod
-          jtech_mod: Dumb Nautas — Moderación
-          jtech_dumbcourse: Dumb Nautas — Dumbcourse
-          jtech_disteleplus: Dumb Nautas — Disteleplus
-          jtech_translator: Dumb Nautas — Traductor
-          jtech_smart_search: Dumb Nautas — Búsqueda inteligente
-          jtech_popup_notifications: Dumb Nautas — Avisos emergentes
-          jtech_mod_whispers: 'Dumb Nautas — Moderación: Respuestas privadas'
-          jtech_mod_notes: 'Dumb Nautas — Moderación: Notas'
-          jtech_mod_notifications: 'Dumb Nautas — Moderación: Notificaciones'
-          jtech_mod_topic_tools: 'Dumb Nautas — Moderación: Historias'
-          jtech_mod_checklists: 'Dumb Nautas — Moderación: Listas'
-          jtech_reqpm: Dumb Nautas — REQ-PM
+          jtech: Power Tools Nautas
+          jtech_tools: Power Tools Nautas
+          jtech_dislike: Power Tools Nautas — Dislike
+          jtech_smtp: Power Tools Nautas — SMTP alternativo
+          jtech_mini_mod: Power Tools Nautas — Mini-mod
+          jtech_mod: Power Tools Nautas — Moderación
+          jtech_dumbcourse: Power Tools Nautas — Dumbcourse
+          jtech_disteleplus: Power Tools Nautas — Disteleplus
+          jtech_translator: Power Tools Nautas — Traductor
+          jtech_smart_search: Power Tools Nautas — Búsqueda inteligente
+          jtech_popup_notifications: Power Tools Nautas — Avisos emergentes
+          jtech_mod_whispers: 'Power Tools Nautas — Moderación: Respuestas privadas'
+          jtech_mod_notes: 'Power Tools Nautas — Moderación: Notas'
+          jtech_mod_notifications: 'Power Tools Nautas — Moderación: Notificaciones'
+          jtech_mod_topic_tools: 'Power Tools Nautas — Moderación: Historias'
+          jtech_mod_checklists: 'Power Tools Nautas — Moderación: Listas'
+          jtech_reqpm: Power Tools Nautas — REQ-PM
         reqpm:
           setup_prompt:
             'off': 'Desactivado: no pedir nunca'

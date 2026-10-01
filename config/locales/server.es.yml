@@ -56,7 +56,7 @@ es:
       another_smtp_unconfigured: SMTP alternativo está activado pero sin dirección de relé, así que el correo sigue saliendo por el servidor propio. Configurá <a href='%{base_path}/admin/plugins/jtech-tools/smtp'>la dirección del relé</a> o desactivá SMTP alternativo.
       disteleplus_telegram: 'Disteleplus no pudo entregar a Telegram (%{at}): <code>%{description}</code> — %{hint}'
   site_settings:
-    jtech_enabled: Interruptor general de Dumb Nautas. Cada función tiene además su propio interruptor en su pestaña.
+    jtech_enabled: Interruptor general de Power Tools Nautas. Cada función tiene además su propio interruptor en su pestaña.
     discourse_no_likes_enabled: Activa los me gusta fantasma. Apagado, los me gusta y reacciones funcionan como en Discourse y nada de abajo tiene efecto.
     no_reactions_category_ids: Categorías donde los me gusta y reacciones son «fantasma». Sin categorías no pasa nada. Las subcategorías se agregan una a una.
     dislike_hide_like_button: Oculta los botones de me gusta y reacción en esas categorías y rechaza los que lleguen por la API. Los existentes se mantienen. Anula {{setting:dislike_allowed_like_groups}}.

@@ -1,42 +1,31 @@
-<p align="center">
-</p>
+# Power Tools Nautas
 
-<h1 align="center">Jtech Tools</h1>
-
-<p align="center"><b>Dumb Nautas edition</b> — Criptonautas' build of Jtech Tools. See <a href="EDITION.md">EDITION.md</a> for what it changes and how it syncs.</p>
-
-<p align="center">
-  The plugin behind <a href="https://forums.jtechforums.org">JTech Forums</a>: everything we run on top of Discourse, in one place.
-</p>
-
-<p align="center">
-  <img src="docs/images/collage.png" alt="Dumbcourse on a keypad phone, a whisper, a moderator note, REQ-PM and a desktop pop-up">
-</p>
-
----
-
-We built these tools for our own forum as the need came up. Some help moderators work, some keep private things private, and one makes the forum usable on a flip phone. They live in one plugin so there's one thing to install and update. Every piece has its own switch, so you only run what you want.
+The Discourse plugin behind [Criptonautas](https://criptonautas.co): moderator tools, privacy features and a lightweight phone client, in one install. Every feature has its own switch, so you only run what you need.
 
 ## What's inside
 
 **For moderators**
 
-- **[Moderator tools](docs/features/moderator-tools.md).** Whispers to specific people inside a topic, private staff notes, alerts when another moderator acts, checklists before posting, and small topic tools like footer messages and reply approval.
-- **[Mini-mod](docs/features/mini-mod.md).** A few extra rights for people who moderate a single category: managing their categories, moving topics, tags. None of it reaches past what they can see.
-- **[Dislike](docs/features/dislike.md).** In the categories you choose, likes stop counting: no notifications, no history, no leaderboard.
+- **[Moderator tools](docs/features/moderator-tools.md).** Private replies to chosen people inside a topic, private team notes, alerts when another moderator acts, checklists before posting, and topic tools such as footer messages and reply approval.
+- **[Mini-mod](docs/features/mini-mod.md).** Extra rights for people who moderate a single category: managing it, moving topics, tags. Never past what they can see.
+- **[Dislike](docs/features/dislike.md).** In the categories you choose, likes stop counting: no notifications, no history, no totals.
 
 **For members**
 
-- **[REQ-PM](docs/features/reqpm.md).** The forum has no private messages. Members ask each other for contact details, and choose exactly what to share.
-- **[Dumbcourse](docs/features/dumbcourse.md).** The whole forum at `/dumb`, built for flip phones and old browsers, driven by the D-pad and keypad.
-- **[Smart search](docs/features/smart-search.md).** When a search finds too little, it tries again with synonyms, so "k8s" finds "kubernetes".
+- **[Dumbcourse](docs/features/dumbcourse.md).** The forum at `/dumb`, light enough for basic phones and old browsers, with an optional leaderboard. On forums that sign in through an SSO, it uses the forum's own sign-in.
+- **[Smart search](docs/features/smart-search.md).** When a search finds too little, it tries again with synonyms, in the searcher's language (English or Spanish).
 - **[Desktop pop-ups](docs/features/popups.md).** A small card in the corner when a notification arrives.
+- **[REQ-PM](docs/features/reqpm.md).** Members ask each other for contact details and choose exactly what to share. Off by default.
 
 **Behind the scenes**
 
-- **[Disteleplus](docs/features/disteleplus.md).** A chat room for staff, mirrored both ways with a Telegram group, with the review queue in Telegram too.
+- **[Disteleplus](docs/features/disteleplus.md).** A team chat room mirrored both ways with a Telegram group, with the review queue in Telegram too.
 - **[Another SMTP](docs/features/another-smtp.md).** Send forum email through a different mail server.
 - **[Translator tweaks](docs/features/translator-tweaks.md).** A proxy for the Translator plugin's Google requests.
+
+It also works alongside [discourse-category-lockdown-nautas](https://github.com/somos-criptonautas/discourse-category-lockdown-nautas): private replies stay visible to their audience inside lockdown topics.
+
+The interface is available in English and Spanish.
 
 ## Installing
 
@@ -48,7 +37,7 @@ hooks:
     - exec:
         cd: $home/plugins
         cmd:
-          - git clone https://github.com/JTech-Forums/JtechTools.git jtech-tools
+          - git clone https://github.com/somos-criptonautas/discourse-power-tools-nautas.git
 ```
 
 ```bash
@@ -56,22 +45,16 @@ cd /var/discourse
 ./launcher rebuild app
 ```
 
-Keep the folder name `jtech-tools` (lowercase). Discourse builds the plugin's stylesheet address from it.
+Keep the folder name lowercase: Discourse builds the plugin's stylesheet address from it.
 
 ## Turning things on
 
-Everything is under **Admin → Plugins → Jtech Tools**, one tab per feature. Some features start switched off; each feature's page says what to set first.
-
-`jtech_enabled` is the master switch. Turning it off stops everything at once, including the permission changes and background jobs. Private things stay private either way: switching whispers off never makes an existing whisper public.
-
-Upgrading? [CHANGELOG.md](CHANGELOG.md) lists what changed and anything worth checking afterwards.
+Everything is under **Admin → Plugins → Power Tools Nautas**, one tab per feature. `jtech_enabled` is the master switch: off stops everything at once, including permission changes and background jobs. Switching private replies off never makes an existing one public.
 
 ## Working on it
 
-Start with the [repository rules](AGENTS.md) and [CONTRIBUTING.md](CONTRIBUTING.md). The developer docs cover [how it's put together](docs/development/architecture.md) and [how to run it and its tests](docs/development/testing.md). Everything else is in [docs/](docs/README.md).
-
-Found a security problem? Please report it privately; see [SECURITY.md](SECURITY.md).
+Read the [repository rules](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md) and [EDITION.md](EDITION.md), which explains how this repo syncs with the code it builds on. Developer docs are in [docs/](docs/README.md). Security problems: see [SECURITY.md](SECURITY.md).
 
 ## License
 
-[GPL-3.0](LICENSE). Made by TripleU, Shalom Karr and Ars18 for JTech Forums.
+[GPL-3.0](LICENSE). Original authors: TripleU, Shalom Karr and Ars18.

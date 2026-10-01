@@ -68,7 +68,7 @@ en:
     # admin_js.admin.site_settings.categories.
 
     # ── Jtech (master) ─────────────────────────────────────────────────────
-    jtech_enabled: Master gate for the whole Dumb Nautas plugin bundle. Every
+    jtech_enabled: Master gate for the whole Power Tools Nautas plugin bundle. Every
       sub-plugin also has its own enable switch on its tab for fine-grained
       control.
 
@@ -189,7 +189,7 @@ en:
       applies only to category group moderators — users who moderate a
       category through a category moderation group, set up with
       {{setting:enable_category_group_moderation}}. It never applies to
-      site-wide moderators (those are on the Dumb Nautas — Mod tab) and never
+      site-wide moderators (those are on the Power Tools Nautas — Mod tab) and never
       changes anything for staff. While this is off, every setting below has
       no effect.
 

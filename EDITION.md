@@ -1,4 +1,4 @@
-# Dumb Nautas edition
+# Power Tools Nautas edition
 
 Criptonautas' edition of [JtechTools](https://github.com/JTech-Forums/JtechTools).
 It tracks upstream `main` and adds a thin layer of changes on top, kept small so
@@ -6,7 +6,7 @@ upstream merges stay easy.
 
 ## What this edition changes
 
-- **Name.** Shows as "Dumb Nautas" in the admin (plugin list, settings
+- **Name.** Shows as "Power Tools Nautas" in the admin (plugin list, settings
   categories). The internal plugin id stays `jtech-tools`, so admin URLs are
   `/admin/plugins/jtech-tools/…`.
 - **Spanish.** `config/locales/*.es.yml` in the community voice: historia,
@@ -23,6 +23,10 @@ upstream merges stay easy.
   - On forums that sign in elsewhere (DiscourseConnect, or no local logins,
     e.g. an OIDC SSO), `/dumb` sends sign-in to the full site and comes back
     to `/dumb` afterwards.
+- **README** is our own; on upstream merges keep ours
+  (`git checkout --ours README.md`).
+- **First-post checklist** is edited from the Mod tab (admins), not from a
+  sidebar link.
 - **REQ-PM** is off by default and assumes no country code.
 - **Migrations.** Disteleplus listen rows cascade with their message
   (`db/post_migrate`), and the Aug 30 migration only resets the module's
@@ -31,7 +35,7 @@ upstream merges stay easy.
 ## Install
 
 ```yaml
-- git clone https://github.com/somos-criptonautas/discourse-dumb-nautas.git
+- git clone https://github.com/somos-criptonautas/discourse-power-tools-nautas.git
 ```
 
 ## Sync with upstream

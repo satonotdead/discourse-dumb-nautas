@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 # name: jtech-tools
-# about: Dumb Nautas — Criptonautas' edition of JtechTools, the JTech Forums all-in-one plugin: moderator tools, Mini-mod, Dislike, the Disteleplus Telegram bridge, REQ-PM, Dumbcourse, smart search, desktop pop-ups, Another SMTP and translator tweaks.
+# about: Power Tools Nautas — Criptonautas' Discourse power tools: moderator tools, Mini-mod, Dislike, the Disteleplus Telegram bridge, REQ-PM, Dumbcourse, smart search, desktop pop-ups, Another SMTP and translator tweaks.
 # version: 0.5.0
 # authors: TripleU, Shalom_Karr, Ars18
-# url: https://github.com/somos-criptonautas/discourse-dumb-nautas
+# url: https://github.com/somos-criptonautas/discourse-power-tools-nautas
 # required_version: 3.0.0
 
 # Smart-search synonym backend — rwordnet ships the WordNet lexical DB

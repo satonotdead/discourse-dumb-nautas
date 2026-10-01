@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Dumb Nautas edition glue: behaviour our forum needs on top of upstream,
+# Power Tools Nautas edition glue: behaviour our forum needs on top of upstream,
 # kept in one file so upstream merges rarely touch it.
 
 after_initialize do

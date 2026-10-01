@@ -764,13 +764,13 @@ RSpec.describe "Gallery expansion" do
     end
 
     def open_checklist_modal
-      visit("/")
-      find("[data-list-item-name='mod-checklist']", wait: 10).click
+      visit("/admin/plugins/jtech-tools/mod")
+      find(".nautas-checklist-button", wait: 10).click
       expect(page).to have_css(".mod-checklist-modal", wait: 10)
     end
 
     it "shows an empty editor when no checklist exists" do
-      sign_in(moderator)
+      sign_in(admin)
       open_checklist_modal
       expect(page).to have_css(".mod-checklist-add-inline", wait: 10)
       expect(page).to have_no_css(".mod-checklist-row")
@@ -779,7 +779,7 @@ RSpec.describe "Gallery expansion" do
 
     it "shows the checklist editor with a custom button label" do
       set_checklist(version: 1, max_tl: 2, button_label: "Yes — post my reply")
-      sign_in(moderator)
+      sign_in(admin)
       open_checklist_modal
       expect(page).to have_css(".mod-checklist-row", wait: 10)
       expect(find(".mod-checklist-button-label").value).to eq("Yes — post my reply")
@@ -788,7 +788,7 @@ RSpec.describe "Gallery expansion" do
 
     it "shows the audience set to 'Up to basic (TL0 to TL1)' in the editor" do
       set_checklist(version: 1, max_tl: 1)
-      sign_in(moderator)
+      sign_in(admin)
       open_checklist_modal
       expect(page).to have_css(".mod-checklist-row", wait: 10)
       shot("157_checklist_editor_audience_tl1")
@@ -831,7 +831,7 @@ RSpec.describe "Gallery expansion" do
           { "user_id" => user.id, "version" => 3, "at" => 30.minutes.ago.iso8601 },
         ],
       )
-      sign_in(moderator)
+      sign_in(admin)
       open_checklist_modal
       expect(page).to have_css(".mod-checklist-log-table tbody tr", count: 5, wait: 10)
       shot("160_checklist_audit_log_many_entries")
@@ -854,7 +854,7 @@ RSpec.describe "Gallery expansion" do
           },
         ],
       )
-      sign_in(moderator)
+      sign_in(admin)
       open_checklist_modal
       expect(page).to have_css(".mod-checklist-row", wait: 10)
       shot("161_targeted_checklist_listed")

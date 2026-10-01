@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Dumb Nautas whisper glue" do
+RSpec.describe "Power Tools Nautas whisper glue" do
   fab!(:moderator)
   fab!(:author, :user)
   fab!(:target, :user)

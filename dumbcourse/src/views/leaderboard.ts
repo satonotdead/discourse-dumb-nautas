@@ -1,4 +1,4 @@
-// Leaderboard from discourse-gamification (Dumb Nautas edition). The board
+// Leaderboard from discourse-gamification (our addition). The board
 // shown is the one named by dumbcourse_leaderboard_id; 0 hides the screen.
 
 import { errorMessage } from "../api.ts";

@@ -588,7 +588,7 @@ en:
       logs:
         staff_actions:
           actions:
-            jtech_admin_action: "run Dumb Nautas action"
+            jtech_admin_action: "run Power Tools Nautas action"
             mod_post_made_whisper: "turn post into whisper"
             mod_whisper_made_public: "make whisper public"
       jtech_tools:
@@ -627,23 +627,23 @@ en:
             done: Purge queued.
       site_settings:
         categories:
-          jtech: Dumb Nautas
-          jtech_tools: Dumb Nautas
-          jtech_dislike: Dumb Nautas — Dislike
-          jtech_smtp: Dumb Nautas — Alternate SMTP
-          jtech_mini_mod: Dumb Nautas — Mini-mod
-          jtech_mod: Dumb Nautas — Mod
-          jtech_dumbcourse: Dumb Nautas — Dumbcourse
-          jtech_disteleplus: Dumb Nautas — Disteleplus
-          jtech_translator: Dumb Nautas — Translator tweaks
-          jtech_smart_search: Dumb Nautas — Smart search
-          jtech_popup_notifications: Dumb Nautas — Desktop pop-ups
-          jtech_mod_whispers: "Dumb Nautas — Mod: Whispers"
-          jtech_mod_notes: "Dumb Nautas — Mod: Notes"
-          jtech_mod_notifications: "Dumb Nautas — Mod: Notifications"
-          jtech_mod_topic_tools: "Dumb Nautas — Mod: Topic tools"
-          jtech_mod_checklists: "Dumb Nautas — Mod: Checklists"
-          jtech_reqpm: Dumb Nautas — REQ-PM
+          jtech: Power Tools Nautas
+          jtech_tools: Power Tools Nautas
+          jtech_dislike: Power Tools Nautas — Dislike
+          jtech_smtp: Power Tools Nautas — Alternate SMTP
+          jtech_mini_mod: Power Tools Nautas — Mini-mod
+          jtech_mod: Power Tools Nautas — Mod
+          jtech_dumbcourse: Power Tools Nautas — Dumbcourse
+          jtech_disteleplus: Power Tools Nautas — Disteleplus
+          jtech_translator: Power Tools Nautas — Translator tweaks
+          jtech_smart_search: Power Tools Nautas — Smart search
+          jtech_popup_notifications: Power Tools Nautas — Desktop pop-ups
+          jtech_mod_whispers: "Power Tools Nautas — Mod: Whispers"
+          jtech_mod_notes: "Power Tools Nautas — Mod: Notes"
+          jtech_mod_notifications: "Power Tools Nautas — Mod: Notifications"
+          jtech_mod_topic_tools: "Power Tools Nautas — Mod: Topic tools"
+          jtech_mod_checklists: "Power Tools Nautas — Mod: Checklists"
+          jtech_reqpm: Power Tools Nautas — REQ-PM
         # Dropdown labels for the plugin's translatable enum settings.
         reqpm:
           setup_prompt:

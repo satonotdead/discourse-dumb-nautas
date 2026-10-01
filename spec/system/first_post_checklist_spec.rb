@@ -3,11 +3,12 @@
 require "rails_helper"
 
 # End-to-end coverage for the first-post checklist: the moderator config
-# modal (opened from the sidebar), and the modal a new user must complete
+# modal (opened from the Mod tab), and the modal a new user must complete
 # before their first post. Screenshots are written to tmp/capybara/ for
 # the CI artifact.
 RSpec.describe "First-post checklist" do
   fab!(:moderator)
+  fab!(:admin)
   fab!(:user) { Fabricate(:user, trust_level: TrustLevel[1], refresh_auto_groups: true) }
   fab!(:tl0_user) { Fabricate(:user, trust_level: TrustLevel[0], refresh_auto_groups: true) }
   fab!(:category)
@@ -61,8 +62,8 @@ RSpec.describe "First-post checklist" do
   end
 
   def open_checklist_modal
-    visit("/")
-    find("[data-list-item-name='mod-checklist']", wait: 10).click
+    visit("/admin/plugins/jtech-tools/mod")
+    find(".nautas-checklist-button", wait: 10).click
     expect(page).to have_css(".mod-checklist-modal", wait: 10)
   end
 
@@ -72,8 +73,8 @@ RSpec.describe "First-post checklist" do
     find(".save-or-cancel .create").click
   end
 
-  it "lets a moderator configure the checklist from the sidebar modal" do
-    sign_in(moderator)
+  it "lets an admin configure the checklist from the Mod tab" do
+    sign_in(admin)
 
     open_checklist_modal
     expect(page).to have_css(".mod-checklist-add-inline")
@@ -100,9 +101,9 @@ RSpec.describe "First-post checklist" do
     shot("53_checklist_editor_saved")
   end
 
-  it "lets a moderator reorder checklist rows and persists the new order" do
+  it "lets an admin reorder checklist rows and persists the new order" do
     set_checklist(version: 1, max_tl: 2)
-    sign_in(moderator)
+    sign_in(admin)
 
     open_checklist_modal
     expect(page).to have_css(".mod-checklist-row", count: 2)
@@ -168,7 +169,7 @@ RSpec.describe "First-post checklist" do
     user.upsert_custom_fields(VERSION_FIELD => 1)
     set_checklist(version: 2, max_tl: 2)
 
-    sign_in(moderator)
+    sign_in(admin)
     open_checklist_modal
     expect(page).to have_css(".mod-checklist-version", text: "2")
     shot("59_checklist_version_bumped")
@@ -231,7 +232,7 @@ RSpec.describe "First-post checklist" do
       ],
     )
 
-    sign_in(moderator)
+    sign_in(admin)
     open_checklist_modal
     expect(page).to have_css(".mod-checklist-log-table", wait: 10)
     expect(page).to have_css(".mod-checklist-log-table tbody tr", count: 3)
@@ -247,7 +248,7 @@ RSpec.describe "First-post checklist" do
       [{ "user_id" => user.id, "version" => 1, "at" => 1.hour.ago.iso8601 }],
     )
 
-    sign_in(moderator)
+    sign_in(admin)
     open_checklist_modal
     expect(page).to have_css(".mod-checklist-log-table tbody tr", count: 1)
     shot("97_checklist_log_before_reaccept")
@@ -260,7 +261,7 @@ RSpec.describe "First-post checklist" do
   end
 
   it "lets staff create a targeted checklist for a user who is then prompted" do
-    sign_in(moderator)
+    sign_in(admin)
     open_checklist_modal
 
     find(".mod-checklist-targeted-add").click
