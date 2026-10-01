@@ -421,12 +421,12 @@ en:
     smart_search_enabled: When a search returns few results, run it again
       with synonyms substituted and merge the extra hits in, so that "js"
       also finds posts that only say "javascript" and "k8s" finds
-      "kubernetes". Synonyms come from a bundled English lexical database
-      (WordNet) plus a tech-jargon dictionary shipped with the plugin; add
-      your own groups in {{setting:smart_search_extra_synonyms}}. Everything
-      runs in-process — no external services, no API keys — and any failure
-      falls back to ordinary Discourse search.
-
+      "kubernetes". Synonyms come from bundled English (WordNet) and Spanish
+      (Open Multilingual Wordnet) dictionaries plus a tech-jargon list — each
+      search uses only the searcher's language; add your own groups in
+      {{setting:smart_search_extra_synonyms}}. Everything runs in-process —
+      no external services, no API keys — and any failure falls back to
+      ordinary Discourse search.
     smart_search_minimum_results: Synonym variants only run when the user's
       original search returned fewer than this many posts. Higher values
       expand more often — better recall, more database queries per search.

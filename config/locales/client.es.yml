@@ -1,0 +1,661 @@
+es:
+  js:
+    disteleplus:
+      title: Disteleplus
+      loading: Cargando mensajes anteriores…
+      telegram_user: Cuenta de Telegram
+      edited: editado
+      deleted: Mensaje eliminado
+      reply: Responder
+      react: Reaccionar
+      edit: Editar
+      delete: Eliminar
+      delete_confirm: "¿Eliminar este mensaje acá y en Telegram si se puede?"
+      editing: Editando mensaje
+      attach: Adjuntar archivos
+      placeholder: Mensaje…
+      send: Enviar
+      empty_title: Empezar la conversación
+      new_messages:
+        one: "%{count} mensaje nuevo"
+        other: "%{count} mensajes nuevos"
+      unread_divider: Mensajes nuevos
+      go_to_bottom: Ir al final
+      search: Buscar mensajes
+      search_placeholder: Buscar…
+      search_empty: Sin resultados
+      seen_by:
+        one: Visto por %{count}
+        other: Visto por %{count}
+      listened_by:
+        one: Escuchado por %{count}
+        other: Escuchado por %{count}
+      message_info:
+        title: Info del mensaje
+        seen: Visto por
+        listened: Escuchado por
+        nobody_yet: Nadie todavía
+      reaction_info:
+        title:
+          one: "%{count} reacción"
+          other: "%{count} reacciones"
+        remove_hint: Quitar tu reacción
+        add: Agregar reacción
+      poll:
+        pick_one: Elegir una
+        pick_many: Elegir una o más
+        closed: Cerrada
+        closes_soon: Cierra pronto
+        closes_hours:
+          one: Cierra en %{count} hora
+          other: Cierra en %{count} horas
+        closes_days:
+          one: Cierra en %{count} día
+          other: Cierra en %{count} días
+        voters:
+          one: "%{count} voto"
+          other: "%{count} votos"
+        close: Cerrar encuesta
+        reopen: Reabrir encuesta
+        stats: Ver resultados
+        stats_title: Resultados
+        closed_label: Tu encuesta se cerró
+        closed_title: Ya hay resultados
+        builder:
+          title: Crear encuesta
+          template_yes_no: Sí / No
+          template_rating: Puntaje 1–5
+          question: Pregunta
+          question_placeholder: Pregunta…
+          options: Opciones
+          option_placeholder: Opción…
+          add_option: Agregar opción
+          remove_option: Quitar opción
+          multiple: Permitir varias respuestas
+          close_label: Cierre automático
+          close_none: Nunca
+          close_one_hour: En 1 hora
+          close_six_hours: En 6 horas
+          close_one_day: En 1 día
+          close_three_days: En 3 días
+          close_one_week: En 1 semana
+          'yes': Sí
+          'no': 'No'
+          create: Crear encuesta
+      mention_title: Te mencionó en la conversación
+      mention_label: "%{username} te mencionó"
+      quote_in_chat:
+        label: Citar en el chat
+      typing_one: "%{name} está escribiendo"
+      typing_two: "%{a} y %{b} están escribiendo"
+      typing_many: "%{count} personas están escribiendo"
+      expand: Expandir
+      collapse: Contraer
+      open_full_page: Abrir en página completa
+      open_in_drawer: Abrir en panel
+      close: Cerrar
+      more: Más
+      copy_text: Copiar texto
+      copy_link: Copiar enlace
+      quote_in_topic: Citar en una historia nueva
+      emoji: Emoji
+      cancel: Cancelar
+      remove: Quitar
+      drop_files: Soltar archivos para adjuntar
+      today: Hoy
+      yesterday: Ayer
+      voice:
+        button: Grabar nota de voz
+        title: Nota de voz
+        start: Grabar
+        stop: Detener
+        requesting: Esperando el micrófono…
+        pause: Pausar
+        resume: Continuar
+        caption_placeholder: Mensaje (opcional)…
+        errors:
+          unsupported: Este navegador no graba audio.
+          denied: Micrófono bloqueado para este sitio.
+          no_microphone: No se encontró micrófono.
+          recording_failed: Falló la grabación.
+          too_short: Demasiado corta para enviar.
+      player:
+        voice_note: Nota de voz
+        audio: Audio
+        play: Reproducir
+        pause: Pausar
+        seek: Avanzar
+        speed: Velocidad
+        speed_value: Velocidad %{speed}×
+        download: Descargar
+        fullscreen: Pantalla completa
+        unavailable: No se pudo cargar el audio.
+    reqpm:
+      title: REQ-PM
+      button:
+        label: REQ-PM
+        title: Pedir o enviar datos de contacto
+      menu:
+        label: Contactos REQ-PM
+      preferences:
+        nav: REQ-PM
+        title: Tarjeta de contacto
+        open_hub: Pedidos y contactos
+        not_yours: Solo quien es dueño de la tarjeta puede verla.
+      sidebar:
+        text: REQ-PM
+        title: Pedir e intercambiar datos de contacto
+      notifications:
+        request: pide tus datos de contacto
+        shared: te envió sus datos de contacto
+      actions:
+        call: Llamar
+        text: SMS
+        chat: Chatear
+        email: Escribir
+        visit: Visitar
+        open: Abrir
+      kinds:
+        phone:
+          field: Número
+          name: Teléfono
+          short: Teléfono
+          placeholder: "+54 9 11 5555 0100"
+        sms:
+          field: Número
+          name: SMS
+          short: SMS
+          placeholder: "+54 9 11 5555 0100"
+        whatsapp:
+          field: Número de WhatsApp
+          name: WhatsApp
+          short: WhatsApp
+          placeholder: "+54 9 11 5555 0100"
+        email:
+          field: Dirección
+          name: Correo
+          short: Correo
+          placeholder: nombre@ejemplo.com
+        website:
+          field: Enlace
+          name: Sitio web
+          short: Web
+          placeholder: ejemplo.com
+        telegram:
+          field: Usuario o número
+          name: Telegram
+          short: Telegram
+          placeholder: "@usuario"
+        signal:
+          field: Número o usuario
+          name: Signal
+          short: Signal
+          placeholder: "+54 9 11 5555 0100 o nombre.01"
+        discord:
+          field: Usuario
+          name: Discord
+          short: Discord
+          placeholder: usuario
+        custom:
+          field: Datos
+          name: Otro
+          short: Otro
+          placeholder: Cómo contactarte
+      contact_list:
+        copy: Copiar
+        copied: Copiado
+      form:
+        emoji: Emoji
+        label: Nombre
+        label_placeholder: p. ej. Línea de trabajo
+        value: Datos
+        note: Nota
+        optional: "(opcional)"
+        note_placeholder: p. ej. Solo por la tarde
+        share_by_default: Marcar por defecto al enviar
+        country_code_hint: Se guarda como +%{code} si no lleva código de país.
+        add: Agregar
+        save: Guardar
+        cancel: Cancelar
+      errors:
+        generic: Algo falló. Probá de nuevo.
+      editor:
+        pick_title: "¿Cómo contactarte?"
+        add_first: Agregar un medio de contacto
+        add_another: Agregar otro
+        limit_reached: Límite de %{max} alcanzado.
+        default_pill: por defecto
+        default_title: Marcado por defecto al enviar
+        unreadable: Ilegible; editalo y cargalo de nuevo.
+        move_up: Subir
+        move_down: Bajar
+        edit: Editar
+        delete: Quitar
+        delete_confirm: "¿Quitar %{name}? Quienes lo recibieron también lo pierden."
+      user_modal:
+        title: REQ-PM con %{username}
+        their_details: Sus datos
+        nothing_yet: "%{username} todavía no te envió datos de contacto."
+        forget: Quitar de mis contactos
+        forget_confirm: "¿Quitar los datos de %{username}? Habría que volver a pedirlos."
+        what_would_you_like: "¿Algo en particular? (opcional)"
+        request: Pedir sus datos
+        request_sent: Pedido enviado.
+        pending: Pedido el %{date}
+        withdraw: Retirar pedido
+        cooldown: Se puede volver a pedir el %{date}.
+        unavailable: Ahora no se le pueden pedir datos a %{username}.
+        they_asked: "%{username} pide tus datos de contacto"
+        they_would_like: 'Pide: %{kinds}'
+        no_thanks: No, gracias
+        declined: Pedido descartado.
+        your_details: Tus datos
+        send: Enviar lo marcado
+        update_share: Actualizar lo que ve
+        shared: Enviado.
+        stop_sharing: Dejar de compartir
+        stop_confirm: "¿Dejar de compartir tus datos con %{username}?"
+        stopped: "%{username} ya no ve tus datos."
+        edit_card: Editar mi tarjeta
+        cannot_share: Ahora no se le pueden enviar datos a %{username}.
+        close: Cerrar
+      setup:
+        title: Tarjeta de contacto
+        lead: Acá la comunidad intercambia datos de contacto, y solo las personas que elijas ven los tuyos.
+        done: Listo
+        later: Más tarde
+        never: Prefiero no
+        required_note: Agregá uno para seguir.
+        log_out: Cerrar sesión
+      hub:
+        tabs:
+          requests: Pedidos
+          contacts: Contactos
+          card: Mi tarjeta
+          shared: Compartido con
+        incoming_title: Esperan respuesta
+        wants_yours: pide tus datos de contacto
+        choose_what_to_send: Elegir qué enviar
+        no_incoming: Nadie espera respuesta.
+        outgoing_title: Mis pedidos
+        state:
+          waiting: En espera
+          answered: Respondido
+          expired: Vencido
+        open: Abrir
+        no_outgoing: Todavía sin pedidos.
+        how_to_request: Se pide desde la tarjeta de cada persona.
+        filter: Filtrar por nombre…
+        shared: compartido
+        send_yours: Enviar los tuyos
+        no_match: Sin coincidencias.
+        no_contacts: Todavía nadie te envió sus datos.
+        allow_requests: Permitir que me pidan datos de contacto
+        change: Cambiar
+        no_shared: Todavía no enviaste tus datos a nadie.
+    jtech_popup_notifications:
+      someone: Alguien
+      close: Descartar
+      action:
+        replied: Respondió
+        mentioned: Te mencionó
+        quoted: Te citó
+        edited: Editó tu respuesta
+        liked: Le gustó tu respuesta
+        messaged: Te escribió
+        posted: Respondió
+        linked: Enlazó tu respuesta
+        badge: Te otorgó un reto
+        whispered: Te respondió en privado
+        post_deleted: Eliminó una respuesta
+        post_approved: Aprobó una respuesta
+        post_rejected: Rechazó una respuesta
+        user_note: Agregó una nota a un perfil
+        flag_note: Agregó una nota a un reporte
+        note: Agregó una nota de moderación
+        chat_mentioned: Te mencionó en el chat
+        chat_message: Envió un mensaje de chat
+        poll_closed: Tu encuesta se cerró
+        reqpm: Datos de contacto (REQ-PM)
+        generic: Te envió una notificación
+      preference:
+        title: Avisos emergentes en escritorio
+        'on': Activado
+        'off': Desactivado
+    discourse_mod_categories:
+      post_viewers:
+        label: Ver quién la leyó
+        title: Vista por
+        count:
+          one: "%{count} persona"
+          other: "%{count} personas"
+        nobody: Todavía nadie con sesión iniciada
+      precheck:
+        title: Antes de publicar
+        confirm: Publicar igual
+        go_back: Volver
+      topic_prompt_checklist:
+        menu_label: Aviso previo
+        title: Aviso previo de esta historia
+        loading: Cargando…
+        current_version: 'Versión actual: %{count}'
+        item_label: Texto de la casilla
+        item_url: Enlace (opcional)
+        add_item: Agregar punto
+        remove_item: Quitar punto
+        button_label_label: Texto del botón
+        button_label_placeholder: Acepto, publicar mi respuesta
+        save: Guardar
+        clear: Vaciar
+        cancel: Cancelar
+        saved_toast: Aviso previo guardado
+        cleared_toast: Aviso previo vaciado
+        mode_label: Modo
+        mode_title_statement: Declaración
+        mode_title_checklist: Lista
+        statement_label: Texto de la declaración
+        statement_placeholder: Admite Markdown
+        frequency_label: Mostrar
+        frequency_once: Una vez por persona e historia
+        frequency_every_reply: En cada respuesta
+        max_tl_label: Mostrar a
+        legacy_migration_notice: Cargado del aviso viejo de esta historia. Guardar para conservarlo.
+      topic_messages:
+        menu_label: Acciones de moderación
+        title: Acciones de moderación de la historia
+        footer_label: Mensaje fijo al pie
+        approval_label: Aprobar respuestas
+        note_label: Nota privada de moderación
+        note_position_label: Mostrar la nota
+        note_position_top: Al principio de la historia
+        note_position_bottom: Al final de la historia
+        save: Guardar
+        cancel: Cancelar
+        saved_toast: Ajustes de moderación guardados
+        section_visible: Lo que ve la comunidad
+        section_moderation: Herramientas de moderación
+      footer_message:
+        label: Mensaje de moderación
+      private_note:
+        heading: Nota de moderación (solo team)
+        just_now: recién
+        reply: Responder
+        add_reply: Agregar respuesta
+        cancel: Cancelar
+        save: Guardar
+        reply_placeholder: Respuesta a esta nota…
+        edit_reply: Editar respuesta
+        delete_reply: Eliminar respuesta
+        delete_reply_confirm: "¿Eliminar esta respuesta de la nota?"
+        edit_note: Editar nota
+        delete_note: Eliminar nota
+        delete_note_confirm: "¿Eliminar esta nota y todas sus respuestas?"
+        viewed_by:
+          one: Vista por %{count} del team
+          other: Vista por %{count} del team
+      notes_tab:
+        title: Notas de moderación
+        loading: Cargando…
+        empty: Todavía no hay notas de moderación.
+        on_target: en %{target}
+        view_more: Ver todas las notificaciones de moderación
+      notification_type_filter:
+        label: Tipo
+        all: Todos
+        mod_notes: Notas de moderación
+        types:
+          mentioned: Menciones
+          group_mentioned: Menciones a grupos
+          replied: Respuestas
+          posted: Respuestas nuevas
+          quoted: Citas
+          edited: Ediciones
+          liked: Me gusta
+          liked_consolidated: Resumen de me gusta
+          reaction: Reacciones
+          private_message: Mensajes personales
+          invited_to_private_message: Invitaciones a mensajes
+          group_message_summary: Resumen de bandejas de grupo
+          invited_to_topic: Invitaciones a historias
+          invitee_accepted: Invitaciones aceptadas
+          moved_post: Respuestas movidas
+          linked: Enlaces a tus respuestas
+          linked_consolidated: Resumen de enlaces
+          granted_badge: Retos
+          watching_first_post: Historias nuevas que seguís
+          watching_category_or_tag: Categorías y etiquetas que seguís
+          topic_reminder: Recordatorios de historias
+          bookmark_reminder: Recordatorios de marcadores
+          post_approved: Respuestas aprobadas
+          membership_request_accepted: Membresías de grupo
+          membership_request_consolidated: Solicitudes a grupos
+          chat_mention: Menciones en el chat
+          chat_message: Mensajes de chat
+          chat_invitation: Invitaciones al chat
+          chat_group_mention: Menciones a grupos en el chat
+          chat_quoted: Citas en el chat
+          chat_watched_thread: Hilos de chat que seguís
+          following: Nuevos seguimientos
+          following_created_topic: Historias de quienes seguís
+          following_replied: Respuestas de quienes seguís
+          votes_released: Votos liberados
+          event_reminder: Recordatorios de eventos
+          event_invitation: Invitaciones a eventos
+          new_features: Novedades del sitio
+          admin_problems: Alertas de administración
+          custom: Avisos del team y plugins
+      note_notification: "%{username} agregó una nota de moderación"
+      note_notification_title: Nota de moderación
+      note_reply_notification: "%{username} respondió a una nota de moderación"
+      note_reply_notification_title: Respuesta a nota de moderación
+      post_deleted_notification: "%{username} eliminó una respuesta"
+      post_deleted_notification_title: Respuesta eliminada por moderación
+      post_approved_notification: "%{username} aprobó una respuesta en cola"
+      post_approved_notification_title: Respuesta aprobada
+      post_rejected_notification: "%{username} rechazó una respuesta en cola"
+      post_rejected_notification_title: Respuesta rechazada
+      user_note_notification: "%{username} agregó una nota a un perfil"
+      user_note_notification_title: Nota de perfil
+      flag_note_notification: "%{username} agregó una nota a un reporte"
+      flag_note_notification_title: Nota de reporte
+      audience:
+        label: Mostrar a
+        all: Toda la comunidad
+        tl0: Solo NC0
+        tl1: NC0 y NC1
+        tl2: NC0 a NC2
+        tl3: NC0 a NC3
+      first_post_checklist:
+        modal_title: Antes de publicar
+        progress: "%{checked} de %{total} confirmados"
+        all_done: Todo confirmado
+        last_updated: 'Actualizado:'
+        confirm: Acepto, publicar
+        cancel: Cancelar
+        open_link: Abrir enlace
+        editor_title: Lista de primera respuesta
+        log_search_placeholder: Filtrar por nombre…
+        log_checklist: Lista
+        log_kind_all: Todas
+        log_kind_global: General
+        log_kind_topic: Aviso de historia
+        loading: Cargando…
+        item_label: Texto de la casilla
+        item_url: Enlace (opcional)
+        add_item: Agregar punto
+        remove_item: Quitar punto
+        move_up_item: Subir
+        move_down_item: Bajar
+        save: Guardar lista
+        saved: Guardada
+        audience_label: Quién tiene que aceptar antes de su próxima respuesta
+        button_label_label: Texto del botón
+        button_label_placeholder: Acepto, publicar
+        sidebar_title: Configurar la lista de primera respuesta
+        sidebar_text: Lista de primera respuesta
+        current_version: 'Versión actual: %{count}'
+        log_title: Registro de aceptaciones
+        log_empty: Nadie aceptó todavía.
+        log_user: Persona
+        log_version: Versión
+        log_when: Aceptada
+        log_filter_current: Solo versión actual (%{count})
+        require_reaccept: Pedir de nuevo
+        reaccept_done: Se le va a pedir de nuevo a %{username} en su próxima respuesta
+        targeted_title: Listas dirigidas
+        targeted_add: Agregar lista dirigida
+        targeted_name_label: Nombre
+        targeted_users_label: Personas
+        targeted_save: Guardar lista dirigida
+        targeted_delete: Eliminar
+        targeted_saved: Lista dirigida guardada
+      category_settings:
+        new_topic_prompt_label: Aviso antes de crear historia
+        preview_label: Vista previa
+        save: Guardar mensaje
+        saved: Guardado
+      pin_post:
+        pin: Fijar al final
+        unpin: Quitar del final
+        pinned_label: Respuesta fijada
+        jump_to_original: Ir a la respuesta original
+      whisper:
+        toolbar_title: Responder en privado
+        modal_title: Responder en privado a personas, grupos o retos
+        badge_label: Quienes tienen el reto (opcional)
+        search_placeholder: Buscar persona o grupo…
+        badge_search_placeholder: Buscar reto…
+        confirm: Responder en privado
+        clear: Vaciar
+        armed_pill_prefix: En privado para
+        armed_pill_staff_only: En privado para el team
+        clear_armed: Quitar privado
+        banner_to: Respuesta privada para
+        banner_to_staff: Respuesta privada para el team
+        whisper_notification: te respondió en privado
+        convert_to_public:
+          label: Hacer pública
+          title: Quitar la privacidad para que todos la vean
+          confirm: "¿Hacer pública esta respuesta privada? La va a ver cualquiera que pueda leer la historia."
+          done_toast: Ahora es pública
+          failed_toast: No se pudo convertir
+        add_participant:
+          menu_label: Sumar a las respuestas privadas
+          modal_title: Sumar personas a esta respuesta privada
+          search_placeholder: Buscar persona…
+          confirm: Sumar
+          cancel: Cancelar
+          added_toast:
+            one: "%{count} persona sumada a la respuesta privada"
+            other: "%{count} personas sumadas a la respuesta privada"
+      pm_badge:
+        button: Agregar por reto
+        modal_title: Agregar a quienes tengan un reto
+        search_placeholder: Buscar reto…
+        none: Elegir un reto…
+        confirm: Agregar
+    dumbcourse:
+      sidebar_section_title: Dumbcourse
+      sidebar_link_text: Dumbcourse
+      sidebar_link_title: Abrir Dumbcourse
+    jtech_tools:
+      admin:
+        tabs:
+          dislike: Dislike
+          smtp: SMTP alternativo
+          mini_mod: Mini-mod
+          mod: Moderación
+          dumbcourse: Dumbcourse
+          translator: Traductor
+          smart_search: Búsqueda inteligente
+          popups: Avisos emergentes
+          disteleplus: Disteleplus
+          reqpm: REQ-PM
+          all_settings: Todos los ajustes
+  admin_js:
+    admin:
+      logs:
+        staff_actions:
+          actions:
+            jtech_admin_action: ejecutar acción de Dumb Nautas
+            mod_post_made_whisper: convertir respuesta en privada
+            mod_whisper_made_public: hacer pública una respuesta privada
+      jtech_tools:
+        actions:
+          title: Acciones de mantenimiento
+          register_webhook:
+            label: Registrar webhook de Telegram
+            confirm: Llama a setWebhook de Telegram con la dirección de este foro (genera el secreto si está vacío) y actualiza el menú de comandos /disteleplus_*. ¿Registrar ahora?
+            done: Registro del webhook en cola.
+          send_test_message:
+            label: Enviar mensaje de prueba
+            done: Mensaje de prueba en cola.
+          sync_notifications:
+            label: Sincronizar notificaciones del canal
+            done: Sincronización en cola.
+          measure_forum_uploads:
+            label: Medir archivo de adjuntos
+            confirm: Recorre las respuestas buscando adjuntos y escribe los totales en /logs. No envía nada a Telegram. ¿Medir ahora?
+            done: Medición en cola.
+          backfill_forum_uploads:
+            label: Copiar adjuntos viejos
+            confirm: Empieza (o reinicia desde cero) la copia de adjuntos viejos al tema de Telegram, al ritmo de los ajustes de copia. ¿Empezar?
+            done: Copia en cola.
+          purge_phantom_likes:
+            label: Purgar me gusta fantasma
+            confirm: Aplica los ajustes de Dislike a los me gusta existentes en las categorías restringidas (borra su historial y avisos, salvo que se conserve el historial) y recalcula me gusta dados y recibidos. No se puede deshacer. ¿Ejecutar ahora?
+            done: Purga en cola.
+      site_settings:
+        categories:
+          jtech: Dumb Nautas
+          jtech_tools: Dumb Nautas
+          jtech_dislike: Dumb Nautas — Dislike
+          jtech_smtp: Dumb Nautas — SMTP alternativo
+          jtech_mini_mod: Dumb Nautas — Mini-mod
+          jtech_mod: Dumb Nautas — Moderación
+          jtech_dumbcourse: Dumb Nautas — Dumbcourse
+          jtech_disteleplus: Dumb Nautas — Disteleplus
+          jtech_translator: Dumb Nautas — Traductor
+          jtech_smart_search: Dumb Nautas — Búsqueda inteligente
+          jtech_popup_notifications: Dumb Nautas — Avisos emergentes
+          jtech_mod_whispers: 'Dumb Nautas — Moderación: Respuestas privadas'
+          jtech_mod_notes: 'Dumb Nautas — Moderación: Notas'
+          jtech_mod_notifications: 'Dumb Nautas — Moderación: Notificaciones'
+          jtech_mod_topic_tools: 'Dumb Nautas — Moderación: Historias'
+          jtech_mod_checklists: 'Dumb Nautas — Moderación: Listas'
+          jtech_reqpm: Dumb Nautas — REQ-PM
+        reqpm:
+          setup_prompt:
+            'off': 'Desactivado: no pedir nunca'
+            gentle: 'Suave: pedir con opción de posponer o rechazar'
+            required: 'Obligatorio: pedir en cada página hasta que agreguen uno'
+        dumbcourse:
+          view:
+            latest: Recientes
+            new: Nuevas
+            top: Destacadas
+            unseen: Sin ver
+            hot: Populares
+            my: Mis respuestas
+            categories: Categorías
+          posters:
+            all: Todos los dispositivos
+            desktop: Solo escritorio
+            mobile: Solo celular
+            none: Desactivado
+          languagetool_mode:
+            self_hosted: Servidor propio
+            official_api: API de LanguageTool
+        requires_confirmation_messages:
+          purge_phantom_likes_now:
+            prompt: Aplica los ajustes de Dislike a los me gusta existentes en las categorías restringidas (borra su historial y avisos, salvo que se conserve el historial) y recalcula me gusta dados y recibidos. No se puede deshacer. ¿Ejecutar ahora?
+            confirm: Purgar
+          discourse_another_email_enabled:
+            prompt: Todo el correo saliente del foro va a pasar por el relé configurado acá (el correo de bandejas de grupo usa su propio servidor). ¿Activarlo?
+            confirm: Activar relé
+          disteleplus_register_webhook_now:
+            prompt: Llama a setWebhook de Telegram con la dirección de este foro (genera el secreto si está vacío). ¿Registrar ahora?
+            confirm: Registrar webhook
+          translator_tweaks_worker_url:
+            prompt: Los endpoints de traducción se cambian al arrancar, así que esto solo aplica después de reiniciar la app. ¿Guardar igual?
+            confirm: Guardar (requiere reinicio)
