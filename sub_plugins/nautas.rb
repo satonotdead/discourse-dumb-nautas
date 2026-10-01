@@ -4,9 +4,6 @@
 
 require_relative "../lib/nautas/category_checklist"
 
-register_category_custom_field_type(NautasCategoryChecklist::FIELD, :json)
-register_user_custom_field_type(NautasCategoryChecklist::USER_FIELD, :json)
-
 Discourse::Application.routes.append do
   scope "/nautas/category-checklist", module: "nautas", defaults: { format: :json } do
     get "/owed" => "category_checklist#owed"
@@ -27,6 +24,9 @@ on(:before_create_post) do |post, opts|
 end
 
 after_initialize do
+  register_category_custom_field_type(NautasCategoryChecklist::FIELD, :json)
+  register_user_custom_field_type(NautasCategoryChecklist::USER_FIELD, :json)
+
   # Mod whispers are regular posts with an audience. A core whisper flag
   # carried over by the composer (replying to a core whisper, e.g. inside a
   # category-lockdown topic) would hide the post from its non-staff targets,
