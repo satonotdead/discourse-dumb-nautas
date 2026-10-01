@@ -3,10 +3,10 @@
 # The mod-categories master toggle used to default OFF, which silently hid
 # pinned-bottom posts and the shield notifications feed on deployed sites —
 # their own toggles default on but ride on the master. The default is now
-# on; clearing any stored "off" rows lets the new default govern everywhere
-# (an admin can still turn any of them off again afterwards).
+# on. Only the master row is cleared: the sub-toggles always defaulted on,
+# so a stored "off" there is a deliberate admin opt-out and is kept.
 class EnableModCategoriesByDefault < ActiveRecord::Migration[7.2]
-  SETTINGS = %w[mod_categories_enabled mod_pin_post_enabled mod_notes_feed_enabled]
+  SETTINGS = %w[mod_categories_enabled]
 
   def up
     execute(<<~SQL)
