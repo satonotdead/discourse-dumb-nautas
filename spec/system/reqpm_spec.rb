@@ -19,6 +19,7 @@ RSpec.describe "REQ-PM", reqpm_prompt: true do
   before do
     SiteSetting.jtech_enabled = true
     SiteSetting.reqpm_enabled = true
+    SiteSetting.reqpm_default_country_code = "1"
     SiteSetting.hide_new_user_profiles = false
   end
 

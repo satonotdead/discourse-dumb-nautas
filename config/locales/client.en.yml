@@ -161,17 +161,17 @@ en:
           field: Number
           name: Phone
           short: Phone
-          placeholder: "(718) 555-0100"
+          placeholder: "+1 718 555 0100"
         sms:
           field: Number
           name: Text message
           short: Text
-          placeholder: "(718) 555-0100"
+          placeholder: "+1 718 555 0100"
         whatsapp:
           field: WhatsApp number
           name: WhatsApp
           short: WhatsApp
-          placeholder: "(718) 555-0100"
+          placeholder: "+1 718 555 0100"
         email:
           field: Address
           name: Email
@@ -212,7 +212,7 @@ en:
         value: Details
         note: Note
         optional: (optional)
-        note_placeholder: e.g. Evenings only, no calls on Shabbos
+        note_placeholder: e.g. Evenings only
         share_by_default: Select by default when sending
         country_code_hint: "Saved as +%{code} unless you add a country code."
         add: Add
@@ -262,7 +262,7 @@ en:
         close: Close
       setup:
         title: Your contact card
-        lead: Private messages are off here. Members swap contact details instead, and only people you choose see yours.
+        lead: Members swap contact details here, and only people you choose see yours.
         done: All set
         later: Remind me later
         never: I'd rather not

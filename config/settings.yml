@@ -1220,7 +1220,7 @@ jtech_reqpm:
   # Master switch. Read at page boot (button, header icon, prompt), hence
   # refresh: true.
   reqpm_enabled:
-    default: true
+    default: false
     client: true
     refresh: true
 
@@ -1258,7 +1258,7 @@ jtech_reqpm:
   # Country code assumed for phone numbers typed without one ("+" or
   # "00"). Blank turns the guess off.
   reqpm_default_country_code:
-    default: "1"
+    default: ""
     client: true
     regex: "^\\+?[0-9]{0,4}$"
     regex_error: "site_settings.errors.reqpm_default_country_code_invalid"

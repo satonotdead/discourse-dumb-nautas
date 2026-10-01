@@ -3,6 +3,9 @@
 require "rails_helper"
 
 RSpec.describe DiscourseReqpm::Kinds do
+  # Our default is blank; these examples exercise the +1 guess.
+  before { SiteSetting.reqpm_default_country_code = "1" }
+
   def normalize(**attrs)
     described_class.normalize!(**attrs)
   end
