@@ -21,8 +21,8 @@ RSpec.describe "Dumb Nautas whisper glue" do
     sign_in(moderator)
     post "/posts.json",
          params: {
-           topic_id: topic.id,
-           raw: "This is a whisper reply body long enough to be valid.",
+           :topic_id => topic.id,
+           :raw => "This is a whisper reply body long enough to be valid.",
            DiscourseModCategories::POST_WHISPER_ARMED_PARAM => true,
            DiscourseModCategories::POST_WHISPER_TARGETS_FIELD => [target.id],
            :whisper => true,
