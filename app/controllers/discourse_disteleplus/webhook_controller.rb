@@ -7,7 +7,7 @@ module DiscourseDisteleplus
   # minimum — verify, parse, enqueue — and answers 200 immediately so
   # Telegram's delivery loop never backs up behind Discourse-side work.
   class WebhookController < ::ApplicationController
-    requires_plugin "discourse-dumb-nautas"
+    requires_plugin "jtech-tools"
 
     skip_before_action :verify_authenticity_token,
                        :redirect_to_login_if_required,
@@ -15,7 +15,7 @@ module DiscourseDisteleplus
                        :preload_json
 
     def receive
-      raise Discourse::NotFound unless SiteSetting.disteleplus_enabled
+      raise Discourse::NotFound unless DiscourseDisteleplus.enabled?
 
       secret = SiteSetting.disteleplus_webhook_secret.to_s
       header = request.headers["X-Telegram-Bot-Api-Secret-Token"].to_s

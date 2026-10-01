@@ -45,8 +45,13 @@ RSpec.describe "DiscourseModCategories plugin.rb" do
     context "when enabled" do
       before { SiteSetting.mod_categories_enabled = true }
 
-      it "grants moderators category create/edit/delete" do
+      it "leaves moderator category management to core's setting" do
         empty_category = Fabricate(:category)
+        guardian = Guardian.new(moderator)
+        expect(guardian.can_create_category?).to eq(false)
+        expect(guardian.can_edit_category?(empty_category)).to eq(false)
+
+        SiteSetting.moderators_manage_categories = true
         guardian = Guardian.new(moderator)
         expect(guardian.can_create_category?).to eq(true)
         expect(guardian.can_edit_category?(empty_category)).to eq(true)
@@ -98,9 +103,6 @@ RSpec.describe "DiscourseModCategories plugin.rb" do
   describe "per-feature moderator toggle registration" do
     it "registers a toggle for every moderator grant, defaulting to current behavior" do
       %i[
-        mod_moderators_can_create_categories
-        mod_moderators_can_edit_categories
-        mod_moderators_can_delete_categories
         mod_whisper_add_participant_enabled
         mod_whisper_convert_enabled
         mod_whisper_badge_targeting_enabled
@@ -140,10 +142,6 @@ RSpec.describe "DiscourseModCategories plugin.rb" do
   describe "translator-tweaks settings registration" do
     it "registers the module master switch, on by default (preserves shipped behavior)" do
       expect(SiteSetting.defaults[:translator_tweaks_enabled]).to eq(true)
-    end
-
-    it "registers the globe-hiding toggle, on by default" do
-      expect(SiteSetting.defaults[:translator_tweaks_hide_untranslatable]).to eq(true)
     end
 
     it "defaults the worker URL to the proxy the module used to hard-code" do
@@ -229,32 +227,6 @@ RSpec.describe "DiscourseModCategories plugin.rb" do
     it "denies moderators when the plugin master switch is off" do
       SiteSetting.mod_categories_enabled = false
       expect(Guardian.new(moderator).can_manage_mod_messages?).to eq(false)
-    end
-  end
-
-  describe "username-avatar (email_hash override)" do
-    fab!(:mixed_case_user) { Fabricate(:user, username: "MixedCase") }
-
-    it "registers discourse_username_avatar_enabled defaulting to true" do
-      expect(SiteSetting.defaults[:discourse_username_avatar_enabled]).to eq(true)
-    end
-
-    it "keeps the setting off the client payload" do
-      client_settings = SiteSetting.client_settings
-      expect(client_settings).not_to include(:discourse_username_avatar_enabled)
-    end
-
-    it "derives email_hash from the downcased username when enabled" do
-      SiteSetting.discourse_username_avatar_enabled = true
-      expect(mixed_case_user.email_hash).to eq(Digest::MD5.hexdigest("mixedcase"))
-    end
-
-    it "falls back to the normal email-based hash when disabled" do
-      SiteSetting.discourse_username_avatar_enabled = false
-      disabled_hash = mixed_case_user.email_hash
-
-      SiteSetting.discourse_username_avatar_enabled = true
-      expect(mixed_case_user.email_hash).not_to eq(disabled_hash)
     end
   end
 end

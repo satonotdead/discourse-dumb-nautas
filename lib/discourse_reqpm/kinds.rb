@@ -104,8 +104,8 @@ module DiscourseReqpm
     end
 
     # A number typed without a country code gets the forum's default one
-    # (reqpm_default_country_code, blank out of the box), so with "1" set
-    # "646-820-1413" is stored as "+1 646-820-1413" — otherwise WhatsApp and friends read
+    # (reqpm_default_country_code, "1" out of the box), so "646-820-1413"
+    # is stored as "+1 646-820-1413" — otherwise WhatsApp and friends read
     # the leading digits as a country ("64" → New Zealand).
     #
     # "00…" is the international prefix and becomes "+". Numbers starting

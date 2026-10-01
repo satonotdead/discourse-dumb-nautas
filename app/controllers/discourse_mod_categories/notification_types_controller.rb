@@ -5,11 +5,11 @@ module DiscourseModCategories
   # notifications page shows only these instead of every type Discourse has
   # ever defined.
   class NotificationTypesController < ::ApplicationController
-    requires_plugin "discourse-dumb-nautas"
+    requires_plugin "jtech-tools"
     requires_login
 
     def index
-      raise Discourse::NotFound unless SiteSetting.mod_categories_enabled
+      # Independent of the Mod master switch, like the filter itself.
       raise Discourse::NotFound unless SiteSetting.mod_notification_type_filter_enabled
 
       ids = Notification.where(user_id: current_user.id).distinct.pluck(:notification_type)

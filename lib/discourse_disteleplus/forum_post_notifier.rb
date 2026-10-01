@@ -9,13 +9,15 @@ module DiscourseDisteleplus
   # forum-upload archive so private content never leaks.
   module ForumPostNotifier
     def self.enabled?
-      SiteSetting.disteleplus_enabled && SiteSetting.disteleplus_forum_post_notifications_enabled
+      DiscourseDisteleplus.enabled? && SiteSetting.disteleplus_forum_post_notifications_enabled
     end
 
     def self.eligible?(post)
       return false unless enabled?
       return false if post.nil? || post.deleted_at.present? || post.hidden?
       return false if post.post_type != Post.types[:regular]
+      # Whispers are private to their audience — never announced.
+      return false if DiscourseModCategories::Whisper.whisper?(post)
       return false if post.user.nil? || post.user.bot?
 
       topic = post.topic

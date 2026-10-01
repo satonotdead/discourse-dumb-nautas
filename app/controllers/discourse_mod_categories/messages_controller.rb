@@ -5,8 +5,18 @@ module ::DiscourseModCategories
   # Guardian-gated so only moderators and admins can write; regular users
   # get a 403.
   class MessagesController < ::ApplicationController
-    requires_plugin "discourse-dumb-nautas"
+    requires_plugin "jtech-tools"
     requires_login
+
+    # Whispers and notification auto-mark have their own switches and keep
+    # working with the module off; everything else here is the module.
+    before_action :ensure_module_enabled,
+                  except: %i[
+                    update_post_whisper
+                    add_whisper_participant
+                    mark_topic_notifications_seen
+                    mark_review_notifications_seen
+                  ]
 
     TOPIC_FOOTER_FIELD = DiscourseModCategories::TOPIC_FOOTER_FIELD
     TOPIC_REPLY_PROMPT_FIELD = DiscourseModCategories::TOPIC_REPLY_PROMPT_FIELD
@@ -26,8 +36,7 @@ module ::DiscourseModCategories
     TOPIC_WHISPER_PARTICIPANTS_FIELD = DiscourseModCategories::TOPIC_WHISPER_PARTICIPANTS_FIELD
 
     def update_topic
-      topic = Topic.find_by(id: params[:topic_id])
-      raise Discourse::NotFound unless topic
+      topic = find_topic!
 
       guardian.ensure_can_manage_mod_messages!
 
@@ -66,6 +75,10 @@ module ::DiscourseModCategories
         else
           post = topic.posts.find_by(id: raw.to_i)
           raise Discourse::InvalidParameters.new(:pinned_post_id) unless post
+          # A pinned copy is shown to every reader of the topic.
+          if DiscourseModCategories::Whisper.whisper?(post)
+            raise Discourse::InvalidParameters.new(:pinned_post_id)
+          end
           topic.custom_fields[TOPIC_PINNED_POST_FIELD] = post.id
         end
       end
@@ -102,7 +115,7 @@ module ::DiscourseModCategories
                reply_prompt: topic.custom_fields[TOPIC_REPLY_PROMPT_FIELD].to_s,
                reply_prompt_max_tl: topic.custom_fields[TOPIC_REPLY_PROMPT_TL_FIELD],
                pinned_post_id: topic.custom_fields[TOPIC_PINNED_POST_FIELD],
-               pinned_post: DiscourseModCategories.serialized_pinned_post(topic),
+               pinned_post: DiscourseModCategories.serialized_pinned_post(topic, guardian),
                require_reply_approval: !!topic.custom_fields[TOPIC_REQUIRE_REPLY_APPROVAL_FIELD],
                private_note: topic.custom_fields[TOPIC_PRIVATE_NOTE_FIELD].to_s,
                private_note_position:
@@ -111,16 +124,19 @@ module ::DiscourseModCategories
              }
     end
 
+    # The per-category new-topic prompt is a moderator message, not a
+    # category setting, so it needs the moderator-message right (and a
+    # category they can see), not the right to edit the category itself.
     def update_category
       category = Category.find_by(id: params[:category_id])
-      raise Discourse::NotFound unless category
+      raise Discourse::NotFound if category.nil? || !guardian.can_see_category?(category)
 
-      # Editing a category is already a moderator-granted ability in this
-      # plugin; reuse that gate for the per-category prompt.
-      guardian.ensure_can_edit_category!(category)
+      guardian.ensure_can_manage_mod_messages!
       ensure_feature!(:precheck_new_topic_enabled)
 
-      category.custom_fields[CATEGORY_NEW_TOPIC_PROMPT_FIELD] = params[:new_topic_prompt].to_s
+      if params.key?(:new_topic_prompt)
+        category.custom_fields[CATEGORY_NEW_TOPIC_PROMPT_FIELD] = params[:new_topic_prompt].to_s
+      end
 
       if params.key?(:new_topic_prompt_max_tl)
         category.custom_fields[CATEGORY_NEW_TOPIC_PROMPT_TL_FIELD] = normalize_max_tl(
@@ -138,8 +154,7 @@ module ::DiscourseModCategories
 
     # Appends a staff reply to the topic's private moderator note thread.
     def add_note_reply
-      topic = Topic.find_by(id: params[:topic_id])
-      raise Discourse::NotFound unless topic
+      topic = find_topic!
 
       guardian.ensure_can_manage_mod_messages!
       ensure_feature!(:mod_topic_private_notes_enabled)
@@ -147,17 +162,19 @@ module ::DiscourseModCategories
       raw = params[:raw].to_s.strip
       raise Discourse::InvalidParameters.new(:raw) if raw.empty?
 
-      replies = note_replies(topic)
       reply = {
         "id" => SecureRandom.hex(8),
         "user_id" => current_user.id,
         "raw" => raw,
         "created_at" => Time.zone.now.iso8601,
       }
-      replies << reply
-      topic.custom_fields[TOPIC_PRIVATE_NOTE_REPLIES_FIELD] = replies
-      topic.custom_fields[TOPIC_PRIVATE_NOTE_ACTIVITY_FIELD] = Time.zone.now.iso8601
-      topic.save_custom_fields(true)
+      with_note_lock(topic) do
+        replies = note_replies(topic)
+        replies << reply
+        topic.custom_fields[TOPIC_PRIVATE_NOTE_REPLIES_FIELD] = replies
+        topic.custom_fields[TOPIC_PRIVATE_NOTE_ACTIVITY_FIELD] = Time.zone.now.iso8601
+        topic.save_custom_fields(true)
+      end
       notify_staff_of_reply(topic, reply) if SiteSetting.mod_notify_staff_on_topic_notes
 
       render json: { replies: serialized_note_replies(topic) }
@@ -165,8 +182,7 @@ module ::DiscourseModCategories
 
     # Edits the `raw` body of a single reply in the note thread.
     def update_note_reply
-      topic = Topic.find_by(id: params[:topic_id])
-      raise Discourse::NotFound unless topic
+      topic = find_topic!
 
       guardian.ensure_can_manage_mod_messages!
       ensure_feature!(:mod_topic_private_notes_enabled)
@@ -175,45 +191,47 @@ module ::DiscourseModCategories
       raise Discourse::InvalidParameters.new(:raw) if raw.empty?
 
       reply_id = params[:reply_id].to_s
-      replies = note_replies(topic)
-      reply = replies.find { |r| r["id"] == reply_id }
-      raise Discourse::InvalidParameters.new(:reply_id) unless reply
-      ensure_can_touch_note_entry!(reply["user_id"])
+      with_note_lock(topic) do
+        replies = note_replies(topic)
+        reply = replies.find { |r| r["id"] == reply_id }
+        raise Discourse::InvalidParameters.new(:reply_id) unless reply
+        ensure_can_touch_note_entry!(reply["user_id"])
 
-      reply["raw"] = raw
-      topic.custom_fields[TOPIC_PRIVATE_NOTE_REPLIES_FIELD] = replies
-      topic.custom_fields[TOPIC_PRIVATE_NOTE_ACTIVITY_FIELD] = Time.zone.now.iso8601
-      topic.save_custom_fields(true)
+        reply["raw"] = raw
+        topic.custom_fields[TOPIC_PRIVATE_NOTE_REPLIES_FIELD] = replies
+        topic.custom_fields[TOPIC_PRIVATE_NOTE_ACTIVITY_FIELD] = Time.zone.now.iso8601
+        topic.save_custom_fields(true)
+      end
 
       render json: note_thread_json(topic)
     end
 
     # Removes a single reply from the note thread.
     def delete_note_reply
-      topic = Topic.find_by(id: params[:topic_id])
-      raise Discourse::NotFound unless topic
+      topic = find_topic!
 
       guardian.ensure_can_manage_mod_messages!
       ensure_feature!(:mod_topic_private_notes_enabled)
 
       reply_id = params[:reply_id].to_s
-      replies = note_replies(topic)
-      target = replies.find { |r| r["id"] == reply_id }
-      raise Discourse::InvalidParameters.new(:reply_id) unless target
-      ensure_can_touch_note_entry!(target["user_id"])
+      with_note_lock(topic) do
+        replies = note_replies(topic)
+        target = replies.find { |r| r["id"] == reply_id }
+        raise Discourse::InvalidParameters.new(:reply_id) unless target
+        ensure_can_touch_note_entry!(target["user_id"])
 
-      replies.reject! { |r| r["id"] == reply_id }
-      topic.custom_fields[TOPIC_PRIVATE_NOTE_REPLIES_FIELD] = replies
-      topic.custom_fields[TOPIC_PRIVATE_NOTE_ACTIVITY_FIELD] = Time.zone.now.iso8601
-      topic.save_custom_fields(true)
+        replies.reject! { |r| r["id"] == reply_id }
+        topic.custom_fields[TOPIC_PRIVATE_NOTE_REPLIES_FIELD] = replies
+        topic.custom_fields[TOPIC_PRIVATE_NOTE_ACTIVITY_FIELD] = Time.zone.now.iso8601
+        topic.save_custom_fields(true)
+      end
 
       render json: note_thread_json(topic)
     end
 
     # Clears the note body, its author/created-at, and its whole reply thread.
     def delete_note
-      topic = Topic.find_by(id: params[:topic_id])
-      raise Discourse::NotFound unless topic
+      topic = find_topic!
 
       guardian.ensure_can_manage_mod_messages!
       ensure_feature!(:mod_topic_private_notes_enabled)
@@ -248,18 +266,31 @@ module ::DiscourseModCategories
       raise Discourse::NotFound unless post
       raise Discourse::InvalidAccess.new("staff_only") unless current_user.staff?
       raise Discourse::InvalidAccess.new("cannot_edit") unless guardian.can_edit?(post)
+      # Hiding or publishing another staff member's post is an admin call.
+      if !current_user.admin? && post.user&.staff? && post.user_id != current_user.id
+        raise Discourse::InvalidAccess.new("other_staff_post")
+      end
 
       armed = ActiveModel::Type::Boolean.new.cast(params[:mod_whisper])
+      was_whisper = DiscourseModCategories::Whisper.whisper?(post)
+
+      # A topic's first post can't be a whisper: title, excerpt and new-topic
+      # notifications are public by nature.
+      if armed && post.is_first_post?
+        raise Discourse::InvalidParameters.new(
+                I18n.t("discourse_mod_categories.whisper.first_post_not_allowed"),
+              )
+      end
 
       targets_field = DiscourseModCategories::POST_WHISPER_TARGETS_FIELD
       groups_field = DiscourseModCategories::POST_WHISPER_TARGET_GROUPS_FIELD
       badges_field = DiscourseModCategories::POST_WHISPER_TARGET_BADGES_FIELD
-      participants_field = DiscourseModCategories::TOPIC_WHISPER_PARTICIPANTS_FIELD
 
       if armed
-        user_ids = sanitize_ids(params[:mod_whisper_target_user_ids])
-        group_ids = sanitize_ids(params[:mod_whisper_target_group_ids])
-        badge_ids = sanitize_ids(params[:mod_whisper_target_badge_ids])
+        cap = DiscourseModCategories::MAX_WHISPER_TARGETS
+        user_ids = sanitize_ids(params[:mod_whisper_target_user_ids]).first(cap)
+        group_ids = sanitize_ids(params[:mod_whisper_target_group_ids]).first(cap)
+        badge_ids = sanitize_ids(params[:mod_whisper_target_badge_ids]).first(cap)
         badge_ids = [] unless SiteSetting.mod_whisper_badge_targeting_enabled
 
         # Validate IDs against the DB so a typo / stale ID doesn't end up
@@ -273,19 +304,13 @@ module ::DiscourseModCategories
         post.custom_fields[badges_field] = badge_ids
         post.save_custom_fields(true)
 
-        # Cumulative topic-participants update — mirrors what
-        # on(:post_created) does so a freshly-targeted user starts seeing
-        # ALL whispers in the topic, not just future ones.
+        # Explicitly targeted non-staff users may whisper back to staff in
+        # this topic. Being a participant grants no visibility at all.
         if post.topic
-          existing = Array(post.topic.custom_fields[participants_field]).map(&:to_i)
-          additions = user_ids.dup
-          additions += ::GroupUser.where(group_id: group_ids).pluck(:user_id) if group_ids.any?
-          additions += ::UserBadge.where(badge_id: badge_ids).pluck(:user_id) if badge_ids.any?
-          merged = (existing + additions).uniq
-          if merged.sort != existing.sort
-            post.topic.custom_fields[participants_field] = merged
-            post.topic.save_custom_fields(true)
-          end
+          DiscourseModCategories::Whisper.merge_participants(
+            post.topic,
+            ::User.where(id: user_ids).where(admin: false, moderator: false).pluck(:id),
+          )
         end
       else
         # Disarming: the `mod_is_whisper` serializer keys off
@@ -305,6 +330,14 @@ module ::DiscourseModCategories
       # in sub_plugins/mod_categories.rb.
       DiscourseEvent.trigger(:mod_whisper_state_changed, post, armed)
 
+      if armed != was_whisper
+        StaffActionLogger.new(current_user).log_custom(
+          armed ? "mod_post_made_whisper" : "mod_whisper_made_public",
+          post_id: post.id,
+          topic_id: post.topic_id,
+        )
+      end
+
       render json: serialized_post_whisper_state(post.reload)
     end
 
@@ -314,8 +347,7 @@ module ::DiscourseModCategories
     # `viewers` array drives the "👁 Viewed by N" pill at the bottom of
     # the panel, refreshed inline without a topic reload.
     def record_note_view
-      topic = Topic.find_by(id: params[:topic_id])
-      raise Discourse::NotFound unless topic
+      topic = find_topic!
 
       guardian.ensure_can_manage_mod_messages!
       ensure_feature!(:mod_note_view_tracking_enabled)
@@ -326,29 +358,32 @@ module ::DiscourseModCategories
       raise Discourse::NotFound if note.strip.empty?
 
       now = Time.zone.now.iso8601
-      raw = topic.custom_fields[DiscourseModCategories::TOPIC_NOTE_VIEWERS_FIELD]
-      viewers = raw.is_a?(Array) ? raw.deep_dup : []
+      viewers = nil
+      with_note_lock(topic) do
+        raw = topic.custom_fields[DiscourseModCategories::TOPIC_NOTE_VIEWERS_FIELD]
+        viewers = raw.is_a?(Array) ? raw.deep_dup : []
 
-      existing = viewers.find { |v| v["user_id"].to_i == current_user.id }
-      if existing
-        existing["viewed_at"] = now
-        # Refresh denormalized identity fields in case the user renamed /
-        # changed their avatar since their last view.
-        existing["username"] = current_user.username
-        existing["name"] = current_user.name
-        existing["avatar_template"] = current_user.avatar_template
-      else
-        viewers << {
-          "user_id" => current_user.id,
-          "username" => current_user.username,
-          "name" => current_user.name,
-          "avatar_template" => current_user.avatar_template,
-          "viewed_at" => now,
-        }
+        existing = viewers.find { |v| v["user_id"].to_i == current_user.id }
+        if existing
+          existing["viewed_at"] = now
+          # Refresh denormalized identity fields in case the user renamed /
+          # changed their avatar since their last view.
+          existing["username"] = current_user.username
+          existing["name"] = current_user.name
+          existing["avatar_template"] = current_user.avatar_template
+        else
+          viewers << {
+            "user_id" => current_user.id,
+            "username" => current_user.username,
+            "name" => current_user.name,
+            "avatar_template" => current_user.avatar_template,
+            "viewed_at" => now,
+          }
+        end
+
+        topic.custom_fields[DiscourseModCategories::TOPIC_NOTE_VIEWERS_FIELD] = viewers
+        topic.save_custom_fields(true)
       end
-
-      topic.custom_fields[DiscourseModCategories::TOPIC_NOTE_VIEWERS_FIELD] = viewers
-      topic.save_custom_fields(true)
 
       render json: { viewers: serialized_note_viewers(viewers) }
     end
@@ -364,8 +399,7 @@ module ::DiscourseModCategories
     # message key) so unrelated custom notifications another plugin might
     # attach to the same topic are left alone.
     def mark_topic_notifications_seen
-      topic = Topic.find_by(id: params[:topic_id])
-      raise Discourse::NotFound unless topic
+      topic = find_topic!
 
       # Cheap no-op instead of an error when disabled: the frontend pings
       # this on every topic open, and stale clients shouldn't 4xx-spam logs.
@@ -511,7 +545,14 @@ module ::DiscourseModCategories
       # recency sort below ties on identical timestamps, and Ruby's stable
       # sort falls back to insertion order; without this, the panel
       # surfaces oldest-first instead of newest-first.
-      topics_by_id = Topic.where(id: topic_ids).index_by(&:id)
+      # Only topics this staff member can read: an admin's note on a private
+      # message or an admin-only topic must not surface for moderators.
+      topics_by_id =
+        Topic
+          .includes(:category)
+          .where(id: topic_ids)
+          .select { |topic| guardian.can_see_topic?(topic) }
+          .index_by(&:id)
       topic_notes =
         topic_ids
           .map do |id|
@@ -551,8 +592,17 @@ module ::DiscourseModCategories
           .order(created_at: :desc)
           .limit(50)
 
+      hidden_topic_ids =
+        Topic
+          .includes(:category)
+          .where(id: event_rows.map(&:topic_id).compact.uniq)
+          .reject { |topic| guardian.can_see_topic?(topic) }
+          .map(&:id)
+          .to_set
+
       events =
-        event_rows.map do |n|
+        event_rows.filter_map do |n|
+          next if n.topic_id && hidden_topic_ids.include?(n.topic_id)
           data =
             begin
               JSON.parse(n.data.to_s)
@@ -656,20 +706,27 @@ module ::DiscourseModCategories
       render json: { usernames: usernames, badge: { id: badge.id, name: badge.display_name } }
     end
 
-    # Adds a user to a topic's cumulative whisper conversation. From then on
-    # that user sees every whisper in the topic (both Guardian#can_see_post?
-    # and the topic-stream SQL filter grant visibility to participants).
+    # Adds users to ONE whisper's audience (its explicit target users). They
+    # see that whisper — and, because staff replies carry the audience
+    # forward, the conversation that follows it — but never other whispers
+    # in the topic: a whisper is visible to exactly who its banner names.
     def add_whisper_participant
       raise Discourse::NotFound unless SiteSetting.mod_whisper_enabled
       raise Discourse::NotFound unless SiteSetting.mod_whisper_add_participant_enabled
 
-      topic = Topic.find_by(id: params[:topic_id])
-      raise Discourse::NotFound unless topic
+      topic = find_topic!
 
       # Whisper-scoped guard, not ensure_can_manage_mod_messages! — that
       # Guardian rides on mod_categories_enabled, and whispers are
       # deliberately independent of the module master.
       raise Discourse::InvalidAccess unless current_user&.staff?
+
+      post = topic.posts.find_by(id: params[:post_id])
+      unless post && DiscourseModCategories::Whisper.whisper?(post)
+        raise Discourse::InvalidParameters.new(
+                I18n.t("discourse_mod_categories.whisper.add_participant_needs_whisper"),
+              )
+      end
 
       user =
         if params[:user_id].present?
@@ -679,19 +736,52 @@ module ::DiscourseModCategories
         end
       raise Discourse::InvalidParameters.new(:username) unless user
 
-      existing = Array(topic.custom_fields[TOPIC_WHISPER_PARTICIPANTS_FIELD]).map(&:to_i)
-      merged = (existing + [user.id]).reject { |i| i <= 0 }.uniq
+      targets_field = DiscourseModCategories::POST_WHISPER_TARGETS_FIELD
+      existing = DiscourseModCategories::Whisper.normalize_ids(post.custom_fields[targets_field])
+      added = existing.exclude?(user.id)
 
-      if merged.sort != existing.sort
-        topic.custom_fields[TOPIC_WHISPER_PARTICIPANTS_FIELD] = merged
-        topic.save_custom_fields(true)
-        notify_whisper_participant(topic, user)
+      if added
+        post.custom_fields[targets_field] = existing + [user.id]
+        post.save_custom_fields(true)
+        DiscourseModCategories::Whisper.merge_participants(topic, [user.id]) unless user.staff?
+        notify_whisper_participant(topic, post, user)
+        post.publish_change_to_clients!(:revised)
       end
 
-      render json: { participant_ids: merged }
+      render json: {
+               participant_ids:
+                 DiscourseModCategories::Whisper.normalize_ids(
+                   topic.custom_fields[TOPIC_WHISPER_PARTICIPANTS_FIELD],
+                 ),
+               **serialized_post_whisper_state(post.reload),
+             }
     end
 
     private
+
+    def ensure_module_enabled
+      raise Discourse::NotFound unless DiscourseModCategories.enabled?
+    end
+
+    # Every topic endpoint works only on topics the caller can see: a
+    # moderator must not set a footer, reply approval, note or checklist on
+    # (or read the note of) a private message or restricted topic they can't
+    # read.
+    # The note thread and its viewer list are JSON in topic custom fields;
+    # a read-modify-write without a lock would let two staff saving at once
+    # drop one of the changes.
+    def with_note_lock(topic)
+      DistributedMutex.synchronize("mod_topic_note_#{topic.id}") do
+        topic.reload
+        yield
+      end
+    end
+
+    def find_topic!
+      topic = Topic.find_by(id: params[:topic_id])
+      raise Discourse::NotFound if topic.nil? || !guardian.can_see_topic?(topic)
+      topic
+    end
 
     # 404s when a per-feature toggle is off — same shape the whisper
     # endpoints already use for their master switch.
@@ -710,9 +800,9 @@ module ::DiscourseModCategories
       raise Discourse::InvalidAccess.new("not_note_author")
     end
 
-    # Notifies a newly added user that they were added to the topic's whisper
-    # conversation, mirroring the whisper `post_created` notification pattern.
-    def notify_whisper_participant(topic, user)
+    # Notifies a newly added user that they were added to a whisper,
+    # mirroring the whisper `post_created` notification pattern.
+    def notify_whisper_participant(topic, post, user)
       return unless SiteSetting.mod_notify_whisper_targets
       return if user.id == current_user.id
 
@@ -720,10 +810,12 @@ module ::DiscourseModCategories
         notification_type: Notification.types[:custom],
         user_id: user.id,
         topic_id: topic.id,
-        post_number: topic.highest_post_number,
+        post_number: post.post_number,
         data: {
           topic_title: topic.title,
           display_username: current_user.username,
+          mod_whisper: true,
+          original_post_id: post.id,
           message: "discourse_mod_categories.whisper.whisper_notification",
         }.to_json,
       )
@@ -755,11 +847,9 @@ module ::DiscourseModCategories
       note = topic.custom_fields[TOPIC_PRIVATE_NOTE_FIELD].to_s
       note_url = "#{topic.relative_url}/#{topic.highest_post_number}#mod-private-note"
 
-      User
-        .where(admin: true)
-        .or(User.where(moderator: true))
-        .where.not(id: current_user.id)
-        .find_each do |staff_user|
+      DiscourseModCategories::StaffNotifier
+        .staff_recipients(except: current_user, topic: topic)
+        .each do |staff_user|
           data = {
             topic_title: topic.title,
             display_username: current_user.username,
@@ -801,11 +891,9 @@ module ::DiscourseModCategories
       reply_url =
         "#{topic.relative_url}/#{topic.highest_post_number}#mod-private-note-reply-#{reply_id}"
 
-      User
-        .where(admin: true)
-        .or(User.where(moderator: true))
-        .where.not(id: current_user.id)
-        .find_each do |staff_user|
+      DiscourseModCategories::StaffNotifier
+        .staff_recipients(except: current_user, topic: topic)
+        .each do |staff_user|
           data = {
             topic_title: topic.title,
             display_username: current_user.username,
@@ -898,7 +986,7 @@ module ::DiscourseModCategories
     def note_replies(topic)
       replies = topic.custom_fields[TOPIC_PRIVATE_NOTE_REPLIES_FIELD]
       replies = [] unless replies.is_a?(Array)
-      replies.each { |entry| entry["id"] = SecureRandom.hex(8) if entry["id"].blank? }
+      replies.each { |entry| entry["id"] = DiscourseModCategories.note_reply_id(entry) }
       replies
     end
 

@@ -26,7 +26,6 @@ RSpec.describe DiscourseDisteleplus::SetupCommandHandler do
   end
 
   before do
-    SiteSetting.disteleplus_enabled = true
     SiteSetting.disteleplus_setup_commands_enabled = true
     SiteSetting.disteleplus_telegram_chat_id = ""
     SiteSetting.disteleplus_chat_topic_id = 0

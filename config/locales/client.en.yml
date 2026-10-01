@@ -2,8 +2,6 @@ en:
   js:
     disteleplus:
       title: Disteleplus
-      subtitle: Telegram bridge · native JTech conversation
-      live: Live
       loading: Loading earlier messages…
       telegram_user: Telegram user
       edited: edited
@@ -14,13 +12,10 @@ en:
       delete: Delete
       delete_confirm: Delete this message here and from Telegram where possible?
       editing: Editing message
-      replying_to: Replying to
       attach: Attach files
       placeholder: Write a message…
       send: Send
-      composer_hint: Enter to send · Shift+Enter for a new line
       empty_title: Start the conversation
-      empty_body: Messages sent here appear in the connected Telegram conversation.
       new_messages:
         one: "%{count} new message"
         other: "%{count} new messages"
@@ -44,7 +39,7 @@ en:
         title:
           one: "%{count} reaction"
           other: "%{count} reactions"
-        remove_hint: Click to remove
+        remove_hint: Remove your reaction
         add: Add reaction
       poll:
         pick_one: Choose one
@@ -76,7 +71,7 @@ en:
           option_placeholder: Option…
           add_option: Add option
           remove_option: Remove option
-          multiple: Allow choosing multiple options
+          multiple: Allow multiple answers
           close_label: Automatically close
           close_none: Never
           close_one_hour: After 1 hour
@@ -112,29 +107,19 @@ en:
       yesterday: Yesterday
       voice:
         button: Record a voice note
-        stop: Stop recording
         title: Voice note
         start: Start recording
         stop: Stop
-        send: Send voice note
-        rerecord: Record again
-        try_again: Try again
-        sending: Sending…
-        requesting: Waiting for microphone permission…
-        tap_to_record: Tap to record
+        requesting: Waiting for the microphone…
         pause: Pause recording
         resume: Resume recording
         caption_placeholder: Add a message…
-        recording_hint: Recording — tap to stop
-        preview_hint: Listen back, then send or record again.
         errors:
-          unsupported: This browser cannot record audio. Try a current Chrome,
-            Firefox, Edge or Safari.
-          denied: Microphone access was blocked. Allow it for this site in your
-            browser's permissions and try again.
-          no_microphone: No microphone was found.
-          recording_failed: Recording failed. Please try again.
-          too_short: That was too short to send. Hold for at least a second.
+          unsupported: This browser can't record audio.
+          denied: Microphone access is blocked for this site.
+          no_microphone: No microphone found.
+          recording_failed: Recording failed.
+          too_short: Too short to send.
       player:
         voice_note: Voice note
         audio: Audio
@@ -311,9 +296,9 @@ en:
         no_shared: You haven't sent your details to anyone yet.
     jtech_popup_notifications:
       someone: Someone
+      close: Dismiss
       # Second half of the toast heading line, "Name — <action>".
       action:
-        reqpm: Contact details (REQ-PM)
         replied: Replied
         mentioned: Mentioned you
         quoted: Quoted you
@@ -333,14 +318,13 @@ en:
         chat_mentioned: Mentioned you in chat
         chat_message: Sent a chat message
         poll_closed: Your poll closed
+        reqpm: Contact details (REQ-PM)
         # NB: this key must never be "one" or "other" — Discourse's i18n
         # linter would then treat the whole action map as a pluralized
         # string and reject the other keys.
         generic: Sent you a notification
       preference:
         title: Desktop Pop Up Notifications
-        instructions: Show a small pop-up card in the top-right corner when you
-          receive a new notification. Desktop only — this never appears on mobile.
         # NB: "on"/"off" MUST be quoted — YAML parses bare on/off as booleans,
         # which would make these i18n keys unreachable.
         "on": "On"
@@ -353,7 +337,6 @@ en:
           one: "%{count} reader"
           other: "%{count} readers"
         nobody: No logged-in readers yet
-        anon_note: Logged-in readers only — anonymous visitors leave no per-post trace.
       precheck:
         title: Before you post
         confirm: Post anyway
@@ -361,12 +344,7 @@ en:
       topic_prompt_checklist:
         menu_label: Prompt Checklist
         title: Prompt Checklist for this topic
-        intro: Users replying to this topic see a confirmation before their reply
-          is allowed through. Saving bumps the version, so any user who already accepted
-          is re-prompted.
         loading: Loading…
-        inactive: Inactive — no items in checklist mode (or blank statement in statement
-          mode) means replies are not gated.
         current_version: 'Current version: %{count}'
         item_label: Checkbox text
         item_url: Link URL (optional)
@@ -380,34 +358,21 @@ en:
         saved_toast: Topic prompt checklist saved
         cleared_toast: Topic prompt checklist cleared
         mode_label: Mode
-        mode_statement: Statement — one message, single accept button
-        mode_checklist: Checklist — multiple items, all must be ticked
         mode_title_statement: Statement
-        mode_desc_statement: One message, single accept button
         mode_title_checklist: Checklist
-        mode_desc_checklist: Multiple items, all must be ticked
         statement_label: Statement text
-        statement_placeholder: Write the confirmation message users see before their
-          reply is allowed through. Markdown is supported.
+        statement_placeholder: Markdown supported
         frequency_label: Show this prompt
         frequency_once: Once per user per topic
         frequency_every_reply: On every reply
         max_tl_label: Show this prompt to
-        legacy_migration_notice: This topic has an older reply-prompt set under "Moderator
-          Actions". It has been pre-filled below in Statement mode — review and click
-          Save to migrate.
+        legacy_migration_notice: Loaded from this topic's old reply prompt. Save to keep it.
       topic_messages:
         menu_label: Moderator Actions
         title: Moderator Actions for this topic
         footer_label: Pinned footer message
-        footer_hint: Shown in a banner at the bottom of this topic. Leave blank for
-          none.
         approval_label: Require approval for replies
-        approval_hint: When on, replies to this topic go to the review queue for a
-          moderator to approve. Staff replies are posted directly.
         note_label: Private moderator note
-        note_hint: Visible only to staff on this topic — never shown to regular users.
-          Leave blank for none.
         note_position_label: Show the note
         note_position_top: At the top of the topic
         note_position_bottom: At the bottom of the topic
@@ -512,9 +477,8 @@ en:
         tl3: Up to regulars (TL0 to TL3)
       first_post_checklist:
         modal_title: Before you post
-        intro: Please confirm each item below before posting for the first time.
         progress: "%{checked} of %{total} confirmed"
-        all_done: All set — you're good to go!
+        all_done: All confirmed
         last_updated: 'Last updated:'
         confirm: I agree, post
         cancel: Cancel
@@ -525,11 +489,7 @@ en:
         log_kind_all: All checklists
         log_kind_global: Global
         log_kind_topic: Topic prompt
-        editor_intro: New members must tick every item below before they can post.
-          Saving changes re-prompts everyone who already accepted.
         loading: Loading…
-        inactive: Inactive — with no items, users are not prompted. Add an item below
-          to start the checklist.
         item_label: Checkbox text
         item_url: Link URL (optional)
         add_item: Add item
@@ -538,7 +498,6 @@ en:
         move_down_item: Move item down
         save: Save checklist
         saved: Saved
-        empty: No items yet. Add one to start the checklist.
         audience_label: Who must accept before their next post
         button_label_label: Accept button text
         button_label_placeholder: I agree, post
@@ -554,9 +513,6 @@ en:
         require_reaccept: Require re-accept
         reaccept_done: '%{username} will be prompted again on their next post'
         targeted_title: Targeted checklists
-        targeted_intro: Separate checklists aimed at specific users. A targeted checklist
-          is always shown to its listed users — regardless of trust level or staff
-          status.
         targeted_add: Add targeted checklist
         targeted_name_label: Name
         targeted_users_label: Target users
@@ -565,8 +521,6 @@ en:
         targeted_saved: Targeted checklist saved
       category_settings:
         new_topic_prompt_label: Before-new-topic prompt
-        new_topic_prompt_hint: Shown as a confirmation when someone starts a new topic
-          in this category. Leave blank for none.
         preview_label: Preview
         save: Save message
         saved: Saved
@@ -578,11 +532,7 @@ en:
       whisper:
         toolbar_title: Whisper this reply
         modal_title: Whisper to users, groups, or badges
-        modal_instructions: Choose up to 10 users or groups who should see this reply.
-          Staff always see whispers.
-        modal_badge_instructions: Optionally also include everyone who currently holds one of these badges.
-          Membership is checked when the post is viewed, so future grants and
-          revokes update the audience automatically.
+        badge_label: Badge holders (optional)
         search_placeholder: Search for a user or group…
         badge_search_placeholder: Search for a badge…
         confirm: Whisper
@@ -596,26 +546,21 @@ en:
         convert_to_public:
           label: Convert to public post
           title: Remove the whisper status from this post so everyone can see it
-          confirm: Convert this whisper into a normal public post? Everyone who can read the topic will be able to see it.
+          confirm: Make this whisper public? Everyone who can read the topic will see it.
           done_toast: Converted to a public post
           failed_toast: Could not convert this post
         add_participant:
           menu_label: Add user to whisper
-          modal_title: Add a user to the whisper conversation
-          modal_instructions: Choose the users to add to this topic's whisper conversation.
-            They will see every whisper in this topic from now on.
+          modal_title: Add users to this whisper
           search_placeholder: Search for a user…
           confirm: Add to whisper
           cancel: Cancel
           added_toast:
-            one: Added %{count} user to the whisper conversation
-            other: Added %{count} users to the whisper conversation
+            one: Added %{count} user to the whisper
+            other: Added %{count} users to the whisper
       pm_badge:
         button: Add badge group
         modal_title: Add badge holders as recipients
-        modal_instructions: Pick a badge. Every user who currently holds it
-          will be added as a recipient. The list is captured at send time,
-          so future badge changes don't affect this conversation.
         search_placeholder: Search for a badge…
         none: Choose a badge…
         confirm: Add recipients
@@ -623,9 +568,9 @@ en:
       sidebar_section_title: Dumbcourse
       sidebar_link_text: Dumbcourse
       sidebar_link_title: Open Dumbcourse
-    discourse_dumb_nautas:
+    jtech_tools:
       admin:
-        # Tab labels on the /admin/plugins/discourse-dumb-nautas config page.
+        # Tab labels on the /admin/plugins/jtech-tools config page.
         tabs:
           dislike: Dislike
           smtp: Alternate SMTP
@@ -636,17 +581,19 @@ en:
           smart_search: Smart search
           popups: Pop-ups
           disteleplus: Disteleplus
-          username_avatar: Username avatar
           reqpm: REQ-PM
           all_settings: All settings
   admin_js:
     admin:
-      discourse_dumb_nautas:
+      logs:
+        staff_actions:
+          actions:
+            jtech_admin_action: "run Dumb Nautas action"
+            mod_post_made_whisper: "turn post into whisper"
+            mod_whisper_made_public: "make whisper public"
+      jtech_tools:
         actions:
           title: Maintenance actions
-          hint: These run immediately as background jobs. Progress and results
-            appear in /logs under the [discourse-dumb-nautas] tags; delivery failures
-            also surface on the admin dashboard.
           register_webhook:
             label: Register Telegram webhook
             confirm: This calls Telegram's setWebhook with this forum's webhook
@@ -655,16 +602,16 @@ en:
             done: Webhook registration queued.
           send_test_message:
             label: Send test message
-            done: Test message queued — check the bridged Telegram group.
+            done: Test message queued.
           sync_notifications:
             label: Sync channel notifications
-            done: Notification enrolment queued for every eligible member.
+            done: Notification sync queued.
           measure_forum_uploads:
             label: Measure upload archive
             confirm: This scans every eligible post for attachments and writes
               the totals to /logs. It sends nothing to Telegram. Run the
               measurement now?
-            done: Measurement queued — results land in /logs.
+            done: Measurement queued.
           backfill_forum_uploads:
             label: Start upload backfill
             confirm: This starts (or restarts from the beginning) copying
@@ -673,14 +620,15 @@ en:
             done: Backfill queued.
           purge_phantom_likes:
             label: Purge phantom likes
-            confirm: This rewrites likes_given and likes_received for every
-              user who has liked in a restricted category, and deletes their
-              like history rows. It cannot be undone. Run the purge now?
+            confirm: This applies the Dislike settings to existing likes in
+              the restricted categories — removing their history rows and
+              notifications unless history is kept — and recalculates likes
+              given and received. It cannot be undone. Run it now?
             done: Purge queued.
       site_settings:
         categories:
           jtech: Dumb Nautas
-          discourse_dumb_nautas: Dumb Nautas
+          jtech_tools: Dumb Nautas
           jtech_dislike: Dumb Nautas — Dislike
           jtech_smtp: Dumb Nautas — Alternate SMTP
           jtech_mini_mod: Dumb Nautas — Mini-mod
@@ -695,7 +643,6 @@ en:
           jtech_mod_notifications: "Dumb Nautas — Mod: Notifications"
           jtech_mod_topic_tools: "Dumb Nautas — Mod: Topic tools"
           jtech_mod_checklists: "Dumb Nautas — Mod: Checklists"
-          jtech_username_avatar: Dumb Nautas — Username avatar
           jtech_reqpm: Dumb Nautas — REQ-PM
         # Dropdown labels for the plugin's translatable enum settings.
         reqpm:
@@ -722,14 +669,15 @@ en:
             official_api: LanguageTool cloud API
         requires_confirmation_messages:
           purge_phantom_likes_now:
-            prompt: This rewrites likes_given and likes_received for every
-              user who has liked in a restricted category, and deletes their
-              like history rows. It cannot be undone. Run the purge now?
+            prompt: This applies the Dislike settings to existing likes in
+              the restricted categories — removing their history rows and
+              notifications unless history is kept — and recalculates likes
+              given and received. It cannot be undone. Run it now?
             confirm: Run purge
           discourse_another_email_enabled:
-            prompt: This reroutes every outgoing forum email — including group
-              SMTP mail — through the relay configured on this tab. Enable
-              the alternate relay?
+            prompt: This sends every outgoing forum email through the relay
+              configured on this tab (group inbox mail keeps its own server).
+              Enable the alternate relay?
             confirm: Enable relay
           disteleplus_register_webhook_now:
             prompt: This calls Telegram's setWebhook with this forum's webhook

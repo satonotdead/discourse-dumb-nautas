@@ -60,18 +60,6 @@ jtech_dislike:
     client: false
     depends_on:
       - "discourse_no_likes_enabled"
-  # Only consulted while history is suppressed (the notification delete is
-  # part of hiding the like).
-  dislike_notification_cleanup_window_seconds:
-    default: 30
-    client: false
-    min: 5
-    max: 600
-    depends_on:
-      - "discourse_no_likes_enabled"
-    depends_on_values:
-      dislike_show_in_history:
-        - "false"
   dislike_count_in_leaderboard:
     default: false
     client: false
@@ -297,7 +285,8 @@ jtech_mini_mod:
 # Jtech — Mod (master switch + the moderator category powers)
 #
 # The master gates every moderator power in this module (Guardian#
-# mod_categories_grant?). It does NOT gate whispers, the notification type
+# mod_categories_grant?). Category management for moderators is core's
+# moderators_manage_categories. It does NOT gate whispers, the notification type
 # filter, or notification auto-mark — those are independent by design and
 # say so in their descriptions.
 # ───────────────────────────────────────────────────────────────────────────
@@ -305,24 +294,6 @@ jtech_mod:
   mod_categories_enabled:
     default: true
     client: true
-
-  # Guardian grants: these change what EVERY moderator can do, site-wide,
-  # beyond what Discourse core allows.
-  mod_moderators_can_create_categories:
-    default: true
-    client: false
-    depends_on:
-      - "mod_categories_enabled"
-  mod_moderators_can_edit_categories:
-    default: true
-    client: false
-    depends_on:
-      - "mod_categories_enabled"
-  mod_moderators_can_delete_categories:
-    default: true
-    client: false
-    depends_on:
-      - "mod_categories_enabled"
 
 # ───────────────────────────────────────────────────────────────────────────
 # Jtech — Mod: Topic tools
@@ -504,13 +475,6 @@ jtech_translator:
     default: true
     client: false
 
-  # Checked per Guardian call, so this takes effect immediately.
-  translator_tweaks_hide_untranslatable:
-    default: true
-    client: false
-    depends_on:
-      - "translator_tweaks_enabled"
-
   # The value the module used to hard-code. Blank means "leave upstream
   # alone and call googleapis.com directly". Boot-time only: the endpoints
   # are Ruby constants, so a change needs an app restart. The confirmation
@@ -636,6 +600,7 @@ jtech_popup_notifications:
       - note
       - chat_mentioned
       - chat_message
+      - reqpm
       - generic
     depends_on:
       - "popup_notifications_enabled"
@@ -661,10 +626,11 @@ jtech_dumbcourse:
 
   # Appearance.
   dumbcourse_default_theme:
-    default: dark
+    default: auto
     client: false
     type: enum
     choices:
+    - auto
     - dark
     - light
     depends_on:
@@ -691,6 +657,22 @@ jtech_dumbcourse:
     depends_on:
       - "dumbcourse_enabled"
   dumbcourse_online_glow_enabled:
+    default: true
+    client: false
+    depends_on:
+      - "dumbcourse_enabled"
+
+  # Sign in by approving the phone from another signed-in device.
+  dumbcourse_device_pairing_enabled:
+    default: true
+    client: true
+    depends_on:
+      - "dumbcourse_enabled"
+
+  # Send browsers that can't run the full site (KaiOS, old Android/Chrome,
+  # Opera Mini, …) to Dumbcourse, and anyone who chose "Open forum links
+  # here" in Dumbcourse.
+  dumbcourse_redirect_legacy_browsers:
     default: true
     client: false
     depends_on:
@@ -1240,15 +1222,8 @@ jtech_disteleplus:
       - "disteleplus_enabled"
 
 # ───────────────────────────────────────────────────────────────────────────
-# Jtech — Username avatar (default avatars derived from username, not email)
+# Jtech — REQ-PM (request / send contact details instead of private messages)
 # ───────────────────────────────────────────────────────────────────────────
-jtech_username_avatar:
-  # Master switch. Historical setting name kept verbatim from the original
-  # standalone plugin.
-  discourse_username_avatar_enabled:
-    default: true
-    client: false
-
 jtech_reqpm:
   # Master switch. Read at page boot (button, header icon, prompt), hence
   # refresh: true.

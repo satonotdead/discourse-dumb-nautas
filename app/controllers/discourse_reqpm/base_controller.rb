@@ -8,7 +8,7 @@ module DiscourseReqpm
   # staff member can read someone's card or the details shared with them by
   # acting as that user.
   class BaseController < ::ApplicationController
-    requires_plugin "discourse-dumb-nautas"
+    requires_plugin "jtech-tools"
     # Not `requires_login`: core stores that per class, so it would not
     # carry over to the controllers inheriting from this one.
     before_action :ensure_logged_in

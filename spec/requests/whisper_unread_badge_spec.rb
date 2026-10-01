@@ -32,11 +32,12 @@ RSpec.describe "Whisper unread badge" do
     SiteSetting.auto_silence_fast_typers_on_first_post = false
     Group.refresh_automatic_groups!
 
-    # Mark the post a whisper to target + participant. Triggers the same
-    # rollback the post_created handler would, since the spec writes the
-    # custom field directly (no PostCreator path).
+    # Mark the post a whisper to target + participant, then apply the same
+    # counter rollback the post_created handler does (the spec writes the
+    # custom field directly, not through PostCreator).
     whisper_post.custom_fields[targets_field] = [target.id]
     whisper_post.save_custom_fields(true)
+    DiscourseModCategories::Whisper.refresh_topic_counters(topic)
 
     topic.custom_fields[participants_field] = [target.id, participant.id]
     topic.save_custom_fields(true)
@@ -49,9 +50,9 @@ RSpec.describe "Whisper unread badge" do
       )
     end
 
-    it "returns the whisper's post_number for a cumulative topic participant" do
+    it "ignores the whisper for a topic participant it doesn't name" do
       expect(DiscourseModCategories.whisper_audience_max_post_number(topic, participant)).to eq(
-        whisper_post.post_number,
+        regular_reply.post_number,
       )
     end
 
@@ -134,13 +135,15 @@ RSpec.describe "Whisper unread badge" do
       expect(topic.highest_post_number).to eq(regular_reply.post_number)
     end
 
-    it "stamps non_whisper_bumped_at into a topic custom field on whisper creation" do
-      # Backdate BOTH non-whisper posts so the max(:created_at) is
-      # deterministically regular_reply (15 min ago) — op was fabricated
-      # at ~now, so without the older backdate it would win the max() and
-      # the stamp wouldn't match what the assertion expects.
+    it "doesn't bump the topic, change its last poster or count the whisper as a reply" do
       op.update_columns(created_at: 30.minutes.ago)
       regular_reply.update_columns(created_at: 15.minutes.ago)
+      ::Topic.where(id: topic.id).update_all(
+        bumped_at: 15.minutes.ago,
+        last_posted_at: 15.minutes.ago,
+        last_post_user_id: regular_reply.user_id,
+      )
+      before = topic.reload.slice(:bumped_at, :last_posted_at, :last_post_user_id, :posts_count)
 
       sign_in(moderator)
       post "/posts.json",
@@ -152,92 +155,59 @@ RSpec.describe "Whisper unread badge" do
            }
       expect(response.status).to eq(200)
 
-      stamped =
-        topic.reload.custom_fields[DiscourseModCategories::TOPIC_NON_WHISPER_BUMPED_AT_FIELD].to_s
-      expect(stamped).not_to be_empty
-      expect(Time.zone.parse(stamped)).to be_within(1.second).of(regular_reply.reload.created_at)
+      after = topic.reload.slice(:bumped_at, :last_posted_at, :last_post_user_id, :posts_count)
+      expect(after["bumped_at"]).to be_within(1.second).of(before["bumped_at"])
+      expect(after["last_posted_at"]).to be_within(1.second).of(before["last_posted_at"])
+      expect(after["last_post_user_id"]).to eq(before["last_post_user_id"])
+      expect(after["posts_count"]).to eq(
+        Post.where(topic_id: topic.id).count -
+          DiscourseModCategories::Whisper.whisper_post_numbers(topic.id).size,
+      )
     end
   end
 
-  describe "audience-aware /latest ordering" do
-    fab!(:public_topic, :topic)
-    fab!(:public_topic_op) { Fabricate(:post, topic: public_topic, user: author) }
-
-    before do
-      # Pin a clear ordering: the whispered topic was bumped at the whisper
-      # time (30 min ago via fabrication), the public topic is more recent.
-      # An audience member should see the whispered topic at the top — the
-      # whisper IS the latest activity for them. A non-audience viewer
-      # should see the public topic first because, for them, the whispered
-      # topic's effective bump is the older regular_reply.
-      regular_reply.update_columns(created_at: 1.hour.ago)
-      ::Topic.where(id: topic.id).update_all(
-        bumped_at: 5.minutes.ago,
-        last_posted_at: 5.minutes.ago,
-      )
-      ::Topic.where(id: public_topic.id).update_all(
-        bumped_at: 30.minutes.ago,
-        last_posted_at: 30.minutes.ago,
-      )
-      # Simulate the on(:post_created) stamp.
-      topic.custom_fields[
-        DiscourseModCategories::TOPIC_NON_WHISPER_BUMPED_AT_FIELD
-      ] = regular_reply.created_at.iso8601
-      topic.save_custom_fields(true)
-    end
-
-    def latest_topic_ids(as_user)
-      sign_in(as_user)
-      get "/latest.json"
-      expect(response.status).to eq(200)
-      response.parsed_body["topic_list"]["topics"].map { |t| t["id"] }
-    end
-
-    it "keeps the whispered topic at the top of /latest for staff" do
-      ids = latest_topic_ids(admin)
-      expect(ids.index(topic.id)).to be < ids.index(public_topic.id)
-    end
-
-    it "keeps the whispered topic at the top of /latest for a whisper participant" do
-      # Participant is in TOPIC_WHISPER_PARTICIPANTS_FIELD per the outer before.
-      ids = latest_topic_ids(participant)
-      expect(ids.index(topic.id)).to be < ids.index(public_topic.id)
-    end
-
-    it "demotes the whispered topic below the public topic for a non-audience viewer" do
-      ids = latest_topic_ids(stranger)
-      expect(ids.index(public_topic.id)).to be < ids.index(topic.id)
-    end
-
-    it "serializes audience-aware bumped_at on /latest (audience sees actual, stranger sees non-whisper)" do
-      sign_in(stranger)
-      get "/latest.json"
-      stranger_view = response.parsed_body["topic_list"]["topics"].find { |t| t["id"] == topic.id }
-      expect(Time.zone.parse(stranger_view["bumped_at"])).to be_within(2.seconds).of(
-        regular_reply.reload.created_at,
-      )
-
+  describe "reading a whisper" do
+    it "lets a non-staff target mark a trailing whisper read" do
       sign_in(target)
-      get "/latest.json"
-      audience_view = response.parsed_body["topic_list"]["topics"].find { |t| t["id"] == topic.id }
-      # Audience members still see the live bump (5 min ago via the outer before).
-      expect(Time.zone.parse(audience_view["bumped_at"])).to be_within(2.seconds).of(
-        topic.reload.bumped_at,
-      )
+      post "/topics/timings.json",
+           params: {
+             topic_id: topic.id,
+             topic_time: 1000,
+             timings: {
+               whisper_post.post_number => 1000,
+             },
+           }
+      expect(response.status).to eq(200)
+      expect(TopicUser.get(topic, target).last_read_post_number).to eq(whisper_post.post_number)
     end
 
-    it "skips the timestamp cast when the non_whisper_bumped_at value is malformed" do
-      # The custom field is normally written by on(:post_created) as an
-      # iso8601 string, but a corrupted, hand-edited, or legacy value
-      # shouldn't blow up /latest. The modifier's regex guard
-      # `~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}'` makes the CASE branch fall
-      # through to topics.bumped_at instead of attempting the cast.
-      topic.custom_fields[DiscourseModCategories::TOPIC_NON_WHISPER_BUMPED_AT_FIELD] = "not-a-time"
-      topic.save_custom_fields(true)
-
+    it "still ignores whisper timings from users outside the audience" do
       sign_in(stranger)
-      get "/latest.json"
+      post "/topics/timings.json",
+           params: {
+             topic_id: topic.id,
+             topic_time: 1000,
+             timings: {
+               regular_reply.post_number => 1000,
+               whisper_post.post_number => 1000,
+             },
+           }
       expect(response.status).to eq(200)
+      expect(TopicUser.get(topic, stranger).last_read_post_number).to eq(regular_reply.post_number)
+    end
+  end
+
+  describe "topic list order" do
+    fab!(:hot_topic) { Fabricate(:topic, like_count: 50, views: 1000) }
+
+    it "is core's for everyone (no re-sort for non-staff)" do
+      TopTopic.refresh!
+      sign_in(stranger)
+      get "/latest.json", params: { order: "created", ascending: "true" }
+      expect(response.status).to eq(200)
+      ids = response.parsed_body["topic_list"]["topics"].map { |t| t["id"] }
+      created = Topic.where(id: ids).order(:created_at, :id).pluck(:id)
+      expect(ids).to eq(created)
     end
   end
 end

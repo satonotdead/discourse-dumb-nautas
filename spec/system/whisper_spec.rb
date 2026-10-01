@@ -128,7 +128,7 @@ RSpec.describe "Moderator whisper" do
 
       whisper_toolbar_button.click
       expect(page).to have_css(".mod-whisper-target-modal", wait: 10)
-      expect(page).to have_css(".mod-whisper-target-modal__instructions")
+      expect(page).to have_css(".mod-whisper-target-modal .email-group-user-chooser")
       shot("63_whisper_target_modal_empty")
 
       chooser =
@@ -303,8 +303,8 @@ RSpec.describe "Moderator whisper" do
     end
   end
 
-  context "staff add a user to the whisper conversation" do
-    before { make_whisper_post([recipient.id]) }
+  context "staff add a user to a whisper" do
+    let!(:whisper) { make_whisper_post([recipient.id]) }
 
     it "adds a user via the whisper post admin menu" do
       sign_in(admin)
@@ -338,9 +338,7 @@ RSpec.describe "Moderator whisper" do
       expect(page).to have_no_css(".mod-whisper-add-participant-modal", wait: 10)
       shot("81_whisper_participant_added")
 
-      expect(Array(topic.reload.custom_fields[participants_field]).map(&:to_i)).to include(
-        stranger.id,
-      )
+      expect(Array(whisper.reload.custom_fields[targets_field]).map(&:to_i)).to include(stranger.id)
     end
   end
 
@@ -350,12 +348,15 @@ RSpec.describe "Moderator whisper" do
       SiteSetting.mod_whisper_enabled = false
     end
 
-    it "keeps the existing whisper hidden from non-recipients" do
+    it "keeps existing whispers private" do
       sign_in(stranger)
       visit("/t/#{topic.slug}/#{topic.id}")
       expect(page).to have_css("#topic-title", wait: 10)
+      # Switching the feature off stops new whispers; it never publishes
+      # the existing ones.
       expect(page).to have_css(".topic-post", count: 1, wait: 10)
-      shot("74_plugin_disabled_whisper_stays_hidden")
+      expect(page).to have_no_content("A staff whisper for the audience.")
+      shot("74_plugin_disabled_still_private")
     end
   end
 end

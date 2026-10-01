@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# name: discourse-dumb-nautas
-# about: discourse-dumb-nautas — Criptonautas' maintained edition of JtechTools, the JTech Forums all-in-one plugin. Reaction controls, alternate SMTP relay, mini-mod and moderator tooling, the Dumbcourse app, translator tweaks, smart search, desktop pop-ups, username-based default avatars, the Telegram chat bridge, and REQ-PM contact exchange.
-# version: 0.4.0
+# name: jtech-tools
+# about: Dumb Nautas — Criptonautas' edition of JtechTools, the JTech Forums all-in-one plugin: moderator tools, Mini-mod, Dislike, the Disteleplus Telegram bridge, REQ-PM, Dumbcourse, smart search, desktop pop-ups, Another SMTP and translator tweaks.
+# version: 0.5.0
 # authors: TripleU, Shalom_Karr, Ars18
 # url: https://github.com/somos-criptonautas/discourse-dumb-nautas
 # required_version: 3.0.0
@@ -15,43 +15,8 @@ gem "rwordnet", "2.0.0", require: false
 # Master gate. Each sub-plugin keeps its own enable setting (e.g.
 # discourse_no_likes_enabled, mini_mod_enabled, mod_categories_enabled,
 # dumbcourse_enabled, discourse_another_email_enabled, smart_search_enabled,
-# discourse_username_avatar_enabled, reqpm_enabled) for fine-grained control.
+# reqpm_enabled) for fine-grained control.
 enabled_site_setting :jtech_enabled
-
-# `depends_on` in settings.yml only hides settings in the admin UI; the code
-# still read each switch on its own, so a feature kept running with its parent
-# (or jtech_enabled) off. Every boolean switch here now reads false while any
-# of its parent switches in this plugin is off; switches without a parent
-# follow jtech_enabled. Stored values and the admin UI are untouched, and the
-# client settings go through the same readers, so the front end agrees.
-module ::JtechSwitches
-  PARENTS =
-    begin
-      all =
-        YAML
-          .safe_load(File.read(File.expand_path("config/settings.yml", __dir__)))
-          .values
-          .grep(Hash)
-          .reduce({}, :merge)
-      switches = all.select { |_, o| o.is_a?(Hash) && [true, false].include?(o["default"]) }
-      switches
-        .except("jtech_enabled")
-        .to_h do |name, o|
-          parents = Array(o["depends_on"]) & switches.keys
-          [name, parents.empty? ? ["jtech_enabled"] : parents]
-        end
-    end
-
-  GATE =
-    Module.new do
-      PARENTS.each do |name, parents|
-        define_method(name) { |*args| super(*args) && parents.all? { |p| public_send(p) } }
-      end
-    end
-end
-
-# SiteSetting only exists once Rails has loaded, not while plugin.rb runs.
-after_initialize { SiteSetting.singleton_class.prepend(::JtechSwitches::GATE) }
 
 # Load each sub-plugin's body in the Plugin::Instance context so that all
 # Discourse plugin DSL methods — after_initialize, on(:event), register_asset,
@@ -73,8 +38,8 @@ after_initialize { SiteSetting.singleton_class.prepend(::JtechSwitches::GATE) }
   smart_search
   popup_notifications
   disteleplus
-  username_avatar
   reqpm
+  nautas
 ].each do |sub|
   path = File.expand_path("sub_plugins/#{sub}.rb", __dir__)
   instance_eval(File.read(path), path, 1)

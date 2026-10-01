@@ -2,7 +2,7 @@
 
 module DiscourseDisteleplus
   class ConversationController < ::ApplicationController
-    requires_plugin "discourse-dumb-nautas"
+    requires_plugin "jtech-tools"
     requires_login
     before_action :ensure_enabled
     before_action :ensure_allowed
@@ -225,7 +225,7 @@ module DiscourseDisteleplus
     private
 
     def ensure_enabled
-      raise Discourse::NotFound unless SiteSetting.disteleplus_enabled
+      raise Discourse::NotFound unless DiscourseDisteleplus.enabled?
     end
 
     def ensure_allowed

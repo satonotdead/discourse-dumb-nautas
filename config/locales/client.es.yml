@@ -2,8 +2,6 @@ es:
   js:
     disteleplus:
       title: Disteleplus
-      subtitle: Puente con Telegram · conversación nativa
-      live: En vivo
       loading: Cargando mensajes anteriores…
       telegram_user: Cuenta de Telegram
       edited: editado
@@ -12,15 +10,12 @@ es:
       react: Reaccionar
       edit: Editar
       delete: Eliminar
-      delete_confirm: ¿Eliminar este mensaje acá y en Telegram si se puede?
+      delete_confirm: "¿Eliminar este mensaje acá y en Telegram si se puede?"
       editing: Editando mensaje
-      replying_to: Respondiendo a
       attach: Adjuntar archivos
       placeholder: Mensaje…
       send: Enviar
-      composer_hint: Enter para enviar · Shift+Enter para nueva línea
       empty_title: Empezar la conversación
-      empty_body: Lo que se envía acá aparece en la conversación de Telegram conectada.
       new_messages:
         one: "%{count} mensaje nuevo"
         other: "%{count} mensajes nuevos"
@@ -30,11 +25,11 @@ es:
       search_placeholder: Buscar…
       search_empty: Sin resultados
       seen_by:
-        one: "Visto por %{count}"
-        other: "Visto por %{count}"
+        one: Visto por %{count}
+        other: Visto por %{count}
       listened_by:
-        one: "Escuchado por %{count}"
-        other: "Escuchado por %{count}"
+        one: Escuchado por %{count}
+        other: Escuchado por %{count}
       message_info:
         title: Info del mensaje
         seen: Visto por
@@ -44,7 +39,7 @@ es:
         title:
           one: "%{count} reacción"
           other: "%{count} reacciones"
-        remove_hint: Clic para quitar
+        remove_hint: Quitar tu reacción
         add: Agregar reacción
       poll:
         pick_one: Elegir una
@@ -52,11 +47,11 @@ es:
         closed: Cerrada
         closes_soon: Cierra pronto
         closes_hours:
-          one: "Cierra en %{count} hora"
-          other: "Cierra en %{count} horas"
+          one: Cierra en %{count} hora
+          other: Cierra en %{count} horas
         closes_days:
-          one: "Cierra en %{count} día"
-          other: "Cierra en %{count} días"
+          one: Cierra en %{count} día
+          other: Cierra en %{count} días
         voters:
           one: "%{count} voto"
           other: "%{count} votos"
@@ -76,7 +71,7 @@ es:
           option_placeholder: Opción…
           add_option: Agregar opción
           remove_option: Quitar opción
-          multiple: Permitir varias opciones
+          multiple: Permitir varias respuestas
           close_label: Cierre automático
           close_none: Nunca
           close_one_hour: En 1 hora
@@ -84,9 +79,8 @@ es:
           close_one_day: En 1 día
           close_three_days: En 3 días
           close_one_week: En 1 semana
-          # NB: "yes"/"no" MUST be quoted — YAML parses them as booleans.
-          "yes": "Sí"
-          "no": "No"
+          'yes': Sí
+          'no': 'No'
           create: Crear encuesta
       mention_title: Te mencionó en la conversación
       mention_label: "%{username} te mencionó"
@@ -112,26 +106,19 @@ es:
       yesterday: Ayer
       voice:
         button: Grabar nota de voz
-        stop: Detener
         title: Nota de voz
         start: Grabar
-        send: Enviar nota de voz
-        rerecord: Grabar de nuevo
-        try_again: Reintentar
-        sending: Enviando…
-        requesting: Esperando permiso del micrófono…
-        tap_to_record: Tocar para grabar
+        stop: Detener
+        requesting: Esperando el micrófono…
         pause: Pausar
         resume: Continuar
         caption_placeholder: Mensaje (opcional)…
-        recording_hint: Grabando — tocar para detener
-        preview_hint: Escuchar, enviar o grabar de nuevo.
         errors:
-          unsupported: Este navegador no graba audio. Funciona en Chrome, Firefox, Edge o Safari actualizados.
-          denied: Micrófono bloqueado. Se habilita en los permisos del navegador para este sitio.
-          no_microphone: No se encontró ningún micrófono.
+          unsupported: Este navegador no graba audio.
+          denied: Micrófono bloqueado para este sitio.
+          no_microphone: No se encontró micrófono.
           recording_failed: Falló la grabación.
-          too_short: "Demasiado corta: mínimo un segundo."
+          too_short: Demasiado corta para enviar.
       player:
         voice_note: Nota de voz
         audio: Audio
@@ -139,7 +126,7 @@ es:
         pause: Pausar
         seek: Avanzar
         speed: Velocidad
-        speed_value: "Velocidad %{speed}×"
+        speed_value: Velocidad %{speed}×
         download: Descargar
         fullscreen: Pantalla completa
         unavailable: No se pudo cargar el audio.
@@ -223,20 +210,20 @@ es:
         label_placeholder: p. ej. Línea de trabajo
         value: Datos
         note: Nota
-        optional: (opcional)
+        optional: "(opcional)"
         note_placeholder: p. ej. Solo por la tarde
         share_by_default: Marcar por defecto al enviar
-        country_code_hint: "Se guarda como +%{code} si no lleva código de país."
+        country_code_hint: Se guarda como +%{code} si no lleva código de país.
         add: Agregar
         save: Guardar
         cancel: Cancelar
       errors:
         generic: Algo falló. Probá de nuevo.
       editor:
-        pick_title: ¿Cómo contactarte?
+        pick_title: "¿Cómo contactarte?"
         add_first: Agregar un medio de contacto
         add_another: Agregar otro
-        limit_reached: "Límite de %{max} alcanzado."
+        limit_reached: Límite de %{max} alcanzado.
         default_pill: por defecto
         default_title: Marcado por defecto al enviar
         unreadable: Ilegible; editalo y cargalo de nuevo.
@@ -246,7 +233,7 @@ es:
         delete: Quitar
         delete_confirm: "¿Quitar %{name}? Quienes lo recibieron también lo pierden."
       user_modal:
-        title: "REQ-PM con %{username}"
+        title: REQ-PM con %{username}
         their_details: Sus datos
         nothing_yet: "%{username} todavía no te envió datos de contacto."
         forget: Quitar de mis contactos
@@ -254,12 +241,12 @@ es:
         what_would_you_like: "¿Algo en particular? (opcional)"
         request: Pedir sus datos
         request_sent: Pedido enviado.
-        pending: "Pedido el %{date}"
+        pending: Pedido el %{date}
         withdraw: Retirar pedido
-        cooldown: "Se puede volver a pedir el %{date}."
-        unavailable: "Ahora no se le pueden pedir datos a %{username}."
+        cooldown: Se puede volver a pedir el %{date}.
+        unavailable: Ahora no se le pueden pedir datos a %{username}.
         they_asked: "%{username} pide tus datos de contacto"
-        they_would_like: "Pide: %{kinds}"
+        they_would_like: 'Pide: %{kinds}'
         no_thanks: No, gracias
         declined: Pedido descartado.
         your_details: Tus datos
@@ -270,7 +257,7 @@ es:
         stop_confirm: "¿Dejar de compartir tus datos con %{username}?"
         stopped: "%{username} ya no ve tus datos."
         edit_card: Editar mi tarjeta
-        cannot_share: "Ahora no se le pueden enviar datos a %{username}."
+        cannot_share: Ahora no se le pueden enviar datos a %{username}.
         close: Cerrar
       setup:
         title: Tarjeta de contacto
@@ -308,9 +295,8 @@ es:
         no_shared: Todavía no enviaste tus datos a nadie.
     jtech_popup_notifications:
       someone: Alguien
-      # Second half of the toast heading line, "Name — <action>".
+      close: Descartar
       action:
-        reqpm: Datos de contacto (REQ-PM)
         replied: Respondió
         mentioned: Te mencionó
         quoted: Te citó
@@ -330,17 +316,12 @@ es:
         chat_mentioned: Te mencionó en el chat
         chat_message: Envió un mensaje de chat
         poll_closed: Tu encuesta se cerró
-        # NB: this key must never be "one" or "other" — Discourse's i18n
-        # linter would then treat the whole action map as a pluralized
-        # string and reject the other keys.
+        reqpm: Datos de contacto (REQ-PM)
         generic: Te envió una notificación
       preference:
         title: Avisos emergentes en escritorio
-        instructions: Una tarjeta arriba a la derecha al llegar una notificación. Solo en escritorio.
-        # NB: "on"/"off" MUST be quoted — YAML parses bare on/off as booleans,
-        # which would make these i18n keys unreachable.
-        "on": "Activado"
-        "off": "Desactivado"
+        'on': Activado
+        'off': Desactivado
     discourse_mod_categories:
       post_viewers:
         label: Ver quién la leyó
@@ -349,7 +330,6 @@ es:
           one: "%{count} persona"
           other: "%{count} personas"
         nobody: Todavía nadie con sesión iniciada
-        anon_note: Solo cuenta a quienes tienen sesión iniciada; las visitas anónimas no dejan rastro.
       precheck:
         title: Antes de publicar
         confirm: Publicar igual
@@ -357,10 +337,8 @@ es:
       topic_prompt_checklist:
         menu_label: Aviso previo
         title: Aviso previo de esta historia
-        intro: Quien responda en esta historia ve una confirmación antes de publicar. Al guardar sube la versión y se le vuelve a pedir a quien ya aceptó.
         loading: Cargando…
-        inactive: Inactivo — sin puntos (o sin texto en modo declaración) no se frena ninguna respuesta.
-        current_version: "Versión actual: %{count}"
+        current_version: 'Versión actual: %{count}'
         item_label: Texto de la casilla
         item_url: Enlace (opcional)
         add_item: Agregar punto
@@ -373,28 +351,21 @@ es:
         saved_toast: Aviso previo guardado
         cleared_toast: Aviso previo vaciado
         mode_label: Modo
-        mode_statement: Declaración — un mensaje y un botón
-        mode_checklist: Lista — varias casillas, todas obligatorias
         mode_title_statement: Declaración
-        mode_desc_statement: Un mensaje y un botón
         mode_title_checklist: Lista
-        mode_desc_checklist: Varias casillas, todas obligatorias
         statement_label: Texto de la declaración
-        statement_placeholder: El mensaje que se ve antes de poder responder. Admite Markdown.
+        statement_placeholder: Admite Markdown
         frequency_label: Mostrar
         frequency_once: Una vez por persona e historia
         frequency_every_reply: En cada respuesta
         max_tl_label: Mostrar a
-        legacy_migration_notice: Esta historia tenía un aviso viejo en «Acciones de moderación». Está precargado abajo en modo declaración; se migra al guardar.
+        legacy_migration_notice: Cargado del aviso viejo de esta historia. Guardar para conservarlo.
       topic_messages:
         menu_label: Acciones de moderación
         title: Acciones de moderación de la historia
         footer_label: Mensaje fijo al pie
-        footer_hint: Se muestra en un aviso al final de la historia. Vacío para ninguno.
         approval_label: Aprobar respuestas
-        approval_hint: Cada respuesta pasa por la cola de revisión. Las del team se publican directo.
         note_label: Nota privada de moderación
-        note_hint: Solo la ve el team. Vacío para ninguna.
         note_position_label: Mostrar la nota
         note_position_top: Al principio de la historia
         note_position_bottom: Al final de la historia
@@ -415,10 +386,10 @@ es:
         reply_placeholder: Respuesta a esta nota…
         edit_reply: Editar respuesta
         delete_reply: Eliminar respuesta
-        delete_reply_confirm: ¿Eliminar esta respuesta de la nota?
+        delete_reply_confirm: "¿Eliminar esta respuesta de la nota?"
         edit_note: Editar nota
         delete_note: Eliminar nota
-        delete_note_confirm: ¿Eliminar esta nota y todas sus respuestas?
+        delete_note_confirm: "¿Eliminar esta nota y todas sus respuestas?"
         viewed_by:
           one: Vista por %{count} del team
           other: Vista por %{count} del team
@@ -426,14 +397,12 @@ es:
         title: Notas de moderación
         loading: Cargando…
         empty: Todavía no hay notas de moderación.
-        on_target: "en %{target}"
+        on_target: en %{target}
         view_more: Ver todas las notificaciones de moderación
       notification_type_filter:
         label: Tipo
         all: Todos
         mod_notes: Notas de moderación
-        # Curated names for the type dropdown. Anything not listed falls back
-        # to core's notifications.titles.X, then to the raw type name.
         types:
           mentioned: Menciones
           group_mentioned: Menciones a grupos
@@ -498,10 +467,9 @@ es:
         tl3: NC0 a NC3
       first_post_checklist:
         modal_title: Antes de publicar
-        intro: Cada punto se confirma antes de la primera respuesta.
         progress: "%{checked} de %{total} confirmados"
-        all_done: Todo listo.
-        last_updated: "Actualizado:"
+        all_done: Todo confirmado
+        last_updated: 'Actualizado:'
         confirm: Acepto, publicar
         cancel: Cancelar
         open_link: Abrir enlace
@@ -511,9 +479,7 @@ es:
         log_kind_all: Todas
         log_kind_global: General
         log_kind_topic: Aviso de historia
-        editor_intro: Quienes recién llegan marcan cada punto antes de publicar. Al guardar se le vuelve a pedir a quien ya aceptó.
         loading: Cargando…
-        inactive: Inactiva — sin puntos no se pide nada.
         item_label: Texto de la casilla
         item_url: Enlace (opcional)
         add_item: Agregar punto
@@ -522,13 +488,12 @@ es:
         move_down_item: Bajar
         save: Guardar lista
         saved: Guardada
-        empty: Sin puntos.
         audience_label: Quién tiene que aceptar antes de su próxima respuesta
         button_label_label: Texto del botón
         button_label_placeholder: Acepto, publicar
         sidebar_title: Configurar la lista de primera respuesta
         sidebar_text: Lista de primera respuesta
-        current_version: "Versión actual: %{count}"
+        current_version: 'Versión actual: %{count}'
         log_title: Registro de aceptaciones
         log_empty: Nadie aceptó todavía.
         log_user: Persona
@@ -536,9 +501,8 @@ es:
         log_when: Aceptada
         log_filter_current: Solo versión actual (%{count})
         require_reaccept: Pedir de nuevo
-        reaccept_done: "Se le va a pedir de nuevo a %{username} en su próxima respuesta"
+        reaccept_done: Se le va a pedir de nuevo a %{username} en su próxima respuesta
         targeted_title: Listas dirigidas
-        targeted_intro: Listas para personas puntuales. Se muestran siempre, sin importar nivel o rol.
         targeted_add: Agregar lista dirigida
         targeted_name_label: Nombre
         targeted_users_label: Personas
@@ -547,7 +511,6 @@ es:
         targeted_saved: Lista dirigida guardada
       category_settings:
         new_topic_prompt_label: Aviso antes de crear historia
-        new_topic_prompt_hint: Confirmación que se muestra al crear una historia en esta categoría. Vacío para ninguno.
         preview_label: Vista previa
         save: Guardar mensaje
         saved: Guardado
@@ -559,8 +522,7 @@ es:
       whisper:
         toolbar_title: Responder en privado
         modal_title: Responder en privado a personas, grupos o retos
-        modal_instructions: Hasta 10 personas o grupos. El team siempre ve las respuestas privadas.
-        modal_badge_instructions: "También se puede sumar a quienes tengan alguno de estos retos. Se comprueba al leer: si alguien lo gana o lo pierde después, cuenta solo."
+        badge_label: Quienes tienen el reto (opcional)
         search_placeholder: Buscar persona o grupo…
         badge_search_placeholder: Buscar reto…
         confirm: Responder en privado
@@ -574,23 +536,21 @@ es:
         convert_to_public:
           label: Hacer pública
           title: Quitar la privacidad para que todos la vean
-          confirm: ¿Convertir esta respuesta privada en pública? La va a ver cualquiera que pueda leer la historia.
+          confirm: "¿Hacer pública esta respuesta privada? La va a ver cualquiera que pueda leer la historia."
           done_toast: Ahora es pública
           failed_toast: No se pudo convertir
         add_participant:
           menu_label: Sumar a las respuestas privadas
-          modal_title: Sumar personas a las respuestas privadas de la historia
-          modal_instructions: Van a ver todas las respuestas privadas de esta historia desde ahora.
+          modal_title: Sumar personas a esta respuesta privada
           search_placeholder: Buscar persona…
           confirm: Sumar
           cancel: Cancelar
           added_toast:
-            one: "%{count} persona sumada a las respuestas privadas"
-            other: "%{count} personas sumadas a las respuestas privadas"
+            one: "%{count} persona sumada a la respuesta privada"
+            other: "%{count} personas sumadas a la respuesta privada"
       pm_badge:
         button: Agregar por reto
         modal_title: Agregar a quienes tengan un reto
-        modal_instructions: Se agrega a quienes lo tengan ahora; los cambios posteriores no afectan esta conversación.
         search_placeholder: Buscar reto…
         none: Elegir un reto…
         confirm: Agregar
@@ -598,9 +558,8 @@ es:
       sidebar_section_title: Dumbcourse
       sidebar_link_text: Dumbcourse
       sidebar_link_title: Abrir Dumbcourse
-    discourse_dumb_nautas:
+    jtech_tools:
       admin:
-        # Tab labels on the /admin/plugins/discourse-dumb-nautas config page.
         tabs:
           dislike: Dislike
           smtp: SMTP alternativo
@@ -611,41 +570,45 @@ es:
           smart_search: Búsqueda inteligente
           popups: Avisos emergentes
           disteleplus: Disteleplus
-          username_avatar: Avatar por nombre
           reqpm: REQ-PM
           all_settings: Todos los ajustes
   admin_js:
     admin:
-      discourse_dumb_nautas:
+      logs:
+        staff_actions:
+          actions:
+            jtech_admin_action: ejecutar acción de Dumb Nautas
+            mod_post_made_whisper: convertir respuesta en privada
+            mod_whisper_made_public: hacer pública una respuesta privada
+      jtech_tools:
         actions:
           title: Acciones de mantenimiento
-          hint: Corren al momento en segundo plano. El progreso sale en /logs con la etiqueta [discourse-dumb-nautas]; los fallos de envío también aparecen en el panel.
           register_webhook:
             label: Registrar webhook de Telegram
             confirm: Llama a setWebhook de Telegram con la dirección de este foro (genera el secreto si está vacío) y actualiza el menú de comandos /disteleplus_*. ¿Registrar ahora?
             done: Registro del webhook en cola.
           send_test_message:
             label: Enviar mensaje de prueba
-            done: Mensaje de prueba en cola; aparece en el grupo de Telegram.
+            done: Mensaje de prueba en cola.
           sync_notifications:
             label: Sincronizar notificaciones del canal
-            done: Alta de notificaciones en cola para toda la comunidad habilitada.
+            done: Sincronización en cola.
           measure_forum_uploads:
             label: Medir archivo de adjuntos
             confirm: Recorre las respuestas buscando adjuntos y escribe los totales en /logs. No envía nada a Telegram. ¿Medir ahora?
-            done: Medición en cola; los resultados salen en /logs.
+            done: Medición en cola.
           backfill_forum_uploads:
             label: Copiar adjuntos viejos
             confirm: Empieza (o reinicia desde cero) la copia de adjuntos viejos al tema de Telegram, al ritmo de los ajustes de copia. ¿Empezar?
             done: Copia en cola.
           purge_phantom_likes:
             label: Purgar me gusta fantasma
-            confirm: Reescribe likes_given y likes_received de quienes dieron me gusta en una categoría restringida y borra ese historial. No se puede deshacer. ¿Purgar ahora?
+            confirm: Aplica los ajustes de Dislike a los me gusta existentes en las categorías restringidas (borra su historial y avisos, salvo que se conserve el historial) y recalcula me gusta dados y recibidos. No se puede deshacer. ¿Ejecutar ahora?
             done: Purga en cola.
       site_settings:
         categories:
           jtech: Dumb Nautas
-          discourse_dumb_nautas: Dumb Nautas
+          jtech_tools: Dumb Nautas
           jtech_dislike: Dumb Nautas — Dislike
           jtech_smtp: Dumb Nautas — SMTP alternativo
           jtech_mini_mod: Dumb Nautas — Mini-mod
@@ -655,19 +618,17 @@ es:
           jtech_translator: Dumb Nautas — Traductor
           jtech_smart_search: Dumb Nautas — Búsqueda inteligente
           jtech_popup_notifications: Dumb Nautas — Avisos emergentes
-          jtech_mod_whispers: "Dumb Nautas — Moderación: Respuestas privadas"
-          jtech_mod_notes: "Dumb Nautas — Moderación: Notas"
-          jtech_mod_notifications: "Dumb Nautas — Moderación: Notificaciones"
-          jtech_mod_topic_tools: "Dumb Nautas — Moderación: Historias"
-          jtech_mod_checklists: "Dumb Nautas — Moderación: Listas"
-          jtech_username_avatar: Dumb Nautas — Avatar por nombre
+          jtech_mod_whispers: 'Dumb Nautas — Moderación: Respuestas privadas'
+          jtech_mod_notes: 'Dumb Nautas — Moderación: Notas'
+          jtech_mod_notifications: 'Dumb Nautas — Moderación: Notificaciones'
+          jtech_mod_topic_tools: 'Dumb Nautas — Moderación: Historias'
+          jtech_mod_checklists: 'Dumb Nautas — Moderación: Listas'
           jtech_reqpm: Dumb Nautas — REQ-PM
-        # Dropdown labels for the plugin's translatable enum settings.
         reqpm:
           setup_prompt:
-            "off": "Desactivado: no pedir nunca"
-            gentle: "Suave: pedir con opción de posponer o rechazar"
-            required: "Obligatorio: pedir en cada página hasta que agreguen uno"
+            'off': 'Desactivado: no pedir nunca'
+            gentle: 'Suave: pedir con opción de posponer o rechazar'
+            required: 'Obligatorio: pedir en cada página hasta que agreguen uno'
         dumbcourse:
           view:
             latest: Recientes
@@ -681,16 +642,16 @@ es:
             all: Todos los dispositivos
             desktop: Solo escritorio
             mobile: Solo celular
-            none: "Desactivado"
+            none: Desactivado
           languagetool_mode:
             self_hosted: Servidor propio
             official_api: API de LanguageTool
         requires_confirmation_messages:
           purge_phantom_likes_now:
-            prompt: Reescribe likes_given y likes_received de quienes dieron me gusta en una categoría restringida y borra ese historial. No se puede deshacer. ¿Purgar ahora?
+            prompt: Aplica los ajustes de Dislike a los me gusta existentes en las categorías restringidas (borra su historial y avisos, salvo que se conserve el historial) y recalcula me gusta dados y recibidos. No se puede deshacer. ¿Ejecutar ahora?
             confirm: Purgar
           discourse_another_email_enabled:
-            prompt: Todo el correo saliente del foro, incluido el SMTP de grupos, va a pasar por el relé configurado acá. ¿Activarlo?
+            prompt: Todo el correo saliente del foro va a pasar por el relé configurado acá (el correo de bandejas de grupo usa su propio servidor). ¿Activarlo?
             confirm: Activar relé
           disteleplus_register_webhook_now:
             prompt: Llama a setWebhook de Telegram con la dirección de este foro (genera el secreto si está vacío). ¿Registrar ahora?

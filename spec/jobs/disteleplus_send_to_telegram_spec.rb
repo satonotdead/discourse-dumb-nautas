@@ -298,7 +298,7 @@ RSpec.describe Jobs::DisteleplusSendToTelegram do
     end
   end
 
-  describe "react mirroring" do
+  describe "react" do
     before { link! }
 
     def react!(user, emoji, at:)

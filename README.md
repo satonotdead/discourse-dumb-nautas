@@ -1,104 +1,77 @@
-# discourse-dumb-nautas
+<p align="center">
+</p>
 
-Maintained edition by Criptonautas, based on [JTech-Forums/JtechTools](https://github.com/JTech-Forums/JtechTools) with our own fixes and additions. Repo, clone folder and plugin name are all `discourse-dumb-nautas`.
+<h1 align="center">Jtech Tools</h1>
 
-One Discourse plugin with everything JTech Forums runs on top of core. Ten features, each with its own on/off switch in **Admin → Settings → Dumb Nautas**.
+<p align="center"><b>Dumb Nautas edition</b> — Criptonautas' build of Jtech Tools. See <a href="EDITION.md">EDITION.md</a> for what it changes and how it syncs.</p>
 
-## Supported versions
+<p align="center">
+  The plugin behind <a href="https://forums.jtechforums.org">JTech Forums</a>: everything we run on top of Discourse, in one place.
+</p>
 
-Requires Discourse 3.0+. Cores older than 2026.8 get a pinned commit via `.discourse-compatibility`; 2026.8 and newer track `main`.
+<p align="center">
+  <img src="docs/images/collage.png" alt="Dumbcourse on a keypad phone, a whisper, a moderator note, REQ-PM and a desktop pop-up">
+</p>
 
-## Install
+---
+
+We built these tools for our own forum as the need came up. Some help moderators work, some keep private things private, and one makes the forum usable on a flip phone. They live in one plugin so there's one thing to install and update. Every piece has its own switch, so you only run what you want.
+
+## What's inside
+
+**For moderators**
+
+- **[Moderator tools](docs/features/moderator-tools.md).** Whispers to specific people inside a topic, private staff notes, alerts when another moderator acts, checklists before posting, and small topic tools like footer messages and reply approval.
+- **[Mini-mod](docs/features/mini-mod.md).** A few extra rights for people who moderate a single category: managing their categories, moving topics, tags. None of it reaches past what they can see.
+- **[Dislike](docs/features/dislike.md).** In the categories you choose, likes stop counting: no notifications, no history, no leaderboard.
+
+**For members**
+
+- **[REQ-PM](docs/features/reqpm.md).** The forum has no private messages. Members ask each other for contact details, and choose exactly what to share.
+- **[Dumbcourse](docs/features/dumbcourse.md).** The whole forum at `/dumb`, built for flip phones and old browsers, driven by the D-pad and keypad.
+- **[Smart search](docs/features/smart-search.md).** When a search finds too little, it tries again with synonyms, so "k8s" finds "kubernetes".
+- **[Desktop pop-ups](docs/features/popups.md).** A small card in the corner when a notification arrives.
+
+**Behind the scenes**
+
+- **[Disteleplus](docs/features/disteleplus.md).** A chat room for staff, mirrored both ways with a Telegram group, with the review queue in Telegram too.
+- **[Another SMTP](docs/features/another-smtp.md).** Send forum email through a different mail server.
+- **[Translator tweaks](docs/features/translator-tweaks.md).** A proxy for the Translator plugin's Google requests.
+
+## Installing
+
+Add the plugin to your `app.yml` and rebuild:
+
+```yaml
+hooks:
+  after_code:
+    - exec:
+        cd: $home/plugins
+        cmd:
+          - git clone https://github.com/JTech-Forums/JtechTools.git jtech-tools
+```
 
 ```bash
 cd /var/discourse
-# add to containers/app.yml under hooks → after_code → cmd:
-#   - git clone https://github.com/satonotdead/discourse-dumb-nautas.git
 ./launcher rebuild app
 ```
 
-Master switch: `jtech_enabled`. Every feature below also has its own switch, so you can turn things off one at a time.
+Keep the folder name `jtech-tools` (lowercase). Discourse builds the plugin's stylesheet address from it.
 
-## What's in it
+## Turning things on
 
-### Disteleplus — team chat, bridged to Telegram
-A private one-room chat inside Discourse for staff (or any groups you allow), mirrored both ways with a Telegram group.
+Everything is under **Admin → Plugins → Jtech Tools**, one tab per feature. Some features start switched off; each feature's page says what to set first.
 
-- Opens as a small drawer bottom-right (like Discourse Chat) or full page; always full page on phones.
-- Messages, replies, edits, deletes, reactions, images, files, video, voice notes (record right in the composer), polls from Telegram.
-- Right-click a message: react, reply, copy text, copy link, quote into a new topic, edit, delete. Double-tap to react.
-- `@mentions` and `:emoji:` suggestions, emoji picker, paste or drag files in, drafts kept while you browse.
-- Search across the conversation. Link previews. "Someone is typing" indicators.
-- Unread badge on the header icon and in the browser tab; notifications only when you're @mentioned.
-- Message text is encrypted in the database.
-- Telegram side: people you map post as their Discourse account; everyone else shows with their Telegram name. Discourse messages arrive in Telegram with the author's name linked to their profile.
-- Optional: announce new forum posts into the Telegram group (by category / tag).
-- Optional: mirror the review queue (flags, posts awaiting approval) into a **Reports** Telegram topic — created by the plugin itself, never General — with **Approve / Deny / More** buttons. Presses work for staff mapped by numeric Telegram ID, or for chat admins whose Telegram username matches a staff account.
-- When someone reacts in Discourse, Telegram gets a quiet "**Name** reacted 👍" reply under the message, since the bot's own single reaction can't say who it was.
-- Setup is done from inside Telegram with `/disteleplus_setup`; there's a "send test message" button and problems show on the admin dashboard.
+`jtech_enabled` is the master switch. Turning it off stops everything at once, including the permission changes and background jobs. Private things stay private either way: switching whispers off never makes an existing whisper public.
 
-### Moderator tools
-- **Whispers** — reply to specific people inside a topic; others don't see it.
-- **Private notes** on topics, with reply threads, visible to staff only.
-- **Staff alerts** — every moderator is told when someone deletes a post, approves/rejects a queued post, adds a user note or a flag note. Shows in the bell and in a shield tab.
-- **Checklists** — first-post checklists, targeted checklists for specific users/groups, topic prompt checklists.
-- **Topic tools** — pinned messages in topics, footer messages, reply approval.
-- Every one of these rights is its own toggle.
+Upgrading? [CHANGELOG.md](CHANGELOG.md) lists what changed and anything worth checking afterwards.
 
-### Mini-mod
-Gives category moderators (people who moderate a category through a group) extra powers normally reserved for staff: create/edit categories, edit and move topics, manage tags, etc. Each power is a separate switch.
+## Working on it
 
-### Dislike (phantom reactions)
-In categories you pick, likes stop mattering: they're hidden from history, don't count toward leaderboards, and the like notification is quietly removed. Optionally hide the like button entirely or allow it only for certain groups.
+Start with the [repository rules](AGENTS.md) and [CONTRIBUTING.md](CONTRIBUTING.md). The developer docs cover [how it's put together](docs/development/architecture.md) and [how to run it and its tests](docs/development/testing.md). Everything else is in [docs/](docs/README.md).
 
-### Smart search
-When a search finds too little, it quietly retries with synonyms (English and Spanish dictionaries + a short list of tech abbreviations like `js`/`javascript`, `k8s`/`kubernetes`) and merges the results. Each search uses only the searcher's language (Spanish ignores accents). Runs locally, no API keys. If anything goes wrong you just get normal search results.
+Found a security problem? Please report it privately; see [SECURITY.md](SECURITY.md).
 
-The Spanish dictionary is derived from the [Multilingual Central Repository 3.0](http://adimen.si.ehu.es/web/MCR/) via the [Open Multilingual Wordnet](https://github.com/omwn/omw-data), CC BY 3.0.
+## License
 
-### Desktop pop-up notifications
-A small card in the top-right corner when you get a notification, with the person's avatar, the topic title and a preview. Click it to jump there. Desktop only, each user turns it on in their account settings.
-
-### Dumbcourse
-A simplified web app version of the forum at `/dumb` for basic devices: reading, replying, reactions, push notifications, spell check, and a leaderboard (set `dumbcourse_leaderboard_id` to a discourse-gamification leaderboard; 0 hides it). Uses the forum's own reactions and custom emoji.
-
-Spell check ("Refine") sends the draft text to the LanguageTool server configured in `dumbcourse_languagetool_url` / `dumbcourse_languagetool_api_url`. It's off by default; only turn it on for a server you trust with users' drafts.
-
-### Another SMTP
-Send forum email through a different mail server than the one in `app.yml` — host, port, TLS, login, and optional "from" address rewriting, all from admin settings.
-
-### Translator tweaks
-Small fixes on top of the official Translator plugin (better foreign-language detection, backfill for old posts).
-
-### Username avatar
-Default (non-uploaded) avatars are derived from a user's **username** instead of their email address, so they no longer depend on whether — or where — someone has a Gravatar. Users with a manually uploaded custom avatar are unaffected. Existing users keep their cached Gravatar-derived avatar until it's flushed; run `scripts/username_avatar_recalculate.rb` (see the file's header for the exact command) to reset everyone without a custom avatar to their username-based letter avatar.
-
-## Telegram setup (5 minutes)
-
-1. In Telegram, message **@BotFather**: `/newbot` → copy the token. Then `/setprivacy` → **Disable** (otherwise the bot can't read the group).
-2. Add the bot to your group and make it an **admin**.
-3. In Discourse: **Admin → Settings → Jtech — Disteleplus** → paste the token, pick who may use the chat (`disteleplus_allowed_groups`, default: staff), turn on `disteleplus_enabled`, press **Register Telegram webhook**.
-4. In the Telegram group, send `/disteleplus_setup` and follow the short checklist (`/disteleplus_bind_general`, optionally `/disteleplus_bind_uploads`, `/disteleplus_bind_reports`).
-5. Send a message from each side to check.
-
-Known limits (Telegram's rules, not ours): the bot can't delete messages older than 48 hours, can't see when Telegram users are typing, can only show one reaction per message, and if your group is converted to a supergroup the chat ID changes — bind it again. The Reports topic needs **Topics** enabled in the group and the bot's *Manage Topics* right.
-
-## Upgrading, rolling back, removing
-
-- **Switching from upstream `jtech-tools`:** replace the old clone line in `app.yml` with ours (don't run both) and rebuild. Settings and data carry over; the admin page moves to `/admin/plugins/discourse-dumb-nautas`.
-
-- **Upgrade:** pull and `./launcher rebuild app`; migrations run automatically. The upgrade to 0.4.0 turns `mod_categories_enabled` back on if it was stored off (its sub-toggles keep whatever you set).
-- **Roll back:** check out the previous commit and rebuild. Migrations aren't reverted; the added tables and columns are harmless to older code.
-- **Remove / disable:** turn off `jtech_enabled` (or a single feature's switch) to stop it without losing data. Deleting the plugin from `app.yml` and rebuilding leaves its tables in place.
-
-## Security model
-
-- Staff/mod endpoints go through Discourse's guardian and `AdminConstraint`; Disteleplus is limited to `disteleplus_allowed_groups`, and the Telegram webhook requires its secret.
-- Dumbcourse is a separate SPA with a strict CSP (own origin only), no cross-origin framing, and CSRF-checked writes. It only serves files from its own `public/` folder.
-- Secrets (bot token, SMTP password, LanguageTool keys) are secret site settings and aren't logged.
-- Report vulnerabilities as described in `SECURITY.md`.
-
-## Notes
-
-- Nothing here requires the official Discourse Chat plugin. If you're moving from the old Chat-based bridge, an admin can import the old channel (`POST /jtech-disteleplus/legacy-import`, check progress with `GET`) before switching Chat off. Nothing is deleted from the old Chat data.
-- Screenshots of the features are in `docs/screenshots`.
+[GPL-3.0](LICENSE). Made by TripleU, Shalom Karr and Ars18 for JTech Forums.

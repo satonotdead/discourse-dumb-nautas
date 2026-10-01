@@ -1,7 +1,8 @@
 # frozen_string_literal: true
-# discourse-dumb-nautas sub-plugin: REQ-PM — exchange contact details instead of messaging.
+# Jtech sub-plugin: REQ-PM — exchange contact details instead of messaging.
 #
-# REQ-PM lets members reach each other: everyone keeps a small "contact card" (phone, text, WhatsApp,
+# The forum has no private messages. REQ-PM is how members still reach each
+# other: everyone keeps a small "contact card" (phone, text, WhatsApp,
 # email, website, … or their own custom ones), and can
 #
 #   * send someone selected details from it, or
@@ -58,7 +59,7 @@ module ::DiscourseReqpm
   ALLOW_REQUESTS_FIELD = "reqpm_allow_requests"
   SETUP_SNOOZED_UNTIL_FIELD = "reqpm_setup_snoozed_until"
   SETUP_DECLINED_FIELD = "reqpm_setup_declined"
-  LOG_TAG = "[discourse-dumb-nautas reqpm]"
+  LOG_TAG = "[jtech-tools reqpm]"
 
   def self.enabled?
     SiteSetting.jtech_enabled && SiteSetting.reqpm_enabled

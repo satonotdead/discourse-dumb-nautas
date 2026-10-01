@@ -8,6 +8,7 @@ en:
     reaction_notice: "reacted %{emoji}"
     test_message: "✅ <b>%{site}</b> can reach this group. The conversation is at %{url}"
     reports:
+      whisper_hidden: "(Whisper — its text is private. Open it in Discourse to review.)"
       approve: Approve
       deny: Deny
       more: More
@@ -47,12 +48,16 @@ en:
       not_a_forum: "The Telegram group has Topics turned off, so the bot cannot create the Reports topic. Enable Topics in the group settings (and give the bot the Manage Topics right); reports are never posted into General."
       generic: "See /logs for the full response and check the bot token."
 
-  discourse_dumb_nautas:
+  jtech_tools:
     admin_actions:
       disabled: "The feature this action belongs to is disabled — enable its settings first."
 
+  reviewables:
+    reasons:
+      mod_topic_requires_reply_approval: "Staff turned on reply approval for this topic, so replies wait for review."
   dashboard:
     problem:
+      another_smtp_unconfigured: "Another SMTP is switched on but has no relay address, so forum email is still going out through the server's own mail host. Set <a href='%{base_path}/admin/plugins/jtech-tools/smtp'>the relay address</a> or switch Another SMTP off."
       disteleplus_telegram: "Disteleplus could not deliver to Telegram (%{at}): <code>%{description}</code> — %{hint}"
 
   site_settings:
@@ -63,10 +68,9 @@ en:
     # admin_js.admin.site_settings.categories.
 
     # ── Jtech (master) ─────────────────────────────────────────────────────
-    jtech_enabled: Master switch for the whole plugin. Off turns every
-      feature off, whatever its own switch says. Each feature also has its
-      own switch on its tab, and a sub-setting only works while its parent
-      switch is on.
+    jtech_enabled: Master gate for the whole Dumb Nautas plugin bundle. Every
+      sub-plugin also has its own enable switch on its tab for fine-grained
+      control.
 
     # ── Jtech — Dislike ────────────────────────────────────────────────────
     discourse_no_likes_enabled: Turn on phantom reactions. When off, likes and
@@ -89,26 +93,16 @@ en:
       every logged-in user — unlike most group settings, empty means
       "everyone", not "nobody". Anonymous likes are not filtered by this list.
 
-    dislike_show_in_history: Keep phantom likes in the activity streams — the
-      liker's "Likes Given" and the author's "Likes Received". When off the
-      like is invisible in both streams and the author's "liked" notification
-      is deleted as well; see
-      {{setting:dislike_notification_cleanup_window_seconds}}.
+    dislike_show_in_history: Treat phantom likes like normal likes for
+      history — the liker's "Likes Given", the author's "Likes Received" and
+      the author's "liked" or "reacted" notification. When off, phantom likes
+      never notify the author and leave no activity-stream rows.
 
-    dislike_notification_cleanup_window_seconds: How far back to look for the
-      author's "liked" notification when deleting it. The delete runs inline
-      the instant the like is created, so the default covers a healthy site;
-      raise it only if notifications survive, and be aware that a longer
-      window can also remove an older "liked" notification for the same post
-      from a different user. Consolidated "liked" notifications are never
-      removed. Only used while {{setting:dislike_show_in_history}} is off.
-
-    dislike_count_in_leaderboard: Let phantom likes move the likes_given and
-      likes_received user statistics. These feed the leaderboard, user cards,
-      the user directory sort and like-based badges — not just the
-      leaderboard. When off the counters are left untouched, and
-      {{setting:purge_phantom_likes_now}} recalculates them from
-      non-restricted categories only.
+    dislike_count_in_leaderboard: Let phantom likes count toward likes given
+      and received — the user directory, user cards and profile summaries.
+      When off they are left out of those totals, which are corrected each
+      time the directory refreshes (hourly). Like counts on the posts,
+      badges and trust-level requirements are not affected.
 
     dislike_record_audit_trail: Write one row per phantom reaction to the
       discourse_no_likes_phantoms table — likes, plus any non-default
@@ -116,21 +110,20 @@ en:
       query it with the Data Explorer. Turn off to skip an extra insert on
       every like in these categories.
 
-    purge_phantom_likes_now: Run the retroactive clean-up job now; it switches
-      itself back off when it starts (reload the page to see that). The job
-      back-fills the audit table from likes that already exist, recalculates
-      likes_given and likes_received for affected users unless
-      {{setting:dislike_count_in_leaderboard}} is on, and deletes the matching
-      activity-stream rows unless {{setting:dislike_show_in_history}} is on.
-      It does not delete any likes and does not touch notifications.
+    purge_phantom_likes_now: Run the clean-up job now; it switches itself
+      back off when it starts. The job applies the settings above to likes
+      made before them. It back-fills the audit table and, unless
+      {{setting:dislike_show_in_history}} is on, removes the matching
+      activity-stream rows and "liked"/"reacted" notifications. It then
+      recalculates likes given and received. It never deletes likes.
 
     # ── Jtech — Alternate SMTP ─────────────────────────────────────────────
     discourse_another_email_enabled: Send outbound forum email through the
       relay configured below instead of the server's DISCOURSE_SMTP_* host.
       Only the host, port, transport security and credentials are replaced —
-      everything else in the mail configuration still applies. This affects
-      every outgoing message, including mail sent from group SMTP addresses,
-      which will no longer use their own per-group credentials.
+      everything else in the mail configuration still applies. Mail sent from
+      a group's own inbox (group SMTP) keeps using that group's mail server.
+      Check the relay with "Send test email" under Admin → Email.
 
     discourse_another_email_smtp_address: Hostname or IP address of the
       relay — no scheme, port, or path. Leave empty to keep using the
@@ -196,43 +189,51 @@ en:
       applies only to category group moderators — users who moderate a
       category through a category moderation group, set up with
       {{setting:enable_category_group_moderation}}. It never applies to
-      site-wide moderators (those are on the Jtech — Mod tab) and never
+      site-wide moderators (those are on the Dumb Nautas — Mod tab) and never
       changes anything for staff. While this is off, every setting below has
       no effect.
 
     mini_mod_manage_all_categories: Scope for the grants below. Off, a
       category group moderator's Mini-mod rights reach only the categories
-      they actually moderate. On, they reach every category on the site, they
-      may create top-level categories, and "Mini mod can edit topics" starts
-      taking effect — that setting does nothing while this one is off. Turn
-      this on deliberately; it is the widest switch on this tab.
+      they actually moderate. On, they reach every category they can see,
+      they may create top-level categories, and "Mini mod can edit topics"
+      starts taking effect — that setting does nothing while this one is off.
+      Categories they can't see stay out of reach either way. Turn this on
+      deliberately; it is the widest switch on this tab.
 
     mini_mod_can_create_categories: Let category group moderators create
       categories. With "Mini mod manage all categories" off they may only
-      create subcategories beneath a category they already moderate; with it
-      on they may create any category, top-level included. Deleting
-      categories is never granted.
+      create subcategories beneath a category they moderate; with it on, any
+      category they can see, top-level included. A new subcategory gets its
+      parent's security and moderators, so they can manage it and it is no
+      more visible than its parent. Deleting categories is never granted.
 
     mini_mod_can_edit_categories: Let category group moderators open the
       category settings screens and save changes, for the categories they
-      moderate — or for every category when "Mini mod manage all categories"
-      is on.
+      moderate — or for every category they can see when "Mini mod manage all
+      categories" is on. Security (who can see and post), moderators,
+      incoming email, review groups, category types, position and custom
+      fields stay with staff, and a category can only be moved under one
+      they moderate. Reordering the site's categories stays with staff.
 
     mini_mod_can_edit_topics: Let category group moderators edit any topic
-      they can see — title, category, tags and first post — unless the first
-      post is locked. This is site-wide and is not limited to the categories
-      they moderate. It requires "Mini mod manage all categories"; while that
-      is off, this setting does nothing.
+      they can see and post in — title, category, tags and first post —
+      unless the first post is locked. Private messages, archived topics and
+      the TOS/FAQ/privacy pages are never included. This is site-wide and
+      requires "Mini mod manage all categories"; while that is off, this
+      setting does nothing. (Core's {{setting:edit_all_topic_groups}} grants
+      the same to any group.)
 
     mini_mod_can_move_topics: Let category group moderators move topics into
-      another category. Destinations are limited to the categories they
-      moderate, or to any category they can see when "Mini mod manage all
-      categories" is on.
+      the categories they moderate, even where they couldn't start a topic
+      themselves. With "Mini mod manage all categories" on they may also move
+      topics past topic approval into any category they can post in.
 
-    mini_mod_manage_tags: Let category group moderators create tags, rename
-      tags and reach the tag administration screens, as staff can. This is
-      site-wide and is not limited to the categories they moderate. Tag
-      groups stay staff-only. Requires {{setting:tagging_enabled}}.
+    mini_mod_manage_tags: Let category group moderators create, rename and
+      delete tags they can see and reach the tag administration screens.
+      This is site-wide and is not limited to the categories they moderate.
+      Tag groups, the CSV tag upload and "delete unused tags" stay
+      staff-only. Requires {{setting:tagging_enabled}}.
 
     mini_mod_can_post_in_closed_topics: A restriction, not a grant. Discourse
       normally lets category group moderators reply inside closed topics in
@@ -241,10 +242,9 @@ en:
 
     mini_mod_can_reopen_topics: A restriction, not a grant. Discourse normally
       lets category group moderators reopen closed topics in the categories
-      they moderate; leaving this off takes that away and hides the reopen
-      button on closed topics, rather than letting them click it and hit an
-      error. Turn it on to restore the standard behaviour. Staff are never
-      affected.
+      they moderate; leaving this off takes that away — including "open"
+      topic timers — and hides the reopen button on closed topics. Turn it on
+      to restore the standard behaviour. Staff are never affected.
 
     tl4_can_post_in_closed_topics: A restriction, not a grant, and it reaches
       every trust level 4 user on the site — not only category group
@@ -256,31 +256,19 @@ en:
     tl4_can_reopen_topics: A restriction, not a grant, and it reaches every
       trust level 4 user on the site — not only category group moderators.
       Discourse normally lets TL4 users reopen closed topics; leaving this
-      off takes that away and hides the reopen button on closed topics. It is
-      enforced by this module, so it only has any effect while
-      {{setting:mini_mod_enabled}} is on. Staff are never affected.
+      off takes that away — including "open" topic timers — and hides the
+      reopen button on closed topics. It is enforced by this module, so it
+      only has any effect while {{setting:mini_mod_enabled}} is on. Staff are
+      never affected.
 
     # ── Jtech — Mod ────────────────────────────────────────────────────────
-    mod_categories_enabled: Master switch for the moderator powers in this
-      module — category grants, topic tools, checklists, private staff notes
-      and staff event notifications. Off means moderators lose every grant
-      below, immediately. Whispers, the notification type filter and
+    mod_categories_enabled: Master switch for the moderator tools in this
+      module — topic tools, checklists, private staff notes and staff event
+      notifications. Off means moderators lose every tool below,
+      immediately. Letting moderators create and edit categories is core's
+      {{setting:moderators_manage_categories}}. Whispers, the notification type filter and
       notification auto-mark have their own switches and keep working with
       this off.
-
-    mod_moderators_can_create_categories: Grants every moderator category
-      creation, which Discourse core reserves for admins. Applies site-wide;
-      there is no per-category or per-moderator scoping.
-
-    mod_moderators_can_edit_categories: Grants every moderator edit rights on
-      every category, site-wide — INCLUDING its security settings, so a
-      moderator can grant themselves or anyone else access to a private
-      category. Leave off unless you trust all moderators with that.
-
-    mod_moderators_can_delete_categories: Grants every moderator deletion of
-      categories that are empty (no topics), have no subcategories, and are
-      not Uncategorized. Categories with content cannot be deleted through
-      this grant.
 
     # ── Jtech — Mod: Topic tools ───────────────────────────────────────────
     precheck_new_topic_enabled: Shows a "before you post" prompt when a user
@@ -373,8 +361,7 @@ en:
 
     mod_notify_whisper_targets: Sends a bell notification to a whisper's
       audience when one is posted, and to a user when staff add them to a
-      topic's whisper conversation. Off means whispers still work but arrive
-      silently.
+      whisper. Off means whispers still work but arrive silently.
 
     mod_auto_mark_notifications_seen: Opening a topic, or the review queue,
       marks THIS plugin's own note and whisper notifications for it as read.
@@ -388,16 +375,15 @@ en:
       page. Independent of the Enable Mod master switch.
 
     # ── Jtech — Mod: Whispers ──────────────────────────────────────────────
-    mod_whisper_enabled: Master switch for whispers — independent of Enable
-      Mod, so whispers keep working when the rest of the module is off. Staff
-      post in-topic messages visible only to staff, the author, the topic's
-      whisper participants and any explicit targets. Turning this off stops
-      new whispers; existing ones stay hidden from everyone outside their
-      audience.
+    mod_whisper_enabled: Master switch for creating whispers — independent of
+      Enable Mod, so whispers keep working when the rest of the module is off.
+      A whisper is visible only to staff, its author and the users, groups and
+      badges it names. Turning this OFF stops new whispers; existing whispers
+      stay private (convert one to public to publish it).
 
-    mod_whisper_add_participant_enabled: Lets staff add a user to a topic's
-      whisper conversation. The user is notified and can then read every
-      whisper in that topic, including ones written before they were added.
+    mod_whisper_add_participant_enabled: Lets staff add users to an existing
+      whisper. They are notified and can read that whisper and replies that
+      keep its audience — not other whispers in the topic.
 
     mod_whisper_convert_enabled: Lets staff turn an existing post into a
       whisper and back, and retarget its audience. Converting to public
@@ -409,36 +395,27 @@ en:
       whisper is read, so a user who later earns the badge can read earlier
       whispers, and one who loses it loses access.
 
-    mod_whisper_audience_aware_topic_list: Keeps a whisper from bumping a
-      topic up the latest list, or refreshing its activity time, for users
-      who cannot read it. Costs two extra joins on every topic list query —
-      turn off to fall back to normal ordering, where a whisper bumps the
-      topic for everyone.
+    mod_whisper_audience_aware_topic_list: Lets a whisper count as a new,
+      unread post for the non-staff users, groups and badge holders it is
+      addressed to (staff always see whispers as new). Off, only its
+      notification tells them about it. Whispers never bump a topic or count
+      as new for anyone outside their audience either way.
 
     # ── Jtech — Translator tweaks ──────────────────────────────────────────
-    translator_tweaks_enabled: Master switch for the Jtech tweaks to the
-      upstream discourse-translator plugin. Everything in this section is
-      inert unless that plugin is installed. The globe tweak below responds
-      to this switch immediately; the worker proxy is applied once at boot,
-      so turning this off does not send translation traffic back to Google
-      until the site is restarted.
+    translator_tweaks_enabled: Master switch for the tweak to the
+      upstream discourse-translator plugin. Inert unless that plugin is
+      installed. The proxy below is applied once at boot, so turning this
+      off doesn't send translation traffic back to Google until the site is
+      restarted.
 
     translator_tweaks_worker_url: 'Base URL the bundled Google translate
       provider is pointed at instead of translation.googleapis.com — include
       the full /language/translate/v2 path; /detect and /languages are
       appended to it. Leave blank to let discourse-translator call Google
-      directly. Two caveats: every post being translated or
-      language-detected is sent to this host, so only enter a proxy you
-      control; and the endpoints are Ruby constants swapped at boot, so
-      editing or clearing this has no effect until a full app restart
-      (./launcher restart app).'
-
-    translator_tweaks_hide_untranslatable: Hide the translate globe on posts
-      that have no detected language yet, instead of showing a globe whose
-      click is a no-op. Posts written before discourse-translator was
-      installed never get a detection row unless they are backfilled;
-      brand-new posts get the globe a few seconds later when the detection
-      job lands. Takes effect immediately — no restart needed.
+      directly. Every post being translated or language-detected, and the
+      site''s Google API key, are sent to this host, so only enter a proxy
+      you control. The endpoints are swapped at boot, so editing or clearing
+      this has no effect until a full app restart (./launcher restart app).'
 
     # ── Jtech — Smart search ─────────────────────────────────────────────
     smart_search_enabled: When a search returns few results, run it again
@@ -446,11 +423,10 @@ en:
       also finds posts that only say "javascript" and "k8s" finds
       "kubernetes". Synonyms come from bundled English (WordNet) and Spanish
       (Open Multilingual Wordnet) dictionaries plus a tech-jargon list — each
-      search uses only the searcher's language; add
-      your own groups in {{setting:smart_search_extra_synonyms}}. Everything
-      runs in-process — no external services, no API keys — and any failure
-      falls back to ordinary Discourse search.
-
+      search uses only the searcher's language; add your own groups in
+      {{setting:smart_search_extra_synonyms}}. Everything runs in-process —
+      no external services, no API keys — and any failure falls back to
+      ordinary Discourse search.
     smart_search_minimum_results: Synonym variants only run when the user's
       original search returned fewer than this many posts. Higher values
       expand more often — better recall, more database queries per search.
@@ -509,8 +485,27 @@ en:
       Takes effect immediately, no restart required.
 
     dumbcourse_default_theme: Colour scheme applied the first time someone
-      opens the app. Each visitor can switch afterwards and their choice is
-      remembered in that browser, so changing this only affects new visitors.
+      opens the app. "auto" follows the phone's own light/dark setting (and is
+      dark on phones that have none). Each visitor can switch afterwards and
+      their choice is remembered in that browser, so changing this only
+      affects new visitors.
+
+    dumbcourse_device_pairing_enabled: Offer "Sign in with another device" —
+      the phone shows a short code, and the member approves it from any
+      device where they're already signed in (like signing in to a TV). Saves
+      typing a password on a keypad. Codes last ten minutes, only the
+      requesting browser can use the approval, and code lookups are rate
+      limited.
+
+    dumbcourse_redirect_legacy_browsers: Send visitors whose browser can't
+      run the full forum (KaiOS, Opera Mini, old Android and Chrome/Firefox
+      versions, and anything in browser update user agents) to the matching
+      Dumbcourse page instead of the broken full site — including sign-in,
+      email-login and password-reset links. Members who choose "Open forum
+      links here" in Dumbcourse's preferences are sent there too. Search
+      engine crawlers are never redirected.
+    dumbcourse_leaderboard_id: Id of the discourse-gamification leaderboard
+      Dumbcourse shows in its menu. 0 hides it.
 
     dumbcourse_default_view: Topic list shown when someone opens the app at
       its root URL. "My posts" falls back to Latest for signed-out visitors.
@@ -524,9 +519,6 @@ en:
 
     dumbcourse_online_glow_enabled: Draw a glow ring around the avatars of
       users who are currently online.
-
-    dumbcourse_leaderboard_id: ID of the discourse-gamification leaderboard
-      shown under Leaderboard in the app menu. 0 hides the entry.
 
     dumbcourse_sidebar_link_enabled: Add a Dumbcourse link to the sidebar of
       the main Discourse forum, pointing at the base path above. This does
@@ -746,7 +738,7 @@ en:
 
     disteleplus_forum_upload_max_mb: Largest file copied into Telegram. The
       Bot API currently caps bot-sent files at 50 MB. Larger or unreadable
-      files produce a metadata message linking back to JTech instead.
+      files produce a metadata message linking back to the forum instead.
 
     disteleplus_forum_upload_backfill_batch_size: Number of historical upload
       references examined per backfill step. Smaller batches reduce load and
@@ -764,7 +756,7 @@ en:
     disteleplus_forum_upload_measure_now: Measure eligible posts, occurrences,
       unique files, bytes, date range, extensions, oversize files, and prior
       deliveries, including unique content hashes, without sending anything.
-      Results are written to /logs under the [discourse-dumb-nautas disteleplus] tag,
+      Results are written to /logs under the [jtech-tools disteleplus] tag,
       then this switch resets itself.
 
     disteleplus_forum_upload_backfill_now: Start or resume the historical
@@ -884,18 +876,13 @@ en:
       domain. Toggling {{setting:disteleplus_setup_commands_enabled}} refreshes
       or removes the command menu automatically.
 
-    # ── Jtech — Username avatar ─────────────────────────────────────────────
-    discourse_username_avatar_enabled: Derive default (non-uploaded) avatars
-      from a user's username instead of their email address. Users with a
-      manually uploaded custom avatar are unaffected.
-
-    # ── Dumb Nautas — REQ-PM ────────────────────────────────────────────────
+    # ── Jtech — REQ-PM ─────────────────────────────────────────────────────
     reqpm_enabled: REQ-PM lets members exchange contact details (phone, text,
-      WhatsApp, email, website, or their own custom ones). Members request
-      each other's details or send their own, and choose exactly which ones
-      to send. There is no free text, details are encrypted in the database,
-      and staff cannot view them — not in the UI, through the API, or by
-      impersonating.
+      WhatsApp, email, website, or their own custom ones) instead of private
+      messages. Members request each other's details or send their own, and
+      choose exactly which ones to send. There is no free text, details are
+      encrypted in the database, and staff cannot view them — not in the UI,
+      through the API, or by impersonating.
     reqpm_allowed_groups: Groups that can use REQ-PM (send, request and
       receive). Staged, suspended, silenced and anonymous-mode accounts are
       always left out. Default trust_level_0 is every signed-in member; use
@@ -908,9 +895,11 @@ en:
     reqpm_setup_snooze_days: How long "Remind me later" hides the setup
       window for.
     reqpm_default_country_code: Country calling code assumed for phone,
-      text, WhatsApp, Signal and Telegram numbers typed without one (e.g. 54
-      for Argentina, 1 for US/Canada). Numbers starting with + or 00, or with
-      a leading 0, are left as typed. Leave blank to never assume a country.
+      text, WhatsApp, Signal and Telegram numbers typed without one — 1 for
+      US/Canada. A 10-digit number like 646-820-1413 is saved as
+      +1 646-820-1413 so the Call, Text and Chat buttons reach the right
+      country. Numbers starting with + or 00, or with a leading 0, are left
+      as typed. Leave blank to never assume a country.
     reqpm_max_methods: Most contact methods one member can keep on their card.
     reqpm_max_requests_per_day: Most contact requests one member can send in
       24 hours. Applies to staff too.
@@ -946,7 +935,6 @@ en:
       tl4_can_post_in_closed_topics: mini-mod|tl4|trust level 4|closed topic
       tl4_can_reopen_topics: mini-mod|tl4|trust level 4|reopen
       translator_tweaks_worker_url: cloudflare|worker|proxy|googleapis|translate
-      translator_tweaks_hide_untranslatable: globe|translate|detected locale
       smart_search_extra_synonyms: synonym|dictionary|search expansion
       popup_notifications_excluded_types: toast|noise|likes|mute
       dumbcourse_base_path: mount|url|path|spa
@@ -957,19 +945,35 @@ en:
       disteleplus_reports_chat_id: reports|admin group|moderation
       disteleplus_reports_admin_notices: what's new|dashboard|problems|warnings
       disteleplus_auto_match_usernames: identity|impersonate|spoof|security
-      discourse_username_avatar_enabled: avatar|gravatar|username|letter avatar
       reqpm_enabled: reqpm|req-pm|contact|phone|whatsapp|private message|pm|dm
       reqpm_setup_prompt: reqpm|onboarding|required field|contact card
 
     errors:
-      reqpm_default_country_code_invalid: must be a calling code of up to 4
-        digits, like 54 or 1 — or blank
       translator_tweaks_invalid_worker_url: must be a full https:// URL with
         no spaces (e.g. https://example.workers.dev/language/translate/v2),
         or blank to call Google directly
+      reqpm_default_country_code_invalid: must be a calling code of up to 4
+        digits, like 1 or 972 — or blank
       dumbcourse_base_path_invalid: must be a single URL segment made of
         lowercase letters, digits, hyphens and underscores, and must not be a
         reserved Discourse path
+
+  dumbcourse:
+    pairing:
+      not_found: That code isn't valid or has expired.
+      busy: Couldn't create a code just now. Please try again.
+
+  discourse_mod_categories:
+    whisper:
+      first_post_not_allowed: "A new topic can't start with or quote a whisper."
+      add_participant_needs_whisper: "Choose a whisper post to add the user to."
+    note_notification_alert: '%{username} added a moderator note on "%{topic}"'
+    note_reply_notification_alert: '%{username} replied to a moderator note on "%{topic}"'
+    post_deleted_notification_alert: '%{username} deleted a post in "%{topic}"'
+    post_approved_notification_alert: '%{username} approved a queued post in "%{topic}"'
+    post_rejected_notification_alert: '%{username} rejected a queued post'
+    user_note_notification_alert: '%{username} added a note on %{target}'
+    flag_note_notification_alert: '%{username} added a note on a flag for %{target}'
 
   reqpm:
     notifications:
@@ -1003,12 +1007,3 @@ en:
         email: "That doesn't look like an email address."
         url: "That doesn't look like a web address (http or https)."
         handle: "That doesn't look like a username (letters, numbers, . _ -)."
-
-  discourse_mod_categories:
-    note_notification_alert: '%{username} added a moderator note on "%{topic}"'
-    note_reply_notification_alert: '%{username} replied to a moderator note on "%{topic}"'
-    post_deleted_notification_alert: '%{username} deleted a post in "%{topic}"'
-    post_approved_notification_alert: '%{username} approved a queued post in "%{topic}"'
-    post_rejected_notification_alert: '%{username} rejected a queued post'
-    user_note_notification_alert: '%{username} added a note on %{target}'
-    flag_note_notification_alert: '%{username} added a note on a flag for %{target}'
