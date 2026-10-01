@@ -97,6 +97,7 @@ es:
     mod_pm_badge_group_enabled: Permite al team sumar a un mensaje personal a quienes tengan un reto. Se ven entre sí. La búsqueda es solo del team.
     mod_first_post_checklist_enabled: Lista que hay que aceptar antes de publicar, hasta el nivel que marque la lista (NC2 por defecto). El team queda exento. Incluye registro y pedido de reaceptar.
     mod_targeted_checklists_enabled: Listas para personas puntuales que bloquean sus respuestas hasta aceptarlas, sin importar nivel, moderación incluida. Nunca admins.
+    nautas_category_checklist_enabled: Permite al team poner en una categoría (en sus ajustes) una lista que cada persona acepta una vez antes de crear historias o responder ahí. Se vuelve a pedir solo con «Volver a pedirla a todo el mundo». Al team nunca se le pide. El servidor también la exige, así que Dumbcourse y la API no la saltean; aprobar una respuesta en cola no se la pide a quien la escribió.
     mod_topic_prompt_checklist_enabled: Lista o declaración obligatoria antes de responder en una historia puntual. Aplica a todo el mundo, team incluido; se puede pedir en cada respuesta.
     topic_reply_prompt_enabled: Heredado; lo reemplazan los avisos previos por historia. Solo muestra avisos viejos. Conviene apagarlo cuando ninguna historia dependa de ellos.
     mod_topic_private_notes_enabled: Permite al team agregar notas privadas con respuestas a cualquier historia. Nunca llegan al resto de la comunidad.
@@ -261,6 +262,10 @@ es:
     pairing:
       not_found: El código no es válido o venció.
       busy: No se pudo crear un código. Probá de nuevo.
+  nautas:
+    category_checklist:
+      required: "Hay que aceptar la lista de «%{category}» antes de publicar ahí."
+      log_name: "Categoría: %{category}"
   discourse_mod_categories:
     whisper:
       first_post_not_allowed: Una historia nueva no puede empezar con una respuesta privada ni citarla.

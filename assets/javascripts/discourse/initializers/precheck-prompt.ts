@@ -12,6 +12,7 @@ import {
   refreshOwedChecklist,
 } from "../lib/first-post-checklist";
 import { messageToHtml } from "../lib/linkify-message";
+import { categoryChecklistGate } from "../lib/nautas-category-checklist";
 import {
   PRECHECK_CONFIRM_KEY,
   PRECHECK_GO_BACK_KEY,
@@ -86,7 +87,9 @@ export default {
       // owed checklist, so a checklist version bumped by staff mid-session
       // is gated without the user needing a hard page refresh.
       api.composerBeforeSave(function (this: PrecheckComposer) {
-        return checklistGate(this).then(() => precheckGate(this));
+        return checklistGate(this)
+          .then(() => categoryChecklistGate(container, this))
+          .then(() => precheckGate(this));
       });
     });
   },

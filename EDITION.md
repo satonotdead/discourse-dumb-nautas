@@ -27,6 +27,12 @@ upstream merges stay easy.
   (`git checkout --ours README.md`).
 - **First-post checklist** is edited from the Mod tab (admins), not from a
   sidebar link.
+- **Category checklist.** A checklist set in a category's settings that each
+  person accepts once before posting there (topics and replies), also
+  enforced on the server (`lib/nautas/category_checklist.rb`,
+  `app/controllers/nautas/`). It hooks into upstream in two places: the
+  composer gate in `initializers/precheck-prompt.ts` and the checklist
+  accept endpoint (prepended in `sub_plugins/nautas.rb`).
 - **REQ-PM** is off by default and assumes no country code.
 - **Migrations.** Disteleplus listen rows cascade with their message
   (`db/post_migrate`), and the Aug 30 migration only resets the module's

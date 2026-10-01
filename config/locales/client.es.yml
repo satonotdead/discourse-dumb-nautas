@@ -322,6 +322,14 @@ es:
         title: Avisos emergentes en escritorio
         'on': Activado
         'off': Desactivado
+    nautas:
+      category_checklist:
+        title: Lista antes de publicar
+        items_placeholder: "Un punto por línea. Enlace opcional: Punto | https://…"
+        button_label: Texto del botón de aceptar
+        reask: Volver a pedirla a todo el mundo
+        save: Guardar lista
+        remove: Quitar lista
     discourse_mod_categories:
       post_viewers:
         label: Ver quién la leyó

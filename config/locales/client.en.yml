@@ -329,6 +329,14 @@ en:
         # which would make these i18n keys unreachable.
         "on": "On"
         "off": "Off"
+    nautas:
+      category_checklist:
+        title: Checklist before posting
+        items_placeholder: "One item per line. Optional link: Item | https://…"
+        button_label: Accept button text
+        reask: Ask everyone again
+        save: Save checklist
+        remove: Remove checklist
     discourse_mod_categories:
       post_viewers:
         label: See message viewers

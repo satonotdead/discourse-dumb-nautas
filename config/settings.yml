@@ -341,6 +341,13 @@ jtech_mod_checklists:
     client: true
     depends_on:
       - "mod_categories_enabled"
+  # Power Tools Nautas: a checklist accepted once per category before
+  # posting there; set on each category's settings page.
+  nautas_category_checklist_enabled:
+    default: true
+    client: true
+    depends_on:
+      - "mod_categories_enabled"
   mod_topic_prompt_checklist_enabled:
     default: true
     client: true

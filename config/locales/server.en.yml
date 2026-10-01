@@ -306,6 +306,12 @@ en:
       regardless of trust level, and including other moderators. Admins can
       never be targeted.
 
+    nautas_category_checklist_enabled: Lets staff set a checklist on a
+      category (in its settings) that each person accepts once before
+      starting a topic or replying there. Asked again only when staff choose
+      "Ask everyone again". Staff are never asked. Enforced on the server too,
+      so Dumbcourse and the API can't skip it; approving a queued post does
+      not ask the author.
     mod_topic_prompt_checklist_enabled: Lets moderators attach a blocking
       checklist or single statement to one topic, shown before posting in it.
       Applies to everyone including staff, and can be set to re-prompt on
@@ -962,6 +968,11 @@ en:
     pairing:
       not_found: That code isn't valid or has expired.
       busy: Couldn't create a code just now. Please try again.
+
+  nautas:
+    category_checklist:
+      required: 'Accept the checklist for "%{category}" before posting there.'
+      log_name: "Category: %{category}"
 
   discourse_mod_categories:
     whisper:

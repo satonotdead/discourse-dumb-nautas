@@ -11,7 +11,7 @@ export interface ChecklistItem {
 // The checklist a user owes: the shape of both the
 // `mod_first_post_checklist` serializer and `/checklist/owed`.
 export interface OwedChecklist {
-  kind?: "global" | "topic" | "targeted";
+  kind?: "global" | "topic" | "targeted" | "category";
   id?: number | string;
   version: number;
   mode?: "checklist" | "statement";

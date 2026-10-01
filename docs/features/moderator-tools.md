@@ -36,6 +36,7 @@ Each kind has its own switch. An alert goes only to staff who can see the topic 
 - **First-post checklist**: a list new members tick before their first post.
 - **Targeted checklists**: aimed at named users, whatever their trust level.
 - **Topic checklists**: attached to one topic, shown before replying.
+- **Category checklists**: set in a category's settings; each person accepts once before starting a topic or replying there. Enforced on the server too.
 
 Acceptances are logged, once per version.
 
